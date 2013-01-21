@@ -1,0 +1,5 @@
+div[id|=wripl-oauth] {
+    padding: 5px 12px;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    text-align: center;
+}
