@@ -19,30 +19,31 @@ class WriplRecommendationWidget extends WP_Widget
     {
 
         //  Assigns values
-        $instance = wp_parse_args((array) $instance, array('maxRecommendations' => '10'));
+        $instance = wp_parse_args((array)$instance, array('maxRecommendations' => '10'));
         $maxRecommendations = strip_tags($instance['maxRecommendations']);
         ?>
-        <p>
-            <label for="<?php echo $this->get_field_id('maxRecommendations'); ?>">
-                <?php echo __('Max recommendations to display'); ?>:
+    <p>
+        <label for="<?php echo $this->get_field_id('maxRecommendations'); ?>">
+            <?php echo __('Max recommendations to display'); ?>:
 
-            </label>
-            <select class="widefat" id="<?php echo $this->get_field_id('maxRecommendations'); ?>" name="<?php echo $this->get_field_name('maxRecommendations'); ?>">
-                <?php
-                for ($i = 1; $i <= 10; $i++) {
+        </label>
+        <select class="widefat" id="<?php echo $this->get_field_id('maxRecommendations'); ?>"
+                name="<?php echo $this->get_field_name('maxRecommendations'); ?>">
+            <?php
+            for ($i = 1; $i <= 10; $i++) {
 
-                    $selected = '';
+                $selected = '';
 
-                    if ($i == $maxRecommendations) {
-                        $selected = ' selected="selected"';
-                    }
-
-                    echo "<option value='$i'$selected>$i</option>";
+                if ($i == $maxRecommendations) {
+                    $selected = ' selected="selected"';
                 }
-                ?>
-            </select>
-        </p>
-        <?php
+
+                echo "<option value='$i'$selected>$i</option>";
+            }
+            ?>
+        </select>
+    </p>
+    <?php
     }
 
     function update($newInstance, $oldInstance)
@@ -99,31 +100,32 @@ class WriplRecommendationWidget extends WP_Widget
 //            </div>';
 //            $out .= '</div>';
 
-        }
-        //When wripl is active
+        } //When wripl is active
         else {
 
             $out .= $before_title . 'wripl recommends...' . $after_title;
 
             try {
                 $recommendations = $wriplWP->requestRecommendations($instance['maxRecommendations']);
+                $recommendations = array();
+                $indexedItems = $this->sortRecommendations($recommendations);
 
-                if (count($recommendations) !== 0) {
+                if (count($recommendations) === 0) {
+                    $out .= "<p>nothing right now, here's a random post to tide you over...</p>";
 
-                    $indexedItems = $this->sortRecommendations($recommendations);
-
-                    $out .= '<ul>';
-
-                    foreach ($indexedItems as $item) {
-                        $permalink = get_permalink($item->ID);
-
-                        $out .= "<li><a href='$permalink'>$item->post_title</a></li>";
-                    }
-
-                    $out .= '</ul>';
-                } else {
-                    $out .= "<p>Browse some content so wripl can see what you're into.</p>";
+                    $indexedItems = query_posts('orderby=rand&posts_per_page=1');
                 }
+
+
+                $out .= '<ul>';
+
+                foreach ($indexedItems as $item) {
+                    $permalink = get_permalink($item->ID);
+
+                    $out .= "<li><a href='$permalink'>$item->post_title</a></li>";
+                }
+
+                $out .= '</ul>';
 
 
                 $disconnectUrl = plugins_url('disconnect.php', __FILE__);
