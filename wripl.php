@@ -9,7 +9,7 @@
 set_include_path(dirname(__FILE__) . '/libs' . PATH_SEPARATOR . get_include_path());
 
 require_once dirname(__FILE__) . '/WriplRecommendationWidget.php';
-require_once dirname(__FILE__) . '/WriplRecommendationWidgetAjax.php';
+//require_once dirname(__FILE__) . '/WriplRecommendationWidgetAjax.php';
 require_once dirname(__FILE__) . '/libs/OAuthSimple/OAuthSimple.php';
 
 $wriplWP = new WriplWP();
@@ -40,7 +40,7 @@ class WriplWP
         add_action('admin_init', array($this, 'settingsPageInit'));
         add_action('wripl_index_content', array($this, 'indexContent'), 5, 2);
         add_action('widgets_init', create_function('', 'return register_widget("WriplRecommendationWidget");'));
-        add_action('widgets_init', create_function('', 'return register_widget("WriplRecommendationWidgetAjax");'));
+        //add_action('widgets_init', create_function('', 'return register_widget("WriplRecommendationWidgetAjax");'));
         add_action('wp_head', array($this, 'monitorInterests'));
         add_action('publish_post', array($this, 'onPostPublish'));
         add_action('wp_trash_post', array($this, 'onPostTrash'));
@@ -617,7 +617,7 @@ class WriplWP
     {
         $devSettingFile = dirname(__FILE__) . '/WriplWPDevSettings.php';
 
-        if (WP_DEBUG && file_exists($devSettingFile)) {
+        if (file_exists($devSettingFile)) {
             require_once $devSettingFile;
 
             return WriplWPDevSettings::WRIPL_API_URL;
