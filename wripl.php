@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Pluging to bring wripl's easy recomendations.
-  Version: 1.1
+  Version: 1.1.2
   Author: Brian Gallagher
   Author URI: http://wripl.com
  */
@@ -202,6 +202,8 @@ class WriplWP
     public function monitorInterests()
     {
 
+
+
         $wriplSettings = get_option('wripl_settings');
         $wriplApiBase = $this->getApiUrl();
 
@@ -242,11 +244,13 @@ class WriplWP
         }
 
 
+
+
         /**
          * If its the home page we don't need to track
-         * the user becase we don't know what exactly they are reading.
+         * the user because we don't know what exactly they are reading.
          */
-        if (!is_single()) {
+        if (!is_single() && !is_page()) {
             return;
         }
 
@@ -263,6 +267,8 @@ class WriplWP
                 return;
                 break;
         }
+
+        //die($path);
 
 
         try {
