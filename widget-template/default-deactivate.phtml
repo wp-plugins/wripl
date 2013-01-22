@@ -1,0 +1,13 @@
+<?php ob_start() ?>
+
+<?php echo $before_title . $title . $after_title ?>
+
+<p>
+    Get <em>real time</em> recommendations with <strong><a href="http://wripl.com/learn-more" target="_blank">wripl</a></strong>.
+</p>
+<br>
+<p>
+    <a href="<?php echo $connectUrl ?>"><img src="<?php echo $imageFolderUrl . 'connect-with-wripl-blue.png'?>" /></a>
+</p>
+
+<?php return ob_get_clean() ?>
