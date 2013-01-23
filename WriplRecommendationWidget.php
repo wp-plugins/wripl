@@ -19,30 +19,31 @@ class WriplRecommendationWidget extends WP_Widget
     {
 
         //  Assigns values
-        $instance = wp_parse_args((array) $instance, array('maxRecommendations' => '10'));
+        $instance = wp_parse_args((array)$instance, array('maxRecommendations' => '10'));
         $maxRecommendations = strip_tags($instance['maxRecommendations']);
         ?>
-        <p>
-            <label for="<?php echo $this->get_field_id('maxRecommendations'); ?>">
-                <?php echo __('Max recommendations to display'); ?>:
+    <p>
+        <label for="<?php echo $this->get_field_id('maxRecommendations'); ?>">
+            <?php echo __('Max recommendations to display'); ?>:
 
-            </label>
-            <select class="widefat" id="<?php echo $this->get_field_id('maxRecommendations'); ?>" name="<?php echo $this->get_field_name('maxRecommendations'); ?>">
-                <?php
-                for ($i = 1; $i <= 10; $i++) {
+        </label>
+        <select class="widefat" id="<?php echo $this->get_field_id('maxRecommendations'); ?>"
+                name="<?php echo $this->get_field_name('maxRecommendations'); ?>">
+            <?php
+            for ($i = 1; $i <= 10; $i++) {
 
-                    $selected = '';
+                $selected = '';
 
-                    if ($i == $maxRecommendations) {
-                        $selected = ' selected="selected"';
-                    }
-
-                    echo "<option value='$i'$selected>$i</option>";
+                if ($i == $maxRecommendations) {
+                    $selected = ' selected="selected"';
                 }
-                ?>
-            </select>
-        </p>
-        <?php
+
+                echo "<option value='$i'$selected>$i</option>";
+            }
+            ?>
+        </select>
+    </p>
+    <?php
     }
 
     function update($newInstance, $oldInstance)
@@ -74,56 +75,31 @@ class WriplRecommendationWidget extends WP_Widget
 
             $out .= require dirname(__FILE__) . '/widget-template/default-deactivate.phtml';
 
-//            $out .= '<div id="wripl-plugin" style="border: gray solid thin; height: 159; padding: 0px; margin: 8px 0px; overflow: auto; background-color: white">';
-//            $out .= '<div id=\'wripl-header\' style=\'font-size: 1em; font-family: "Helvetica Neue", "Helvetica", "Arial"; padding: 6px; background-color: gainsboro; border-bottom: solid gray thin;\'>recommendations with wripl</div>';
-//            $out .= '<div style="text-align: center; padding: 30px 0px;"><a href="' .$connectUrl  .' " style="text-decoration: none; border-bottom-width:0px;"><img src="' . $imageFolderUrl . 'connect-button.png" style="margin: 0 auto;" style="padding: 0px;"></a></div>';
-//            $out .= '<div style="margin-left: 15px; margin-right: 15px; height: 2px; background-color: lightgrey;"></div>';
-//            $out .= '<div style="padding: 8px 8px 0px 8px;">
-//
-//                <a href="https://www.twitter.com/sinkingfish" target="_blank" style="text-decoration: none; border-bottom-width:0px; margin-right: -2px;">
-//                    <img src="' . $imageFolderUrl . 'twitter-user-1.png" style="padding: 0px; width:13%; ">
-//                </a>
-//                <a href="https://www.twitter.com/koidl" target="_blank" style="text-decoration: none; border-bottom-width:0px; margin-right: -2px;">
-//                    <img src="' . $imageFolderUrl . 'twitter-user-2.png" style="padding: 0px; width:13%;">
-//                </a>
-//                <a href="https://www.twitter.com/robertross" target="_blank" style="text-decoration: none; border-bottom-width:0px; margin-right: -2px;">
-//                    <img src="' . $imageFolderUrl . 'twitter-user-3.png" style="padding: 0px; width:13%;">
-//                </a>
-//                <a href="http://www.wripl.com" target="_blank" style="text-decoration: none;">
-//                    <img src="' . $imageFolderUrl . 'wripl-logo.png" style="float: right; padding: 0px; width:45%;">
-//                </a>
-//            </div>';
-//            $out .= '<div style="font-size: 0.9em; font-family: \'Helvetica Neue\', \'Helvetica\', \'Arial\'; padding: 4px 8px 8px 8px; ">
-//                <span style="float: left; ">~3 users here</span>
-//                <span style="float: right; padding-right: 2%; padding-bottom:6px;">wordpress plugin</span>
-//            </div>';
-//            $out .= '</div>';
-
-        }
-        //When wripl is active
+        } //When wripl is active
         else {
 
             $out .= $before_title . 'wripl recommends...' . $after_title;
 
             try {
                 $recommendations = $wriplWP->requestRecommendations($instance['maxRecommendations']);
+                $indexedItems = $this->sortRecommendations($recommendations);
 
-                if (count($recommendations) !== 0) {
+                if (count($recommendations) === 0) {
+                    $out .= "<p>nothing right now, here's a random post to tide you over...</p>";
 
-                    $indexedItems = $this->sortRecommendations($recommendations);
-
-                    $out .= '<ul>';
-
-                    foreach ($indexedItems as $item) {
-                        $permalink = get_permalink($item->ID);
-
-                        $out .= "<li><a href='$permalink'>$item->post_title</a></li>";
-                    }
-
-                    $out .= '</ul>';
-                } else {
-                    $out .= "<p>Browse some content so wripl can see what you're into.</p>";
+                    $indexedItems = query_posts('orderby=rand&posts_per_page=1');
                 }
+
+
+                $out .= '<ul>';
+
+                foreach ($indexedItems as $item) {
+                    $permalink = get_permalink($item->ID);
+
+                    $out .= "<li><a href='$permalink'>$item->post_title</a></li>";
+                }
+
+                $out .= '</ul>';
 
 
                 $disconnectUrl = plugins_url('disconnect.php', __FILE__);
