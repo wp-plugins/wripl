@@ -75,31 +75,6 @@ class WriplRecommendationWidget extends WP_Widget
 
             $out .= require dirname(__FILE__) . '/widget-template/default-deactivate.phtml';
 
-//            $out .= '<div id="wripl-plugin" style="border: gray solid thin; height: 159; padding: 0px; margin: 8px 0px; overflow: auto; background-color: white">';
-//            $out .= '<div id=\'wripl-header\' style=\'font-size: 1em; font-family: "Helvetica Neue", "Helvetica", "Arial"; padding: 6px; background-color: gainsboro; border-bottom: solid gray thin;\'>recommendations with wripl</div>';
-//            $out .= '<div style="text-align: center; padding: 30px 0px;"><a href="' .$connectUrl  .' " style="text-decoration: none; border-bottom-width:0px;"><img src="' . $imageFolderUrl . 'connect-button.png" style="margin: 0 auto;" style="padding: 0px;"></a></div>';
-//            $out .= '<div style="margin-left: 15px; margin-right: 15px; height: 2px; background-color: lightgrey;"></div>';
-//            $out .= '<div style="padding: 8px 8px 0px 8px;">
-//
-//                <a href="https://www.twitter.com/sinkingfish" target="_blank" style="text-decoration: none; border-bottom-width:0px; margin-right: -2px;">
-//                    <img src="' . $imageFolderUrl . 'twitter-user-1.png" style="padding: 0px; width:13%; ">
-//                </a>
-//                <a href="https://www.twitter.com/koidl" target="_blank" style="text-decoration: none; border-bottom-width:0px; margin-right: -2px;">
-//                    <img src="' . $imageFolderUrl . 'twitter-user-2.png" style="padding: 0px; width:13%;">
-//                </a>
-//                <a href="https://www.twitter.com/robertross" target="_blank" style="text-decoration: none; border-bottom-width:0px; margin-right: -2px;">
-//                    <img src="' . $imageFolderUrl . 'twitter-user-3.png" style="padding: 0px; width:13%;">
-//                </a>
-//                <a href="http://www.wripl.com" target="_blank" style="text-decoration: none;">
-//                    <img src="' . $imageFolderUrl . 'wripl-logo.png" style="float: right; padding: 0px; width:45%;">
-//                </a>
-//            </div>';
-//            $out .= '<div style="font-size: 0.9em; font-family: \'Helvetica Neue\', \'Helvetica\', \'Arial\'; padding: 4px 8px 8px 8px; ">
-//                <span style="float: left; ">~3 users here</span>
-//                <span style="float: right; padding-right: 2%; padding-bottom:6px;">wordpress plugin</span>
-//            </div>';
-//            $out .= '</div>';
-
         } //When wripl is active
         else {
 

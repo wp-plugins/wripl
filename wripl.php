@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Pluging to bring wripl's easy recomendations.
-  Version: 1.1.4
+  Version: 1.1.5
   Author: Brian Gallagher
   Author URI: http://wripl.com
  */
@@ -242,9 +242,6 @@ class WriplWP
         if (is_null($accessToken)) {
             return;
         }
-
-
-
 
         /**
          * If its the home page we don't need to track

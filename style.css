@@ -3,3 +3,9 @@ div[id|=wripl-oauth] {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     text-align: center;
 }
+
+img#oauth-connect {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
