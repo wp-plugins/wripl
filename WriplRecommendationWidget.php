@@ -107,7 +107,6 @@ class WriplRecommendationWidget extends WP_Widget
 
             try {
                 $recommendations = $wriplWP->requestRecommendations($instance['maxRecommendations']);
-                $recommendations = array();
                 $indexedItems = $this->sortRecommendations($recommendations);
 
                 if (count($recommendations) === 0) {
