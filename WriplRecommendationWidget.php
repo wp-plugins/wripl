@@ -88,6 +88,7 @@ class WriplRecommendationWidget extends WP_Widget
                     $out .= "<p>nothing right now, here's a random post to tide you over...</p>";
 
                     $indexedItems = query_posts('orderby=rand&posts_per_page=1');
+                    wp_reset_query();
                 }
 
 
