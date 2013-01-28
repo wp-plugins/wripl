@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Pluging to bring wripl's easy recomendations.
-  Version: 1.1.6
+  Version: 1.1.7
   Author: Brian Gallagher
   Author URI: http://wripl.com
  */
@@ -485,7 +485,7 @@ class WriplWP
         setcookie('wripl-oauth-referer', $url, strtotime('+1 hour'), COOKIEPATH, COOKIE_DOMAIN, false);
     }
 
-    public function retreiveOauthRefererUrl($url)
+    public function retreiveOauthRefererUrl()
     {
         return $_COOKIE['wripl-oauth-referer'];
     }
