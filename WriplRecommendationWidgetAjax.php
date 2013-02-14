@@ -19,6 +19,8 @@ class WriplRecommendationWidgetAjax extends WriplRecommendationWidget
 
     public function widget($args, $instance)
     {
+        $imageFolderUrl = plugins_url('images', __FILE__);
+
         $wriplAjaxOptions['ajaxUrl'] = admin_url('admin-ajax.php');
         $wriplAjaxOptions['maxRecommendations'] = $instance['maxRecommendations'];
 
@@ -46,7 +48,8 @@ class WriplRecommendationWidgetAjax extends WriplRecommendationWidget
         $out = $args['before_widget'];
         $out .= $args['before_title'] . $title . $args['after_title'];
 
-        $out .= "<div id='wripl-ajax-container'>loading...</div>";
+        $out .= "<div id='wripl-ajax-container'><img class='wripl-rotate' src='$imageFolderUrl/wripl-logo-rotate-orng-sml.png'> loading...</div>";
+
         $out .= $args['after_widget'];
 
         echo $out;

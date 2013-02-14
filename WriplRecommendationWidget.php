@@ -161,7 +161,7 @@ class WriplRecommendationWidget extends WP_Widget
         $wriplWP = WriplWP::$instance;
 
         $connectUrl = plugins_url('connect.php', __FILE__);
-        $imageFolderUrl = plugins_url('images/', __FILE__);
+        $imageFolderUrl = plugins_url('images', __FILE__);
         $title = 'wripl recommends...';
 
         $out = require dirname(__FILE__) . '/widget-template/default-deactivate.phtml';
