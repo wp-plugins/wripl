@@ -10,6 +10,13 @@ img#oauth-connect {
     margin-right: auto;
 }
 
+img.wripl-rotate {
+    padding: 10px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .wripl-rotate:hover
 {
     -webkit-transform:rotate(720deg);
@@ -44,12 +51,12 @@ img#oauth-connect {
 .wripl-rotate
 {
     -webkit-animation-name:             rotate-webkit;
-    -webkit-animation-duration:         4.5s;
+    -webkit-animation-duration:         1.5s;
     -webkit-animation-iteration-count:  infinite;
     -webkit-animation-timing-function: linear;
 
     -moz-animation-name:             rotate-moz;
-    -moz-animation-duration:         4.5s;
+    -moz-animation-duration:         1.5s;
     -moz-animation-iteration-count:  infinite;
     -moz-animation-timing-function: linear;
 
