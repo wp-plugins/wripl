@@ -36,6 +36,16 @@
                     wripl.main(response);
                 }
 
+                if(response.piwikScript) {
+                    var script = document.createElement('script');
+                    script.type = 'text/javascript';
+                    script.src = response.piwikScript;
+
+                    jQuery("body").append(script);
+                }
+
+
+
                 getWidget();
 
             }
