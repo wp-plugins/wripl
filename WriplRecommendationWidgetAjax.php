@@ -19,6 +19,8 @@ class WriplRecommendationWidgetAjax extends WriplRecommendationWidget
 
     public function widget($args, $instance)
     {
+        $wriplWP = WriplWP::$instance;
+
         $imageFolderUrl = plugins_url('images', __FILE__);
 
         $wriplAjaxOptions['ajaxUrl'] = admin_url('admin-ajax.php');
@@ -40,8 +42,9 @@ class WriplRecommendationWidgetAjax extends WriplRecommendationWidget
             }
         }
 
+        wp_enqueue_script('wripl-interest-monito', $wriplWP->getMonitorScriptUrl(), array('jquery'));
         wp_enqueue_script('wripl-ajax-widget', plugin_dir_url(__FILE__) . 'js/ajax-widget.js', array('jquery'));
-        wp_localize_script('wripl-ajax-widget', 'wriplAjax', $wriplAjaxOptions);
+        wp_localize_script('wripl-ajax-widget', 'WriplAjax', $wriplAjaxOptions);
 
         $title = 'wripl recommends...';
 

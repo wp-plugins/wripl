@@ -6,10 +6,10 @@
     var getWidget = function() {
 
         jQuery.post(
-            wriplAjax.ajaxUrl,
+            WriplAjax.ajaxUrl,
             {
                 action: 'wripl-get-widget-recommendations',
-                maxRecommendations: wriplAjax.maxRecommendations
+                maxRecommendations: WriplAjax.maxRecommendations
             },
             function( response ) {
 
@@ -25,15 +25,15 @@
     var beginTracking = function(){
 
         jQuery.post(
-            wriplAjax.ajaxUrl,
+            WriplAjax.ajaxUrl,
             {
                 action: 'wripl-get-activity-code',
-                path: wriplAjax.path
+                path: WriplAjax.path
             },
             function( response ) {
-
-                if(response.activity_hash_id && response.endpoint) {
-                    wripl.main({activityHashId: response.activity_hash_id, endpoint : response.endpoint});
+;
+                if(response.activityHashId && response.endpoint) {
+                    wripl.main(response);
                 }
 
                 getWidget();
@@ -44,7 +44,7 @@
 
     jQuery(document).ready(function() {
 
-        if (typeof wriplAjax.path != 'undefined') {
+        if (typeof WriplAjax.path != 'undefined') {
             beginTracking();
         }else{
             getWidget();

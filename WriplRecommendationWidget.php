@@ -57,8 +57,8 @@ class WriplRecommendationWidget extends WP_Widget
 
     public function widget($args, $instance)
     {
-
         $wriplWP = WriplWP::$instance;
+        $wriplWP->monitorInterests();
 
         $interestUrl = Wripl_Client::getWebRootFromApiUrl($wriplWP->getApiUrl()) . '/interests';
         $connectUrl = plugins_url('connect.php', __FILE__);
@@ -66,6 +66,8 @@ class WriplRecommendationWidget extends WP_Widget
         $title = 'wripl recommends...';
 
         $accessToken = $wriplWP->retreiveAccessToken();
+
+        $wriplWP->metricCollection((bool) $accessToken);
 
         $out = $args['before_widget'];
         $out .= $args['before_title'] . 'wripl recommends...' . $args['after_title'];
@@ -77,8 +79,6 @@ class WriplRecommendationWidget extends WP_Widget
 
         } //When wripl is active
         else {
-
-
 
             try {
                 $recommendations = $wriplWP->requestRecommendations($instance['maxRecommendations']);
@@ -158,17 +158,11 @@ class WriplRecommendationWidget extends WP_Widget
 
     public static function disconnectedHtml()
     {
-        $wriplWP = WriplWP::$instance;
-
         $connectUrl = plugins_url('connect.php', __FILE__);
         $imageFolderUrl = plugins_url('images', __FILE__);
         $title = 'wripl recommends...';
 
         $out = require dirname(__FILE__) . '/widget-template/default-deactivate.phtml';
-
-        //$interestUrl = Wripl_Client::getWebRootFromApiUrl($wriplWP->getApiUrl()) . '/interests';
-
-        //$accessToken = $wriplWP->retreiveAccessToken();
 
         echo $out;
     }

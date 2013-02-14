@@ -41,7 +41,6 @@ class WriplWP
         add_action('wripl_index_content', array($this, 'indexContent'), 5, 2);
         add_action('widgets_init', create_function('', 'return register_widget("WriplRecommendationWidget");'));
         add_action('widgets_init', create_function('', 'return register_widget("WriplRecommendationWidgetAjax");'));
-        add_action('wp_head', array($this, 'monitorInterests'));
         add_action('publish_post', array($this, 'onPostPublish'));
         add_action('wp_trash_post', array($this, 'onPostTrash'));
         add_action('publish_page', array($this, 'onPagePublish'));
@@ -59,12 +58,16 @@ class WriplWP
         register_activation_hook(__FILE__, array($this, 'onInstall'));
         register_deactivation_hook(__FILE__, array($this, 'onUninstall'));
 
+        /**
+         * ugly singleton
+         */
         self::$instance = $this;
     }
 
     public function init()
     {
         spl_autoload_register(array($this, 'wriplAutoloader'));
+        wp_enqueue_style('wripl-style', plugins_url('style.css', __FILE__));
     }
 
     /**
@@ -144,10 +147,13 @@ class WriplWP
             $client = $this->getWriplClient();
             $result = $client->sendActivity($path, $accessToken->getToken(), $accessToken->gettokenSecret());
 
-            $response = json_decode($result);
+            $resultDecoded = json_decode($result);
 
             $wriplApiBase = $this->getApiUrl();
-            $response['endpoint'] = $wriplApiBase . '/activity-update';
+            $endpoint = $wriplApiBase . '/activity-update';
+
+            $response['activityHashId'] = $resultDecoded->activity_hash_id;
+            $response['endpoint'] = $endpoint;
 
             header("Content-Type: application/json");
             echo json_encode($response);
@@ -158,32 +164,28 @@ class WriplWP
         }
     }
 
+    /**
+     * NOTE!
+     *
+     * Tracking scripts for trial sites only.
+     * Will be removed in future.
+     *
+     * @param bool $wriplEnabled
+     */
     public function metricCollection($wriplEnabled = false)
     {
-        //--- Begin metric collection ---\\
-
         $wriplSettings = get_option('wripl_settings');
-        $accessToken = $this->retreiveAccessToken();
 
-        /**
-         * NOTE!
-         *
-         * Tracking scripts for trial sites only.
-         * Will be removed in future.
-         */
         $piwikScript = "http://piwik.wripl.com/piwik.js";
         $piwitWriplScript = "http://wripl.com/" . "metrics/{$wriplSettings['consumerKey']}.js";
 
-        echo "<script type='text/javascript' src='$piwikScript'></script>";
+        wp_enqueue_script('wripl-piwik-script', $piwikScript);
 
-        if (is_null($accessToken)) {
-            echo "<script type='text/javascript' src='$piwitWriplScript'></script>";
-            return;
+        if ($wriplEnabled) {
+            wp_enqueue_script('wripl-piwik-tracking-code', "$piwitWriplScript?wripl=on");
         } else {
-            echo "<script type='text/javascript' src='$piwitWriplScript?wripl=on'></script>";
+            wp_enqueue_script('wripl-piwik-tracking-code', "$piwitWriplScript");
         }
-
-        //--- End metric collection ---\\
     }
 
     public function monitorInterests()
@@ -198,8 +200,6 @@ class WriplWP
         echo "<link rel='stylesheet' href='$css' type='text/css' />";
 
         $accessToken = $this->retreiveAccessToken();
-
-        $this->metricCollection((bool) $accessToken);
 
         if (is_null($accessToken)) {
             return;
@@ -233,11 +233,15 @@ class WriplWP
 
             $activitiesResponse = json_decode($result);
 
-            $script = Wripl_Client::getWebRootFromApiUrl($wriplApiBase) . '/js/wripl-compiled.js';
+            $wriplMonitorScript = $this->getMonitorScriptUrl();
             $endpoint = $wriplApiBase . '/activity-update';
 
-            echo "<script type='text/javascript' src='$script'></script>";
-            echo "<script type='text/javascript'>wripl.main({activityHashId:'{$activitiesResponse->activity_hash_id}', 'endpoint' : '$endpoint'});</script>";
+            wp_enqueue_script('wripl-interest-monitor', $wriplMonitorScript);
+            wp_enqueue_script('wripl-interest-monitor-start', plugin_dir_url(__FILE__) . 'js/start_wripl_monitor.js');
+            wp_localize_script('wripl-interest-monitor-start', 'WriplMonitorProperties', array(
+                'activityHashId' => $activitiesResponse->activity_hash_id,
+                'endpoint' => $endpoint)
+            );
         } catch (Exception $e) {
             //var_dump($e);die;
         }
@@ -596,6 +600,11 @@ class WriplWP
         }
 
         return $this->apiUrl;
+    }
+
+    public function getMonitorScriptUrl()
+    {
+        return Wripl_Client::getWebRootFromApiUrl($this->getApiUrl()) . '/js/wripl-compiled.js';
     }
 
 }
