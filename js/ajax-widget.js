@@ -8,19 +8,21 @@
         jQuery.post(
             wriplAjax.ajaxUrl,
             {
-                action: 'wripl-get-widget-recommendations'
+                action: 'wripl-get-widget-recommendations',
+                maxRecommendations: wriplAjax.maxRecommendations
             },
             function( response ) {
-                alert(response);
+
+                jQuery("div#wripl-ajax-container").html(response);
             }
             );
     }
 
     /**
      * Fetches the activity code from the host site,
-     * on success it starts the tracker and calls the callback if provided.
+     * on success it starts the tracker and gets the widget content.
      */
-    var beginTracking = function(callback){
+    var beginTracking = function(){
 
         jQuery.post(
             wriplAjax.ajaxUrl,
@@ -30,12 +32,11 @@
             },
             function( response ) {
 
-                wripl.main({activityHashId: response.activity_hash_id, endpoint : response.endpoint});
-
-                if(typeof callback == 'function')
-                {
-                    callback();
+                if(response.activity_hash_id && response.endpoint) {
+                    wripl.main({activityHashId: response.activity_hash_id, endpoint : response.endpoint});
                 }
+
+                getWidget();
 
             }
             );
@@ -44,7 +45,7 @@
     jQuery(document).ready(function() {
 
         if (typeof wriplAjax.path != 'undefined') {
-            beginTracking(getWidget);
+            beginTracking();
         }else{
             getWidget();
         }

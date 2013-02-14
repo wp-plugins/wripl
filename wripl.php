@@ -9,7 +9,7 @@
 set_include_path(dirname(__FILE__) . '/libs' . PATH_SEPARATOR . get_include_path());
 
 require_once dirname(__FILE__) . '/WriplRecommendationWidget.php';
-//require_once dirname(__FILE__) . '/WriplRecommendationWidgetAjax.php';
+require_once dirname(__FILE__) . '/WriplRecommendationWidgetAjax.php';
 require_once dirname(__FILE__) . '/libs/OAuthSimple/OAuthSimple.php';
 
 $wriplWP = new WriplWP();
@@ -40,7 +40,7 @@ class WriplWP
         add_action('admin_init', array($this, 'settingsPageInit'));
         add_action('wripl_index_content', array($this, 'indexContent'), 5, 2);
         add_action('widgets_init', create_function('', 'return register_widget("WriplRecommendationWidget");'));
-        //add_action('widgets_init', create_function('', 'return register_widget("WriplRecommendationWidgetAjax");'));
+        add_action('widgets_init', create_function('', 'return register_widget("WriplRecommendationWidgetAjax");'));
         add_action('wp_head', array($this, 'monitorInterests'));
         add_action('publish_post', array($this, 'onPostPublish'));
         add_action('wp_trash_post', array($this, 'onPostTrash'));
@@ -73,10 +73,10 @@ class WriplWP
      */
     public function wriplAutoloader($className)
     {
-        if(substr($className, 0, 6) === 'Wripl_') {
-            $requestedFile = dirname(__FILE__) . '/libs/' . str_replace("_" , DIRECTORY_SEPARATOR, $className) . '.php';
+        if (substr($className, 0, 6) === 'Wripl_') {
+            $requestedFile = dirname(__FILE__) . '/libs/' . str_replace("_", DIRECTORY_SEPARATOR, $className) . '.php';
 
-            if(is_readable($requestedFile)) {
+            if (is_readable($requestedFile)) {
                 require_once $requestedFile;
             }
         }
@@ -87,75 +87,34 @@ class WriplWP
      */
     public function ajaxWidgetRecommendationsHtml()
     {
-
         try {
 
-            $recommendations = $this->requestRecommendations($_POST['maxRecommendations']);
+            $accessToken = $this->retreiveAccessToken();
 
-            if (count($recommendations) !== 0) {
-                $postIds = array();
-                $pageIds = array();
+            if (is_null($accessToken)) {
 
-                $itemOrder = array();
-
-                /**
-                 * Collect post id's
-                 */
-                foreach ($recommendations as $recommendation) {
-                    if (substr($recommendation->uri, 0, 2) === 'p=') {
-                        $id = substr($recommendation->uri, 2, strlen($recommendation->uri));
-                        $itemOrder[]['post'] = $id;
-                        $postIds[] = $id;
-                    } elseif (substr($recommendation->uri, 0, 8) === 'page_id=') {
-                        $id = substr($recommendation->uri, 8, strlen($recommendation->uri));
-                        $itemOrder[]['page'] = $id;
-                        $pageIds[] = $id;
-                        ;
-                    }
-                }
-
-                $posts = get_posts(array('include' => $postIds));
-                $pages = get_pages(array('include' => $pageIds));
-
-                $indexedPosts = array();
-                foreach ($posts as $post) {
-                    $indexedPosts[$post->ID] = $post;
-                }
-
-                $indexedPages = array();
-                foreach ($pages as $page) {
-                    $indexedPosts[$page->ID] = $page;
-                }
-
-                $indexedItems = array();
-
-                foreach ($itemOrder as $item) {
-                    if (array_key_exists('post', $item)) {
-                        $indexedItems[] = $indexedPosts[$item['post']];
-                    }
-                    if (array_key_exists('page', $item)) {
-                        $indexedItems[] = $indexedPages[$item['page']];
-                    }
-                }
-
-                $out = '<ul>';
-
-                foreach ($indexedItems as $item) {
-                    $permalink = get_permalink($item->ID);
-
-                    $out .= "<li><a href='$permalink'>$item->post_title</a></li>";
-                }
-
-                $out .= '</ul>';
+                echo WriplRecommendationWidget::disconnectedHtml();
+                exit;
             } else {
-                $out .= "<p>Browse some content so wripl can see what you're into.</p>";
+                $recommendations = $this->requestRecommendations($_POST['maxRecommendations']);
+
+                $out = "<p>Browse some content so wripl can see what you're into.</p>";
+
+                if (count($recommendations) !== 0) {
+
+                    $indexedItems = WriplRecommendationWidget::sortRecommendations($recommendations);
+
+                    $out = WriplRecommendationWidget::recommendationListHtml($indexedItems);
+                }
+
+
+                $connectUrl = plugins_url('disconnect.php', __FILE__);
+                $out .= "<div id='wripl-oauth-disconnect-button'><a href='' target='_blank'>see your interests</a> | <a href='$connectUrl'>disconnect</a></div>";
             }
 
 
-            $connectUrl = plugins_url('disconnect.php', __FILE__);
-            $out .= "<div id='wripl-oauth-disconnect-button'><a href='$interestUrl' target='_blank'>see your interests</a> | <a href='$connectUrl'>disconnect</a></div>";
         } catch (Exception $exc) {
-            $out = "<p>it would seam something went wrong wih wripl</p>";
+            $out = "<p>it would seem something went wrong with wripl...</p>";
         }
 
         echo $out;
@@ -177,7 +136,7 @@ class WriplWP
         $accessToken = $this->retreiveAccessToken();
 
         if (is_null($accessToken)) {
-            header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized', true, 401);
+            //header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized', true, 401);
             exit;
         }
 
@@ -199,12 +158,36 @@ class WriplWP
         }
     }
 
-    public function monitorInterests()
+    public function metricCollection($wriplEnabled = false)
     {
-
-
+        //--- Begin metric collection ---\\
 
         $wriplSettings = get_option('wripl_settings');
+        $accessToken = $this->retreiveAccessToken();
+
+        /**
+         * NOTE!
+         *
+         * Tracking scripts for trial sites only.
+         * Will be removed in future.
+         */
+        $piwikScript = "http://piwik.wripl.com/piwik.js";
+        $piwitWriplScript = "http://wripl.com/" . "metrics/{$wriplSettings['consumerKey']}.js";
+
+        echo "<script type='text/javascript' src='$piwikScript'></script>";
+
+        if (is_null($accessToken)) {
+            echo "<script type='text/javascript' src='$piwitWriplScript'></script>";
+            return;
+        } else {
+            echo "<script type='text/javascript' src='$piwitWriplScript?wripl=on'></script>";
+        }
+
+        //--- End metric collection ---\\
+    }
+
+    public function monitorInterests()
+    {
         $wriplApiBase = $this->getApiUrl();
 
         if (!$this->isSetup()) {
@@ -216,28 +199,7 @@ class WriplWP
 
         $accessToken = $this->retreiveAccessToken();
 
-        //--- Begin metric collection ---\\
-
-        /**
-         * NOTE!
-         *
-         * Tracking scripts for trial sites only.
-         * Will be removed in future.
-         */
-        $piwikScript = "http://piwik.wripl.com/piwik.js";
-        $piwitWriplScript = "http://wripl.com/" . "metrics/{$wriplSettings['consumerKey']}.php";
-        //$piwitWriplScript = Wripl_Client::getWebRootFromApiUrl($wriplApiBase) . "/metrics/{$wriplSettings['consumerKey']}.php";
-
-        echo "<script type='text/javascript' src='$piwikScript'?wripl=off></script>";
-
-        if (is_null($accessToken)) {
-            echo "<script type='text/javascript' src='$piwitWriplScript'?wripl=off></script>";
-            return;
-        } else {
-            echo "<script type='text/javascript' src='$piwitWriplScript?wripl=on'></script>";
-        }
-
-        //--- End metric collection ---\\
+        $this->metricCollection((bool) $accessToken);
 
         if (is_null($accessToken)) {
             return;
@@ -264,9 +226,6 @@ class WriplWP
                 return;
                 break;
         }
-
-        //die($path);
-
 
         try {
             $client = $this->getWriplClient();
@@ -370,54 +329,64 @@ class WriplWP
         $totalItemsInQueue = $wpdb->get_var("SELECT COUNT(*) FROM $this->wriplIndexQueueTableName");
         $totalItemsIndexed = $wpdb->get_var("SELECT COUNT(*) FROM $this->wriplIndexQueueTableName where status = " . self::ITEM_INDEXED);
         ?>
-        <div class="wrap">
+    <div class="wrap">
 
-            <!-- Display Plugin Icon, Header, and Description -->
-            <div class="icon32" id="icon-plugins"><br></div>
-            <h2>Wripl Settings</h2>
-            <p>Below you can set your wripl tokens for secure communication with the wripl servers.</p>
+        <!-- Display Plugin Icon, Header, and Description -->
+        <div class="icon32" id="icon-plugins"><br></div>
+        <h2>Wripl Settings</h2>
 
-            <h3>Step 1 : Set wripl OAuth Keys</h3>
-            <!-- Beginning of the Plugin Options Form -->
-            <form method="post" action="options.php">
-                <?php settings_fields('wripl_plugin_settings'); ?>
-                <table class="form-table">
-                    <tr>
-                        <th scope="row">Consumer Key</th>
-                        <td>
-                            <input type="text" size="57" name="wripl_settings[consumerKey]" value="<?php echo $options['consumerKey']; ?>" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <th scope="row">Consumer Secret</th>
-                        <td>
-                            <input type="text" size="57" name="wripl_settings[consumerSecret]" value="<?php echo $options['consumerSecret']; ?>" />
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            <div/>
-                        </td>
-                    </tr>
-                </table>
-                <input type="submit" name="submit" id="submit" class="button-primary" value="Save Settings">
-            </form>
+        <p>Below you can set your wripl tokens for secure communication with the wripl servers.</p>
 
-            <br/>
-            <h3>Step 2 : Queue up content to send to wripl's api</h3>
-            <p><em><?php echo $totalItemsIndexed ?>/<?php echo $totalItemsInQueue ?> content items sent...</em></p>
-            <form method="post">
-                <input type="submit" name="submit" id="submit" class="button-primary" value="Queue Published Content" <?php echo $setUp ? '' : 'disabled="disabled"' ?>>
-                <input type="hidden" name="action" value="queueContent">
-            </form>
+        <h3>Step 1 : Set wripl OAuth Keys</h3>
+        <!-- Beginning of the Plugin Options Form -->
+        <form method="post" action="options.php">
+            <?php settings_fields('wripl_plugin_settings'); ?>
+            <table class="form-table">
+                <tr>
+                    <th scope="row">Consumer Key</th>
+                    <td>
+                        <input type="text" size="57" name="wripl_settings[consumerKey]"
+                               value="<?php echo $options['consumerKey']; ?>"/>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row">Consumer Secret</th>
+                    <td>
+                        <input type="text" size="57" name="wripl_settings[consumerSecret]"
+                               value="<?php echo $options['consumerSecret']; ?>"/>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <div/>
+                    </td>
+                </tr>
+            </table>
+            <input type="submit" name="submit" id="submit" class="button-primary" value="Save Settings">
+        </form>
 
-            <br/>
-            <h3>Step 3 : Add the recommendation widget</h3>
-            <p>Add the 'Wripl Recommendations' widget to your site <a href="<?php echo get_admin_url() ?>widgets.php">here</a></p>
+        <br/>
 
-        </div>
+        <h3>Step 2 : Queue up content to send to wripl's api</h3>
 
-        <?php
+        <p><em><?php echo $totalItemsIndexed ?>/<?php echo $totalItemsInQueue ?> content items sent...</em></p>
+
+        <form method="post">
+            <input type="submit" name="submit" id="submit" class="button-primary"
+                   value="Queue Published Content" <?php echo $setUp ? '' : 'disabled="disabled"' ?>>
+            <input type="hidden" name="action" value="queueContent">
+        </form>
+
+        <br/>
+
+        <h3>Step 3 : Add the recommendation widget</h3>
+
+        <p>Add the 'Wripl Recommendations' widget to your site <a
+                href="<?php echo get_admin_url() ?>widgets.php">here</a></p>
+
+    </div>
+
+    <?php
     }
 
     public function settingsPageInit()
@@ -630,4 +599,5 @@ class WriplWP
     }
 
 }
+
 ?>

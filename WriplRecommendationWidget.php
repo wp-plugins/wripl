@@ -19,7 +19,7 @@ class WriplRecommendationWidget extends WP_Widget
     {
 
         //  Assigns values
-        $instance = wp_parse_args((array)$instance, array('maxRecommendations' => '10'));
+        $instance = wp_parse_args((array)$instance, array('maxRecommendations' => '5'));
         $maxRecommendations = strip_tags($instance['maxRecommendations']);
         ?>
     <p>
@@ -57,8 +57,6 @@ class WriplRecommendationWidget extends WP_Widget
 
     public function widget($args, $instance)
     {
-        extract($args);
-        $out = $before_widget;
 
         $wriplWP = WriplWP::$instance;
 
@@ -69,6 +67,8 @@ class WriplRecommendationWidget extends WP_Widget
 
         $accessToken = $wriplWP->retreiveAccessToken();
 
+        $out = $args['before_widget'];
+        $out .= $args['before_title'] . 'wripl recommends...' . $args['after_title'];
 
         //When wripl isn't active
         if (is_null($accessToken)) {
@@ -78,11 +78,11 @@ class WriplRecommendationWidget extends WP_Widget
         } //When wripl is active
         else {
 
-            $out .= $before_title . 'wripl recommends...' . $after_title;
+
 
             try {
                 $recommendations = $wriplWP->requestRecommendations($instance['maxRecommendations']);
-                $indexedItems = $this->sortRecommendations($recommendations);
+                $indexedItems = self::sortRecommendations($recommendations);
 
                 if (count($recommendations) === 0) {
                     $out .= "<p>nothing right now, here's a random post to tide you over...</p>";
@@ -92,15 +92,7 @@ class WriplRecommendationWidget extends WP_Widget
                 }
 
 
-                $out .= '<ul>';
-
-                foreach ($indexedItems as $item) {
-                    $permalink = get_permalink($item->ID);
-
-                    $out .= "<li><a href='$permalink'>$item->post_title</a></li>";
-                }
-
-                $out .= '</ul>';
+                $out .= self::recommendationListHtml($indexedItems);
 
 
                 $disconnectUrl = plugins_url('disconnect.php', __FILE__);
@@ -110,11 +102,11 @@ class WriplRecommendationWidget extends WP_Widget
             }
         }
 
-        $out .= $after_widget;
+        $out .= $args['after_widget'];
         echo $out;
     }
 
-    public function sortRecommendations($recommendations)
+    public static function sortRecommendations($recommendations)
     {
         $postIds = array();
         $pageIds = array();
@@ -162,6 +154,38 @@ class WriplRecommendationWidget extends WP_Widget
         }
 
         return $indexedItems;
+    }
+
+    public static function disconnectedHtml()
+    {
+        $wriplWP = WriplWP::$instance;
+
+        $connectUrl = plugins_url('connect.php', __FILE__);
+        $imageFolderUrl = plugins_url('images/', __FILE__);
+        $title = 'wripl recommends...';
+
+        $out = require dirname(__FILE__) . '/widget-template/default-deactivate.phtml';
+
+        //$interestUrl = Wripl_Client::getWebRootFromApiUrl($wriplWP->getApiUrl()) . '/interests';
+
+        //$accessToken = $wriplWP->retreiveAccessToken();
+
+        echo $out;
+    }
+
+    public static function recommendationListHtml($items)
+    {
+        $out = '<ul>';
+
+        foreach ($items as $item) {
+            $permalink = get_permalink($item->ID);
+
+            $out .= "<li><a href='$permalink'>$item->post_title</a></li>";
+        }
+
+        $out .= '</ul>';
+        return $out;
+
     }
 
 }
