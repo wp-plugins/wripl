@@ -44,6 +44,7 @@ class WriplRecommendationWidgetAjax extends WriplRecommendationWidget
 
         wp_enqueue_script('wripl-interest-monito', $wriplWP->getMonitorScriptUrl(), array('jquery'));
         wp_enqueue_script('wripl-ajax-widget', plugin_dir_url(__FILE__) . 'js/ajax-widget.js', array('jquery'));
+        wp_enqueue_script('wripl-piwik-script', 'http://piwik.wripl.com/piwik.js');
         wp_localize_script('wripl-ajax-widget', 'WriplAjax', $wriplAjaxOptions);
 
         $title = 'wripl recommends...';

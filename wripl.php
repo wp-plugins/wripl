@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Pluging to bring wripl's easy recomendations.
-  Version: 1.2.0
+  Version: 1.2.1
   Author: Brian Gallagher
   Author URI: http://wripl.com
  */
@@ -110,9 +110,10 @@ class WriplWP
                     $out = WriplRecommendationWidget::recommendationListHtml($indexedItems);
                 }
 
+                $interestUrl = Wripl_Client::getWebRootFromApiUrl($this->getApiUrl()) . '/interests';
 
                 $connectUrl = plugins_url('disconnect.php', __FILE__);
-                $out .= "<div id='wripl-oauth-disconnect-button'><a href='' target='_blank'>see your interests</a> | <a href='$connectUrl'>disconnect</a></div>";
+                $out .= "<div id='wripl-oauth-disconnect-button'><a href='$interestUrl' target='_blank'>see your interests</a> | <a href='$connectUrl'>disconnect</a></div>";
             }
 
 
@@ -129,6 +130,7 @@ class WriplWP
      */
     public function ajaxActivityCode()
     {
+        $response = array();
         $path = isset($_POST['path']) ? $_POST['path'] : null;
 
         if (is_null($path)) {
@@ -139,29 +141,30 @@ class WriplWP
         $accessToken = $this->retreiveAccessToken();
 
         if (is_null($accessToken)) {
-            //header($_SERVER['SERVER_PROTOCOL'] . ' 401 Unauthorized', true, 401);
-            exit;
+            $response['piwikScript'] = $this->metricCollection(false, true);
+        } else {
+            try {
+                $client = $this->getWriplClient();
+                $result = $client->sendActivity($path, $accessToken->getToken(), $accessToken->gettokenSecret());
+
+                $resultDecoded = json_decode($result);
+
+                $wriplApiBase = $this->getApiUrl();
+                $endpoint = $wriplApiBase . '/activity-update';
+
+                $response['activityHashId'] = $resultDecoded->activity_hash_id;
+                $response['endpoint'] = $endpoint;
+                $response['piwikScript'] = $this->metricCollection(true, true);
+
+            } catch (Exception $e) {
+                header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+                exit;
+            }
         }
 
-        try {
-            $client = $this->getWriplClient();
-            $result = $client->sendActivity($path, $accessToken->getToken(), $accessToken->gettokenSecret());
-
-            $resultDecoded = json_decode($result);
-
-            $wriplApiBase = $this->getApiUrl();
-            $endpoint = $wriplApiBase . '/activity-update';
-
-            $response['activityHashId'] = $resultDecoded->activity_hash_id;
-            $response['endpoint'] = $endpoint;
-
-            header("Content-Type: application/json");
-            echo json_encode($response);
-            exit;
-        } catch (Exception $e) {
-            header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-            exit;
-        }
+        header("Content-Type: application/json");
+        echo json_encode($response);
+        exit;
     }
 
     /**
@@ -172,20 +175,22 @@ class WriplWP
      *
      * @param bool $wriplEnabled
      */
-    public function metricCollection($wriplEnabled = false)
+    public function metricCollection($wriplEnabled = false, $return = false)
     {
         $wriplSettings = get_option('wripl_settings');
 
-        $piwikScript = "http://piwik.wripl.com/piwik.js";
         $piwitWriplScript = "http://wripl.com/" . "metrics/{$wriplSettings['consumerKey']}.js";
 
-        wp_enqueue_script('wripl-piwik-script', $piwikScript);
-
         if ($wriplEnabled) {
-            wp_enqueue_script('wripl-piwik-tracking-code', "$piwitWriplScript?wripl=on");
-        } else {
-            wp_enqueue_script('wripl-piwik-tracking-code', "$piwitWriplScript");
+            $piwitWriplScript .= '?wripl=on';
         }
+
+        if ($return) {
+            return $piwitWriplScript;
+        }
+
+        wp_enqueue_script('wripl-piwik-script', 'http://piwik.wripl.com/piwik.js');
+        wp_enqueue_script('wripl-piwik-tracking-code', "$piwitWriplScript");
     }
 
     public function monitorInterests()
@@ -239,8 +244,8 @@ class WriplWP
             wp_enqueue_script('wripl-interest-monitor', $wriplMonitorScript);
             wp_enqueue_script('wripl-interest-monitor-start', plugin_dir_url(__FILE__) . 'js/start_wripl_monitor.js');
             wp_localize_script('wripl-interest-monitor-start', 'WriplMonitorProperties', array(
-                'activityHashId' => $activitiesResponse->activity_hash_id,
-                'endpoint' => $endpoint)
+                    'activityHashId' => $activitiesResponse->activity_hash_id,
+                    'endpoint' => $endpoint)
             );
         } catch (Exception $e) {
             //var_dump($e);die;
@@ -342,6 +347,7 @@ class WriplWP
         <p>Below you can set your wripl tokens for secure communication with the wripl servers.</p>
 
         <h3>Step 1 : Set wripl OAuth Keys</h3>
+        <p>If you don't haven credentials, contact me at <a href="mailto:brian@wripl.com">brian@wripl.com</a> and we'll get you set up.</p>
         <!-- Beginning of the Plugin Options Form -->
         <form method="post" action="options.php">
             <?php settings_fields('wripl_plugin_settings'); ?>
@@ -385,8 +391,9 @@ class WriplWP
 
         <h3>Step 3 : Add the recommendation widget</h3>
 
-        <p>Add the 'Wripl Recommendations' widget to your site <a
+        <p>Add a 'Wripl Recommendations' widget to your site <a
                 href="<?php echo get_admin_url() ?>widgets.php">here</a></p>
+        <p><em>We <strong>recommend</strong> using the "Wripl Recommendations (AJAX)" version - and it's <strong>essential</strong> if you are using caching.</em></p>
 
     </div>
 
