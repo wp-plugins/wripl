@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Pluging to bring wripl's easy recomendations.
-  Version: 1.2.2
+  Version: 1.2.3
   Author: Brian Gallagher
   Author URI: http://wripl.com
  */
