@@ -27,10 +27,15 @@ $client = new Wripl_Client(new Wripl_Oauth_Client_Adapter_OAuthSimple($consumerK
  */
 //$callbackUrl = plugins_url() . '/' . basename(dirname((__FILE__))) . '/callback.php';
 $callbackUrl = plugins_url('callback.php', __FILE__);
-$requestToken = $client->getRequestToken($callbackUrl);
 
-$wriplWP->storeRequestToken($requestToken);
-$wriplWP->storeOauthRefererUrl($_SERVER['HTTP_REFERER']);
+try {
+    $requestToken = $client->getRequestToken($callbackUrl);
 
-$client->authorize();
+    $wriplWP->storeRequestToken($requestToken);
+    $wriplWP->storeOauthRefererUrl($_SERVER['HTTP_REFERER']);
+
+    $client->authorize();
+} catch (Exception $e) {
+    error_log('message : ' . $e->getMessage() . ' code: ' . $e->getCode());
+}
 ?>

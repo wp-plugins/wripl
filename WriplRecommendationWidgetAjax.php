@@ -23,7 +23,9 @@ class WriplRecommendationWidgetAjax extends WriplRecommendationWidget
 
         $imageFolderUrl = plugins_url('images', __FILE__);
 
-        $wriplAjaxOptions['ajaxUrl'] = admin_url('admin-ajax.php');
+        $protocol = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off' || $_SERVER['SERVER_PORT'] == 443) ? "https" : "http";
+
+        $wriplAjaxOptions['ajaxUrl'] = admin_url('admin-ajax.php', $protocol);
         $wriplAjaxOptions['maxRecommendations'] = $instance['maxRecommendations'];
 
         if (is_single() && !is_page()) {
