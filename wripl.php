@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Pluging to bring wripl's easy recomendations.
-  Version: 1.2.5
+  Version: 1.2.6
   Author: Brian Gallagher
   Author URI: http://wripl.com
  */
@@ -20,7 +20,7 @@ class WriplWP
     const ITEM_NEEDS_INDEXING = -1;
     const ITEM_QUEUED = 0;
     const ITEM_INDEXED = 1;
-    const VERSION = '1.2.5';
+    const VERSION = '1.2.6';
 
     protected $wriplIndexQueueTableName = null;
     static $instance;

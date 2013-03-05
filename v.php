@@ -15,6 +15,7 @@ $data['wriplWpVersion'] = $wriplWP::VERSION;
 if (isset($_POST['debug'])) {
     $data['wriplSetup'] = (bool) $wriplWP->isSetup();
     $data['wordpressVersion'] = $wp_version;
+    $data['curlVersion'] = function_exists('curl_version') ? curl_version() : false;
     $data['phpVersion'] = phpversion();
     $data['server'] = $_SERVER['SERVER_SOFTWARE'];
 }
