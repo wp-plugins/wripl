@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Pluging to bring wripl's easy recomendations.
-  Version: 1.2.1
+  Version: 1.2.6
   Author: Brian Gallagher
   Author URI: http://wripl.com
  */
@@ -14,14 +14,13 @@ require_once dirname(__FILE__) . '/libs/OAuthSimple/OAuthSimple.php';
 
 $wriplWP = new WriplWP();
 
-//$wriplWP->indexContent(2, 'page');
-
 class WriplWP
 {
 
     const ITEM_NEEDS_INDEXING = -1;
     const ITEM_QUEUED = 0;
     const ITEM_INDEXED = 1;
+    const VERSION = '1.2.6';
 
     protected $wriplIndexQueueTableName = null;
     static $instance;
@@ -148,6 +147,10 @@ class WriplWP
                 $result = $client->sendActivity($path, $accessToken->getToken(), $accessToken->gettokenSecret());
 
                 $resultDecoded = json_decode($result);
+
+                if (!$resultDecoded) {
+                    throw new Exception();
+                }
 
                 $wriplApiBase = $this->getApiUrl();
                 $endpoint = $wriplApiBase . '/activity-update';
@@ -432,10 +435,12 @@ class WriplWP
                 break;
         }
 
-
-        $client = $this->getWriplClient();
-        $client->deleteFromIndex($path);
-
+        try {
+            $client = $this->getWriplClient();
+            $client->deleteFromIndex($path);
+        } catch (Exception $e) {
+            //fail silently
+        }
         global $wpdb;
         wp_clear_scheduled_hook('wripl_index_content', array($pId, $postOrPage->post_type));
         $wpdb->query("DELETE FROM $this->wriplIndexQueueTableName WHERE id = " . $pId);
@@ -451,9 +456,12 @@ class WriplWP
 
     public function onPageTrash($pageId)
     {
-        die('page_id=' . $pageId);
-        $client = $this->getWriplClient();
-        $client->deleteFromIndex('page_id=' . $pageId);
+        try {
+            $client = $this->getWriplClient();
+            $client->deleteFromIndex('page_id=' . $pageId);
+        } catch (Exception $e) {
+            //fail silently
+        }
 
         global $wpdb;
         wp_clear_scheduled_hook('wripl_index_content', array($pageId, 'page'));
