@@ -9,7 +9,7 @@ if (!$wriplWP->isSetup()) {
     exit('wripl doesn\'t seem to be set up yet');
 }
 
-$data['wriplWpVersion'] = $wriplWP::VERSION;
+$data['wriplWpVersion'] = WriplWP::VERSION;
 
 
 if (isset($_POST['debug'])) {
