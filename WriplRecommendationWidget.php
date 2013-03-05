@@ -48,7 +48,6 @@ class WriplRecommendationWidget extends WP_Widget
 
     function update($newInstance, $oldInstance)
     {
-
         $instance = $oldInstance;
         $instance['maxRecommendations'] = strip_tags($newInstance['maxRecommendations']);
 
