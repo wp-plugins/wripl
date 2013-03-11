@@ -77,7 +77,7 @@
     {
 
         //trigger event - loaded recommendations;
-        $.trigger('wripl-recommendations-loaded', {});
+        //$.trigger('wripl-recommendations-loaded', {});
 
     }
 

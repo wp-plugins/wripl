@@ -11,6 +11,7 @@ set_include_path(dirname(__FILE__) . '/libs' . PATH_SEPARATOR . get_include_path
 require_once dirname(__FILE__) . '/WriplRecommendationWidget.php';
 require_once dirname(__FILE__) . '/WriplRecommendationWidgetAjax.php';
 require_once dirname(__FILE__) . '/libs/OAuthSimple/OAuthSimple.php';
+require_once dirname(__FILE__) . '/WriplPluginHelper.php';
 
 $wriplWP = new WriplWP();
 
@@ -67,8 +68,7 @@ class WriplWP
     public function init()
     {
         spl_autoload_register(array($this, 'wriplAutoloader'));
-        wp_enqueue_style('wripl-style', plugins_url('style.css', __FILE__));
-        wp_enqueue_script('jquery-effects-slide');
+
     }
 
     /**
@@ -86,17 +86,28 @@ class WriplWP
         }
     }
 
+    /**
+     * Adding required scripts
+     */
     public function enqueueScripts()
     {
         wp_register_script(
-            'handlebars.js',  //handle
+            'handlebars.js', //handle
             'http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js',
-            array(),  //dependencies
-            false,  //version
-            true  //footer
+            array(), //dependencies
+            false, //version
+            true //footer
         );
 
         wp_enqueue_script('handlebars.js');
+        wp_enqueue_style('wripl-style', plugins_url('style.css', __FILE__));
+        wp_enqueue_script('jquery-effects-slide');
+
+        wp_enqueue_script('wripl-ajax-properties', plugin_dir_url(__FILE__) . 'js/wripl-ajax-init.js', array('jquery'));
+        wp_localize_script('wripl-ajax-properties', 'WriplAjaxProperties', array(
+            'ajaxUrl' => admin_url('admin-ajax.php', WriplPluginHelper::getCurrentProtocol()),
+            'path' => WriplPluginHelper::getPathUri()
+        ));
     }
 
     /**
