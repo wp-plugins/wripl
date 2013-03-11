@@ -1,9 +1,7 @@
 <?php
 
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/wp-load.php');
-require_once dirname(__FILE__) . '/libs/Wripl/Client.php';
-require_once dirname(__FILE__) . '/libs/Wripl/Oauth/Token.php';
-require_once dirname(__FILE__) . '/libs/Wripl/Oauth/Client/Adapter/OAuthSimple.php';
+require_once dirname(__FILE__) . '/WriplTokenStore.php';
 
 $wriplWP = WriplWP::$instance;
 
@@ -23,16 +21,18 @@ $config['oauthBaseUrl'] = Wripl_Client::getOauthUrlFromApiUrl($wriplApiBase);
 
 $client = new Wripl_Client(new Wripl_Oauth_Client_Adapter_OAuthSimple($consumerKey, $consumerSecret), $config);
 
-$requestToken = $wriplWP->retrieveRequestToken();
+$requestToken = WriplTokenStore::retrieveRequestToken();
 
 $client->setRequestToken($requestToken);
 
 $accessToken = $client->getAccessToken();
 
-$wriplWP->storeAccessToken($accessToken);
-$wriplWP->nukeRequestToken();
+WriplTokenStore::storeAccessToken($accessToken);
+WriplTokenStore::deleteRequestToken();
 
-$referer = $wriplWP->retrieveOauthRefererUrl();
+$referer = $wriplWP->wriplPluginHelper->retrieveOauthRefererUrl();
+$wriplWP->wriplPluginHelper->deleteOauthRefererUrl();
 
 header("Location: $referer");
+exit;
 ?>

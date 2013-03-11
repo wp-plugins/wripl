@@ -11,6 +11,7 @@ set_include_path(dirname(__FILE__) . '/libs' . PATH_SEPARATOR . get_include_path
 require_once dirname(__FILE__) . '/WriplRecommendationWidget.php';
 require_once dirname(__FILE__) . '/libs/OAuthSimple/OAuthSimple.php';
 require_once dirname(__FILE__) . '/WriplPluginHelper.php';
+require_once dirname(__FILE__) . '/WriplTokenStore.php';
 
 $wriplWP = new WriplWP();
 
@@ -27,8 +28,6 @@ class WriplWP
     protected $wriplIndexQueueTableName = null;
     static $instance;
     protected $apiUrl = 'http://api.wripl.com/v0.1';
-    protected $wriplOauthAccessTokenCookieKey = 'wripl-oat';
-    protected $wriplOauthRequestTokenCookieKey = 'wripl-ort';
 
     public function __construct()
     {
@@ -50,12 +49,6 @@ class WriplWP
         add_action('wp_trash_page', array($this, 'onPageTrash'));
 
         add_action('wp_enqueue_scripts', array($this, 'enqueueScripts'));
-
-        add_action('wp_ajax_nopriv_wripl-get-activity-code', array($this, 'ajaxActivityCode'));
-        add_action('wp_ajax_wripl-get-activity-code', array($this, 'ajaxActivityCode'));
-
-        add_action('wp_ajax_nopriv_wripl-get-widget-recommendations', array($this, 'ajaxWidgetRecommendationsHtml'));
-        add_action('wp_ajax_wripl-get-widget-recommendations', array($this, 'ajaxWidgetRecommendationsHtml'));
 
         add_action('wp_ajax_nopriv_wripl-ajax-init', array($this, 'ajaxInit'));
         add_action('wp_ajax_wripl-ajax-init', array($this, 'ajaxInit'));
@@ -127,7 +120,7 @@ class WriplWP
         $response = array();
         $path = isset($_POST['path']) ? $_POST['path'] : null;
 
-        $accessToken = $this->retrieveAccessToken();
+        $accessToken = WriplTokenStore::retrieveAccessToken();
 
         if (is_null($accessToken)) {
 
@@ -193,97 +186,6 @@ class WriplWP
     }
 
     /**
-     * AJAX endpoint
-     * @deprecated
-     */
-    public
-    function ajaxWidgetRecommendationsHtml()
-    {
-        try {
-
-            $accessToken = $this->retrieveAccessToken();
-
-            if (is_null($accessToken)) {
-
-                echo WriplRecommendationWidget::disconnectedHtml();
-                exit;
-            } else {
-                $recommendations = $this->requestRecommendations($_POST['maxRecommendations']);
-
-                $out = "<p>Browse some content so wripl can see what you're into.</p>";
-
-                if (count($recommendations) !== 0) {
-
-                    $indexedItems = WriplRecommendationWidget::sortRecommendations($recommendations);
-
-                    $out = WriplRecommendationWidget::recommendationListHtml($indexedItems);
-                }
-
-                $interestUrl = Wripl_Client::getWebRootFromApiUrl($this->wriplPluginHelper->getApiUrl()) . '/interests';
-
-                $connectUrl = plugins_url('disconnect.php', __FILE__);
-                $out .= "<div id='wripl-oauth-disconnect-button'><a href='$interestUrl' target='_blank'>see your interests</a> | <a href='$connectUrl'>disconnect</a></div>";
-            }
-
-
-        } catch (Exception $exc) {
-            $out = "<p>it would seem something went wrong with wripl...</p>";
-        }
-
-        echo $out;
-        exit;
-    }
-
-    /**
-     * AJAX endpoint
-     * @deprecated
-     */
-    public function ajaxActivityCode()
-    {
-        $response = array();
-        $path = isset($_POST['path']) ? $_POST['path'] : null;
-
-        if (is_null($path)) {
-            header($_SERVER['SERVER_PROTOCOL'] . ' 400 Bad Request', true, 400);
-            exit;
-        }
-
-        $accessToken = $this->retrieveAccessToken();
-
-        if (is_null($accessToken)) {
-            $response['piwikScript'] = $this->metricCollection(false, true);
-        } else {
-            try {
-                $client = $this->getWriplClient();
-                $result = $client->sendActivity($path, $accessToken->getToken(), $accessToken->gettokenSecret());
-
-                $resultDecoded = json_decode($result);
-
-                if (!$resultDecoded) {
-                    throw new Exception();
-                }
-
-                $wriplApiBase = $this->wriplPluginHelper->getApiUrl();
-                $endpoint = $wriplApiBase . '/activity-update';
-
-                $response['activityHashId'] = $resultDecoded->activity_hash_id;
-                $response['endpoint'] = $endpoint;
-                $response['piwikScript'] = $this->metricCollection(true, true);
-
-            } catch (Exception $e) {
-                header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-                exit;
-            }
-        }
-
-        header("Content-Type: application/json");
-
-
-        echo json_encode($response);
-        exit;
-    }
-
-    /**
      * NOTE!
      *
      * Tracking scripts for trial sites only.
@@ -320,7 +222,7 @@ class WriplWP
             return;
         }
 
-        $accessToken = $this->retrieveAccessToken();
+        $accessToken = WriplTokenStore::retrieveAccessToken();
 
         if (is_null($accessToken)) {
             return;
@@ -595,59 +497,6 @@ class WriplWP
         $wpdb->query("DELETE FROM $this->wriplIndexQueueTableName WHERE id = " . $pageId);
     }
 
-    public function storeOauthRefererUrl($url)
-    {
-        setcookie('wripl-oauth-referer', $url, strtotime('+1 hour'), COOKIEPATH, COOKIE_DOMAIN, false);
-    }
-
-    public function retrieveOauthRefererUrl()
-    {
-        return $_COOKIE['wripl-oauth-referer'];
-    }
-
-    public function storeRequestToken(Wripl_Oauth_Token $requestToken)
-    {
-        setcookie($this->wriplOauthRequestTokenCookieKey, implode(':', array($requestToken->getToken(), $requestToken->getTokenSecret())), strtotime('+1 hour'), COOKIEPATH, COOKIE_DOMAIN, false);
-    }
-
-    public function retrieveRequestToken()
-    {
-        if (isset($_COOKIE[$this->wriplOauthRequestTokenCookieKey])) {
-            $tokens = explode(':', $_COOKIE[$this->wriplOauthRequestTokenCookieKey]);
-
-            return new Wripl_Oauth_Token($tokens[0], $tokens[1]);
-        }
-
-        return null;
-    }
-
-    public function nukeRequestToken()
-    {
-        setcookie($this->wriplOauthRequestTokenCookieKey, 'FALSE', strtotime('-1 year'), COOKIEPATH, COOKIE_DOMAIN, false);
-        setcookie('wripl-oauth-referer', 'FALSE', strtotime('-1 year'), COOKIEPATH, COOKIE_DOMAIN, false);
-    }
-
-    public function storeAccessToken(Wripl_Oauth_Token $accessToken)
-    {
-        setcookie($this->wriplOauthAccessTokenCookieKey, ($accessToken->getToken() . ':' . $accessToken->getTokenSecret()), strtotime('+1 year'), COOKIEPATH, COOKIE_DOMAIN, false);
-    }
-
-    public function retrieveAccessToken()
-    {
-        if (isset($_COOKIE[$this->wriplOauthAccessTokenCookieKey])) {
-            $tokens = explode(':', $_COOKIE[$this->wriplOauthAccessTokenCookieKey]);
-
-            return new Wripl_Oauth_Token($tokens[0], $tokens[1]);
-        }
-
-        return null;
-    }
-
-    public function nukeAccessToken()
-    {
-        setcookie($this->wriplOauthAccessTokenCookieKey, 'FALSE', strtotime('-1 year'), COOKIEPATH, COOKIE_DOMAIN, false);
-    }
-
     /**
      * @param $id Post Id
      * @param $type Post type
@@ -733,7 +582,7 @@ class WriplWP
     {
         $client = $this->getWriplClient();
 
-        $accessToken = $this->retrieveAccessToken();
+        $accessToken = WriplTokenStore::retrieveAccessToken();
 
         return $client->getRecommendations($max, $accessToken->getToken(), $accessToken->getTokenSecret());
     }

@@ -120,4 +120,19 @@ class WriplPluginHelper
 
         return $indexedItems;
     }
+
+    public function storeOauthRefererUrl($url)
+    {
+        setcookie('wripl-oauth-referer', $url, strtotime('+1 hour'), COOKIEPATH, COOKIE_DOMAIN, false);
+    }
+
+    public function retrieveOauthRefererUrl()
+    {
+        return $_COOKIE['wripl-oauth-referer'];
+    }
+
+    public function deleteOauthRefererUrl()
+    {
+        setcookie('wripl-oauth-referer', 'FALSE', strtotime('-1 year'), COOKIEPATH, COOKIE_DOMAIN, false);
+    }
 }

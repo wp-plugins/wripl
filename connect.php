@@ -1,6 +1,7 @@
 <?php
 
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/wp-load.php');
+require_once dirname(__FILE__) . '/WriplTokenStore.php';
 
 $wriplWP = WriplWP::$instance;
 
@@ -31,8 +32,8 @@ try {
 
     $requestToken = $client->getRequestToken($callbackUrl);
 
-    $wriplWP->storeRequestToken($requestToken);
-    $wriplWP->storeOauthRefererUrl($_SERVER['HTTP_REFERER']);
+    WriplTokenStore::storeRequestToken($requestToken);
+    $wriplWP->wriplPluginHelper->storeOauthRefererUrl($_SERVER['HTTP_REFERER']);
 
     $client->authorize();
 
