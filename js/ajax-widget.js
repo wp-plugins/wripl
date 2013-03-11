@@ -67,11 +67,13 @@
 
         // Add listeners
         $("body").bind( "wripl-ajax-init-done" , function (e, params) {
+            console.log(e);
             $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/loggedout.html', function(data) {
+
                 var template = Handlebars.compile(data);
                 var compiledHtml = template({ pluginPath: WriplAjaxProperties.pluginPath }); // (step 3)
 
-                $('.wripl-widget-recommendation').html(compiledHtml);
+                $('#wripl-widget-ajax-container').html(compiledHtml);
             });
         });
 
