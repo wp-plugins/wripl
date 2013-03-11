@@ -10,7 +10,7 @@ class WriplRecommendationWidget extends WP_Widget
 
     public function WriplRecommendationWidget()
     {
-        $widget_ops = array('classname' => 'wripl_recommentadion_widget-ajax', 'description' => __('Displays wripl recommendations'));
+        $widget_ops = array('classname' => 'wripl-widget-recommendation', 'description' => __('Displays wripl recommendations'));
 
         $this->WP_Widget('wripl-recommentadion-widget-ajax', __('Wripl Recommendations'), $widget_ops);
     }
