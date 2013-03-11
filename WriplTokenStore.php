@@ -3,7 +3,7 @@
 class WriplTokenStore
 {
     const WRIPL_OAUTH_REQUEST_TOKEN_COOKIE_KEY = 'wripl-ort';
-    const WRIPL_OAUTH_ACCESS_TOKEN_COOKIE_KEY = 'wripl-oAt';
+    const WRIPL_OAUTH_ACCESS_TOKEN_COOKIE_KEY = 'wripl-oat';
 
     public static function storeRequestToken(Wripl_Oauth_Token $requestToken)
     {
@@ -33,6 +33,7 @@ class WriplTokenStore
 
     public static function retrieveAccessToken()
     {
+
         if (isset($_COOKIE[self::WRIPL_OAUTH_ACCESS_TOKEN_COOKIE_KEY])) {
             $tokens = explode(':', $_COOKIE[self::WRIPL_OAUTH_ACCESS_TOKEN_COOKIE_KEY]);
 
