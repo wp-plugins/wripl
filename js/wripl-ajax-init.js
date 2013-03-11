@@ -1,12 +1,8 @@
 (function ($) {
 
+    const INIT_DONE_EVENT = "wripl-ajax-init-done";
+
     $(document).ready(function () {
-
-        //add listeners here?
-        $("#wripl-ajax-container").bind('wriplEvent', function (e) {
-            //console.log(e)
-        });
-
         init();
 
     });
@@ -20,13 +16,28 @@
             }
         ).done(function(response) {
                 console.log(response);
-                $("#wripl-ajax-container").trigger('wriplEvent', response);
+                $("body").trigger( INIT_DONE_EVENT , response);
             }
         ).fail(function(response){
+
+                response.responseText = response.responseText || "{}";
+
+                var responseTextObject = eval('(' + response.responseText + ')');
+
+                if(responseTextObject.piwikScript) {
+                    var script = document.createElement('script');
+                    script.type = 'text/javascript';
+                    script.src = responseTextObject.piwikScript;
+
+                    $("body").append(script);
+                }
+
                 switch(response.status)
                 {
+
                     case 403:
                         console.log('not logged in');
+                        $("body").trigger( INIT_DONE_EVENT , response);
                         break;
                     default:
                         //$("#wripl-ajax-container").trigger('wriplEvent', response);
@@ -35,8 +46,7 @@
                 }
             }
         );
-
-
     }
+
 
 })(jQuery);

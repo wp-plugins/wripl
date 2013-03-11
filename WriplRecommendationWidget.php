@@ -63,7 +63,7 @@ class WriplRecommendationWidget extends WP_Widget
 
         $imageFolderUrl = plugins_url('images', __FILE__);
 
-        wp_enqueue_script('wripl-ajax-widget', plugin_dir_url(__FILE__) . 'js/ajax-widget.js', array('jquery'));
+        wp_enqueue_script('wripl-ajax-widget', plugin_dir_url(__FILE__) . 'js/ajax-widget.js', array('jquery', 'handlebars.js'));
         wp_localize_script('wripl-ajax-widget', 'WriplWidgetProperties', $properties);
 
         $title = 'wripl recommends...';
