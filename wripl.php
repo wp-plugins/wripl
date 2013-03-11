@@ -122,6 +122,7 @@ class WriplWP
 
     public function ajaxInit()
     {
+
         $response = array();
         $path = isset($_POST['path']) ? $_POST['path'] : null;
 
@@ -130,9 +131,6 @@ class WriplWP
         if (is_null($accessToken)) {
 
             $response['inactive'] = true;
-
-            echo WriplRecommendationWidget::disconnectedHtml();
-            exit;
 
         } else {
 

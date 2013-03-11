@@ -59,26 +59,3 @@
     });
 
 })();
-
-
-/**
- * NEW
- */
-(function ($) {
-
-    $(document).ready(function () {
-
-        init();
-        //add listeners here?
-
-    });
-
-    var init = function()
-    {
-
-        //trigger event - loaded recommendations;
-        //$.trigger('wripl-recommendations-loaded', {});
-
-    }
-
-})(jQuery);
