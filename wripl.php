@@ -116,7 +116,8 @@ class WriplWP
         wp_enqueue_script('wripl-ajax-properties', plugin_dir_url(__FILE__) . 'js/wripl-ajax-init.js', array('jquery', 'wripl-interest-monitor'));
         wp_localize_script('wripl-ajax-properties', 'WriplAjaxProperties', array(
             'ajaxUrl' => admin_url('admin-ajax.php', $this->wriplPluginHelper->getCurrentProtocol()),
-            'path' => $this->wriplPluginHelper->getPathUri()
+            'path' => $this->wriplPluginHelper->getPathUri(),
+            'pluginPath' => plugin_dir_url(__FILE__),
         ));
     }
 
