@@ -1,8 +1,6 @@
 <?php
 
 require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/wp-load.php');
-//require_once dirname(__FILE__) . '/wripl.php';
-//require_once dirname(__FILE__) . '/libs/OAuthSimple/OAuthSimple.php';
 
 $wriplWP = WriplWP::$instance;
 
@@ -15,7 +13,7 @@ try {
 
     $wriplSettings = get_option('wripl_settings');
 
-    $wriplApiBase = $wriplWP->getApiUrl();
+    $wriplApiBase = $wriplWP->wriplPluginHelper->getApiUrl();
     $consumerKey = $wriplSettings['consumerKey'];
     $consumerSecret = $wriplSettings['consumerSecret'];
 

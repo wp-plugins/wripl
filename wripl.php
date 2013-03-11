@@ -9,7 +9,6 @@
 set_include_path(dirname(__FILE__) . '/libs' . PATH_SEPARATOR . get_include_path());
 
 require_once dirname(__FILE__) . '/WriplRecommendationWidget.php';
-require_once dirname(__FILE__) . '/WriplRecommendationWidgetAjax.php';
 require_once dirname(__FILE__) . '/libs/OAuthSimple/OAuthSimple.php';
 require_once dirname(__FILE__) . '/WriplPluginHelper.php';
 
@@ -45,7 +44,6 @@ class WriplWP
         add_action('admin_init', array($this, 'settingsPageInit'));
         add_action('wripl_index_content', array($this, 'indexContent'), 5, 2);
         add_action('widgets_init', create_function('', 'return register_widget("WriplRecommendationWidget");'));
-        add_action('widgets_init', create_function('', 'return register_widget("WriplRecommendationWidgetAjax");'));
         add_action('publish_post', array($this, 'onPostPublish'));
         add_action('wp_trash_post', array($this, 'onPostTrash'));
         add_action('publish_page', array($this, 'onPagePublish'));
@@ -111,6 +109,8 @@ class WriplWP
 
         wp_enqueue_style('wripl-style', plugins_url('style.css', __FILE__));
 
+        wp_enqueue_script('wripl-piwik-script', 'http://piwik.wripl.com/piwik.js');
+
         wp_enqueue_script('wripl-interest-monitor', $this->wriplPluginHelper->getMonitorScriptUrl());
 
         wp_enqueue_script('wripl-ajax-properties', plugin_dir_url(__FILE__) . 'js/wripl-ajax-init.js', array('jquery', 'wripl-interest-monitor'));
@@ -130,12 +130,14 @@ class WriplWP
 
         if (is_null($accessToken)) {
 
-            $response['inactive'] = true;
+            $response['piwikScript'] = $this->metricCollection(false, true);
+
+            header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
 
         } else {
 
             // 1.) If a proper post, fetch activity code
-            if (is_single() && is_page() && !is_null($path)) {
+            if (!is_single() && !is_null($path)) {
 
                 try {
                     $client = $this->getWriplClient();
@@ -191,8 +193,10 @@ class WriplWP
 
     /**
      * AJAX endpoint
+     * @deprecated
      */
-    public function ajaxWidgetRecommendationsHtml()
+    public
+    function ajaxWidgetRecommendationsHtml()
     {
         try {
 
@@ -231,6 +235,7 @@ class WriplWP
 
     /**
      * AJAX endpoint
+     * @deprecated
      */
     public function ajaxActivityCode()
     {
@@ -303,6 +308,9 @@ class WriplWP
         wp_enqueue_script('wripl-piwik-tracking-code', "$piwitWriplScript");
     }
 
+    /**
+     * @deprecated
+     */
     public function monitorInterests()
     {
         $wriplApiBase = $this->wriplPluginHelper->getApiUrl();
@@ -310,9 +318,6 @@ class WriplWP
         if (!$this->isSetup()) {
             return;
         }
-
-        $css = plugins_url('style.css', __FILE__);
-        echo "<link rel='stylesheet' href='$css' type='text/css' />";
 
         $accessToken = $this->retrieveAccessToken();
 
@@ -467,7 +472,8 @@ class WriplWP
 
         <h3>Step 1 : Set wripl OAuth Keys</h3>
 
-        <p>If you don't haven credentials, contact me at <a href="mailto:brian@wripl.com">brian@wripl.com</a> and we'll
+        <p>If you don't haven credentials, contact me at <a href="mailto:brian@wripl.com">brian@wripl.com</a> and
+            we'll
             get you set up.</p>
         <!-- Beginning of the Plugin Options Form -->
         <form method="post" action="options.php">
