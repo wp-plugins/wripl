@@ -23,6 +23,8 @@ class WriplWP
     const ITEM_INDEXED = 1;
     const VERSION = '1.2.7';
 
+    public $wriplPluginHelper;
+
     protected $wriplIndexQueueTableName = null;
     static $instance;
     protected $apiUrl = 'http://api.wripl.com/v0.1';
@@ -31,6 +33,9 @@ class WriplWP
 
     public function __construct()
     {
+
+        $this->wriplPluginHelper = new WriplPluginHelper($this->apiUrl);
+
         global $wpdb;
 
         $this->wriplIndexQueueTableName = $wpdb->prefix . "wripl_index_queue";
@@ -54,6 +59,9 @@ class WriplWP
         add_action('wp_ajax_nopriv_wripl-get-widget-recommendations', array($this, 'ajaxWidgetRecommendationsHtml'));
         add_action('wp_ajax_wripl-get-widget-recommendations', array($this, 'ajaxWidgetRecommendationsHtml'));
 
+        add_action('wp_ajax_nopriv_wripl-ajax-init', array($this, 'ajaxInit'));
+        add_action('wp_ajax_wripl-ajax-init', array($this, 'ajaxInit'));
+
         add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'pluginActionLinks'));
 
         register_activation_hook(__FILE__, array($this, 'onInstall'));
@@ -68,7 +76,6 @@ class WriplWP
     public function init()
     {
         spl_autoload_register(array($this, 'wriplAutoloader'));
-
     }
 
     /**
@@ -100,14 +107,88 @@ class WriplWP
         );
 
         wp_enqueue_script('handlebars.js');
-        wp_enqueue_style('wripl-style', plugins_url('style.css', __FILE__));
         wp_enqueue_script('jquery-effects-slide');
 
-        wp_enqueue_script('wripl-ajax-properties', plugin_dir_url(__FILE__) . 'js/wripl-ajax-init.js', array('jquery'));
+        wp_enqueue_style('wripl-style', plugins_url('style.css', __FILE__));
+
+        wp_enqueue_script('wripl-interest-monitor', $this->wriplPluginHelper->getMonitorScriptUrl());
+
+        wp_enqueue_script('wripl-ajax-properties', plugin_dir_url(__FILE__) . 'js/wripl-ajax-init.js', array('jquery', 'wripl-interest-monitor'));
         wp_localize_script('wripl-ajax-properties', 'WriplAjaxProperties', array(
-            'ajaxUrl' => admin_url('admin-ajax.php', WriplPluginHelper::getCurrentProtocol()),
-            'path' => WriplPluginHelper::getPathUri()
+            'ajaxUrl' => admin_url('admin-ajax.php', $this->wriplPluginHelper->getCurrentProtocol()),
+            'path' => $this->wriplPluginHelper->getPathUri()
         ));
+    }
+
+    public function ajaxInit()
+    {
+        $response = array();
+        $path = isset($_POST['path']) ? $_POST['path'] : null;
+
+        $accessToken = $this->retrieveAccessToken();
+
+        if (is_null($accessToken)) {
+
+            $response['inactive'] = true;
+
+            echo WriplRecommendationWidget::disconnectedHtml();
+            exit;
+
+        } else {
+
+            // 1.) If a proper post, fetch activity code
+            if (is_single() && is_page() && !is_null($path)) {
+
+                try {
+                    $client = $this->getWriplClient();
+                    $result = $client->sendActivity($path, $accessToken->getToken(), $accessToken->gettokenSecret());
+
+                    $resultDecoded = json_decode($result);
+
+                    if (!$resultDecoded) {
+                        throw new Exception();
+                    }
+
+                    $wriplApiBase = $this->wriplPluginHelper->getApiUrl();
+                    $endpoint = $wriplApiBase . '/activity-update';
+
+                    $response['activityHashId'] = $resultDecoded->activity_hash_id;
+                    $response['endpoint'] = $endpoint;
+                    $response['piwikScript'] = $this->metricCollection(true, true);
+
+                } catch (Exception $e) {
+                    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+                    exit;
+                }
+
+
+            }
+
+            //2.) Get recommendations
+            try {
+
+                if (is_null($accessToken)) {
+
+                    echo WriplRecommendationWidget::disconnectedHtml();
+                    exit;
+                } else {
+
+                    $recommendations = $this->requestRecommendations();
+
+                    $indexedItems = $this->wriplPluginHelper->sortRecommendations($recommendations);
+
+                    $response['recommendations'] = $indexedItems;
+                }
+
+            } catch (Exception $exc) {
+                $response['recommendations'] = null;
+            }
+
+        }
+
+        header("Content-Type: application/json");
+        echo json_encode($response);
+        exit;
     }
 
     /**
@@ -135,7 +216,7 @@ class WriplWP
                     $out = WriplRecommendationWidget::recommendationListHtml($indexedItems);
                 }
 
-                $interestUrl = Wripl_Client::getWebRootFromApiUrl($this->getApiUrl()) . '/interests';
+                $interestUrl = Wripl_Client::getWebRootFromApiUrl($this->wriplPluginHelper->getApiUrl()) . '/interests';
 
                 $connectUrl = plugins_url('disconnect.php', __FILE__);
                 $out .= "<div id='wripl-oauth-disconnect-button'><a href='$interestUrl' target='_blank'>see your interests</a> | <a href='$connectUrl'>disconnect</a></div>";
@@ -178,7 +259,7 @@ class WriplWP
                     throw new Exception();
                 }
 
-                $wriplApiBase = $this->getApiUrl();
+                $wriplApiBase = $this->wriplPluginHelper->getApiUrl();
                 $endpoint = $wriplApiBase . '/activity-update';
 
                 $response['activityHashId'] = $resultDecoded->activity_hash_id;
@@ -192,6 +273,8 @@ class WriplWP
         }
 
         header("Content-Type: application/json");
+
+
         echo json_encode($response);
         exit;
     }
@@ -224,7 +307,7 @@ class WriplWP
 
     public function monitorInterests()
     {
-        $wriplApiBase = $this->getApiUrl();
+        $wriplApiBase = $this->wriplPluginHelper->getApiUrl();
 
         if (!$this->isSetup()) {
             return;
@@ -632,7 +715,7 @@ class WriplWP
         $consumerKey = $wriplSettings['consumerKey'];
         $consumerSecret = $wriplSettings['consumerSecret'];
 
-        $config['apiBaseUrl'] = $this->getApiUrl();
+        $config['apiBaseUrl'] = $this->wriplPluginHelper->getApiUrl();
 
         return new Wripl_Client(new Wripl_Oauth_Client_Adapter_OAuthSimple($consumerKey, $consumerSecret), $config);
     }
@@ -648,30 +731,6 @@ class WriplWP
         $accessToken = $this->retrieveAccessToken();
 
         return $client->getRecommendations($max, $accessToken->getToken(), $accessToken->getTokenSecret());
-    }
-
-    /**
-     * @return string return the api url
-     */
-    public function getApiUrl()
-    {
-        $devSettingFile = dirname(__FILE__) . '/WriplWPDevSettings.php';
-
-        if (file_exists($devSettingFile)) {
-            require_once $devSettingFile;
-
-            return WriplWPDevSettings::WRIPL_API_URL;
-        }
-
-        return $this->apiUrl;
-    }
-
-    /**
-     * @return string Url to monitor script
-     */
-    public function getMonitorScriptUrl()
-    {
-        return Wripl_Client::getWebRootFromApiUrl($this->getApiUrl()) . '/js/wripl-compiled.js';
     }
 
 }
