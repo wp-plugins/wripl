@@ -45,14 +45,15 @@ class WriplWP
         add_action('publish_page', array($this, 'onPagePublish'));
         add_action('wp_trash_page', array($this, 'onPageTrash'));
 
+        add_action('wp_enqueue_scripts', array($this, 'enqueueScripts'));
+
         add_action('wp_ajax_nopriv_wripl-get-activity-code', array($this, 'ajaxActivityCode'));
         add_action('wp_ajax_wripl-get-activity-code', array($this, 'ajaxActivityCode'));
 
         add_action('wp_ajax_nopriv_wripl-get-widget-recommendations', array($this, 'ajaxWidgetRecommendationsHtml'));
         add_action('wp_ajax_wripl-get-widget-recommendations', array($this, 'ajaxWidgetRecommendationsHtml'));
 
-
-        add_filter('the_content', array($this, 'dump'));
+        add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'pluginActionLinks'));
 
         register_activation_hook(__FILE__, array($this, 'onInstall'));
         register_deactivation_hook(__FILE__, array($this, 'onUninstall'));
@@ -67,6 +68,7 @@ class WriplWP
     {
         spl_autoload_register(array($this, 'wriplAutoloader'));
         wp_enqueue_style('wripl-style', plugins_url('style.css', __FILE__));
+        wp_enqueue_script('jquery-effects-slide');
     }
 
     /**
@@ -84,6 +86,19 @@ class WriplWP
         }
     }
 
+    public function enqueueScripts()
+    {
+        wp_register_script(
+            'handlebars.js',  //handle
+            'http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js',
+            array(),  //dependencies
+            false,  //version
+            true  //footer
+        );
+
+        wp_enqueue_script('handlebars.js');
+    }
+
     /**
      * AJAX endpoint
      */
@@ -91,7 +106,7 @@ class WriplWP
     {
         try {
 
-            $accessToken = $this->retreiveAccessToken();
+            $accessToken = $this->retrieveAccessToken();
 
             if (is_null($accessToken)) {
 
@@ -137,7 +152,7 @@ class WriplWP
             exit;
         }
 
-        $accessToken = $this->retreiveAccessToken();
+        $accessToken = $this->retrieveAccessToken();
 
         if (is_null($accessToken)) {
             $response['piwikScript'] = $this->metricCollection(false, true);
@@ -207,7 +222,7 @@ class WriplWP
         $css = plugins_url('style.css', __FILE__);
         echo "<link rel='stylesheet' href='$css' type='text/css' />";
 
-        $accessToken = $this->retreiveAccessToken();
+        $accessToken = $this->retrieveAccessToken();
 
         if (is_null($accessToken)) {
             return;
@@ -301,6 +316,15 @@ class WriplWP
         return false;
     }
 
+    public function pluginActionLinks($links)
+    {
+        return array_merge(
+            array(
+                'settings' => '<a href="' . get_bloginfo('wpurl') . '/wp-admin/options-general.php?page=wripl-settings">Settings</a>'
+            ),
+            $links);
+    }
+
     public function settingsPage()
     {
         global $wpdb;
@@ -350,7 +374,9 @@ class WriplWP
         <p>Below you can set your wripl tokens for secure communication with the wripl servers.</p>
 
         <h3>Step 1 : Set wripl OAuth Keys</h3>
-        <p>If you don't haven credentials, contact me at <a href="mailto:brian@wripl.com">brian@wripl.com</a> and we'll get you set up.</p>
+
+        <p>If you don't haven credentials, contact me at <a href="mailto:brian@wripl.com">brian@wripl.com</a> and we'll
+            get you set up.</p>
         <!-- Beginning of the Plugin Options Form -->
         <form method="post" action="options.php">
             <?php settings_fields('wripl_plugin_settings'); ?>
@@ -396,7 +422,9 @@ class WriplWP
 
         <p>Add a 'Wripl Recommendations' widget to your site <a
                 href="<?php echo get_admin_url() ?>widgets.php">here</a></p>
-        <p><em>We <strong>recommend</strong> using the "Wripl Recommendations (AJAX)" version - and it's <strong>essential</strong> if you are using caching.</em></p>
+
+        <p><em>We <strong>recommend</strong> using the "Wripl Recommendations (AJAX)" version - and it's <strong>essential</strong>
+            if you are using caching.</em></p>
 
     </div>
 
@@ -473,7 +501,7 @@ class WriplWP
         setcookie('wripl-oauth-referer', $url, strtotime('+1 hour'), COOKIEPATH, COOKIE_DOMAIN, false);
     }
 
-    public function retreiveOauthRefererUrl()
+    public function retrieveOauthRefererUrl()
     {
         return $_COOKIE['wripl-oauth-referer'];
     }
@@ -483,7 +511,7 @@ class WriplWP
         setcookie($this->wriplOauthRequestTokenCookieKey, implode(':', array($requestToken->getToken(), $requestToken->getTokenSecret())), strtotime('+1 hour'), COOKIEPATH, COOKIE_DOMAIN, false);
     }
 
-    public function retreiveRequestToken()
+    public function retrieveRequestToken()
     {
         if (isset($_COOKIE[$this->wriplOauthRequestTokenCookieKey])) {
             $tokens = explode(':', $_COOKIE[$this->wriplOauthRequestTokenCookieKey]);
@@ -505,7 +533,7 @@ class WriplWP
         setcookie($this->wriplOauthAccessTokenCookieKey, ($accessToken->getToken() . ':' . $accessToken->getTokenSecret()), strtotime('+1 year'), COOKIEPATH, COOKIE_DOMAIN, false);
     }
 
-    public function retreiveAccessToken()
+    public function retrieveAccessToken()
     {
         if (isset($_COOKIE[$this->wriplOauthAccessTokenCookieKey])) {
             $tokens = explode(':', $_COOKIE[$this->wriplOauthAccessTokenCookieKey]);
@@ -521,11 +549,10 @@ class WriplWP
         setcookie($this->wriplOauthAccessTokenCookieKey, 'FALSE', strtotime('-1 year'), COOKIEPATH, COOKIE_DOMAIN, false);
     }
 
-    public function dump($content)
-    {
-        return $content;
-    }
-
+    /**
+     * @param $id Post Id
+     * @param $type Post type
+     */
     public function indexContent($id, $type)
     {
         global $wpdb;
@@ -579,6 +606,10 @@ class WriplWP
         }
     }
 
+    /**
+     * @return Wripl_Client
+     * @throws Exception
+     */
     protected function getWriplClient()
     {
         if (!$this->isSetup()) {
@@ -595,15 +626,22 @@ class WriplWP
         return new Wripl_Client(new Wripl_Oauth_Client_Adapter_OAuthSimple($consumerKey, $consumerSecret), $config);
     }
 
+    /**
+     * @param int $max
+     * @return Wripl_Link_Collection
+     */
     public function requestRecommendations($max = 10)
     {
         $client = $this->getWriplClient();
 
-        $accessToken = $this->retreiveAccessToken();
+        $accessToken = $this->retrieveAccessToken();
 
         return $client->getRecommendations($max, $accessToken->getToken(), $accessToken->getTokenSecret());
     }
 
+    /**
+     * @return string return the api url
+     */
     public function getApiUrl()
     {
         $devSettingFile = dirname(__FILE__) . '/WriplWPDevSettings.php';
@@ -617,6 +655,9 @@ class WriplWP
         return $this->apiUrl;
     }
 
+    /**
+     * @return string Url to monitor script
+     */
     public function getMonitorScriptUrl()
     {
         return Wripl_Client::getWebRootFromApiUrl($this->getApiUrl()) . '/js/wripl-compiled.js';

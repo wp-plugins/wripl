@@ -24,7 +24,7 @@ $config['oauthBaseUrl'] = Wripl_Client::getOauthUrlFromApiUrl($wriplApiBase);
 
 $client = new Wripl_Client(new Wripl_Oauth_Client_Adapter_OAuthSimple($consumerKey, $consumerSecret), $config);
 
-$requestToken = $wriplWP->retreiveRequestToken();
+$requestToken = $wriplWP->retrieveRequestToken();
 
 $client->setRequestToken($requestToken);
 
@@ -33,7 +33,7 @@ $accessToken = $client->getAccessToken();
 $wriplWP->storeAccessToken($accessToken);
 $wriplWP->nukeRequestToken();
 
-$referer = $wriplWP->retreiveOauthRefererUrl();
+$referer = $wriplWP->retrieveOauthRefererUrl();
 
 header("Location: $referer");
 ?>

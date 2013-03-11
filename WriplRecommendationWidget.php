@@ -64,7 +64,7 @@ class WriplRecommendationWidget extends WP_Widget
         $imageFolderUrl = plugins_url('images/', __FILE__);
         $title = 'wripl recommends...';
 
-        $accessToken = $wriplWP->retreiveAccessToken();
+        $accessToken = $wriplWP->retrieveAccessToken();
 
         $wriplWP->metricCollection((bool) $accessToken);
 

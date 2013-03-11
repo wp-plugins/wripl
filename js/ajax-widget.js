@@ -1,42 +1,41 @@
-(function(){
+(function () {
 
     /**
      * Gets and renders the widget.
      */
-    var getWidget = function() {
+    var getWidget = function () {
 
         jQuery.post(
             WriplAjax.ajaxUrl,
             {
-                action: 'wripl-get-widget-recommendations',
-                maxRecommendations: WriplAjax.maxRecommendations
+                action:'wripl-get-widget-recommendations',
+                maxRecommendations:WriplAjax.maxRecommendations
             },
-            function( response ) {
-
+            function (response) {
                 jQuery("div#wripl-ajax-container").html(response);
             }
-            );
+        );
     }
 
     /**
      * Fetches the activity code from the host site,
      * on success it starts the tracker and gets the widget content.
      */
-    var beginTracking = function(){
+    var beginTracking = function () {
 
         jQuery.post(
             WriplAjax.ajaxUrl,
             {
-                action: 'wripl-get-activity-code',
-                path: WriplAjax.path
+                action:'wripl-get-activity-code',
+                path:WriplAjax.path
             },
-            function( response ) {
-;
-                if(response.activityHashId && response.endpoint) {
+            function (response) {
+
+                if (response.activityHashId && response.endpoint) {
                     wripl.main(response);
                 }
 
-                if(response.piwikScript) {
+                if (response.piwikScript) {
                     var script = document.createElement('script');
                     script.type = 'text/javascript';
                     script.src = response.piwikScript;
@@ -44,21 +43,42 @@
                     jQuery("body").append(script);
                 }
 
-
-
                 getWidget();
 
             }
-            );
+        );
     }
 
-    jQuery(document).ready(function() {
+    jQuery(document).ready(function () {
 
         if (typeof WriplAjax.path != 'undefined') {
             beginTracking();
-        }else{
+        } else {
             getWidget();
         }
     });
 
 })();
+
+
+/**
+ * NEW
+ */
+(function ($) {
+
+    $(document).ready(function () {
+
+        init();
+        //add listeners here?
+
+    });
+
+    var init = function()
+    {
+
+        //trigger event - loaded recommendations;
+        $.trigger('wripl-recommendations-loaded', {});
+
+    }
+
+})(jQuery);
