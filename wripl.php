@@ -43,6 +43,7 @@ class WriplWP
         add_action('admin_init', array($this, 'settingsPageInit'));
         add_action('wripl_index_content', array($this, 'indexContent'), 5, 2);
         add_action('widgets_init', create_function('', 'return register_widget("WriplRecommendationWidget");'));
+
         add_action('publish_post', array($this, 'onPostPublish'));
         add_action('wp_trash_post', array($this, 'onPostTrash'));
         add_action('publish_page', array($this, 'onPagePublish'));
@@ -118,7 +119,7 @@ class WriplWP
     {
 
         $response = array();
-        $path = isset($_POST['path']) ? $_POST['path'] : null;
+        $path = isset($_POST['path']) && $_POST['path'] !== 'null' ? $_POST['path'] : null;
 
         $accessToken = WriplTokenStore::retrieveAccessToken();
 
@@ -131,7 +132,7 @@ class WriplWP
         } else {
 
             // 1.) If a proper post, fetch activity code
-            if (!is_single() && !is_null($path)) {
+            if (!is_null($path)) {
 
                 try {
                     $client = $this->getWriplClient();
@@ -152,6 +153,7 @@ class WriplWP
 
                 } catch (Exception $e) {
                     header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+                    echo $e->getMessage();
                     exit;
                 }
 
@@ -211,63 +213,13 @@ class WriplWP
         wp_enqueue_script('wripl-piwik-tracking-code', "$piwitWriplScript");
     }
 
-    /**
-     * @deprecated
-     */
-    public function monitorInterests()
+    public function pluginActionLinks($links)
     {
-        $wriplApiBase = $this->wriplPluginHelper->getApiUrl();
-
-        if (!$this->isSetup()) {
-            return;
-        }
-
-        $accessToken = WriplTokenStore::retrieveAccessToken();
-
-        if (is_null($accessToken)) {
-            return;
-        }
-
-        /**
-         * If its the home page we don't need to track
-         * the user because we don't know what exactly they are reading.
-         */
-        if (!is_single() && !is_page()) {
-            return;
-        }
-
-        global $post;
-
-        switch ($post->post_type) {
-            case 'post':
-                $path = '?p=' . $post->ID;
-                break;
-            case 'page':
-                $path = '?page_id=' . $post->ID;
-                break;
-            default:
-                return;
-                break;
-        }
-
-        try {
-            $client = $this->getWriplClient();
-            $result = $client->sendActivity($path, $accessToken->getToken(), $accessToken->gettokenSecret());
-
-            $activitiesResponse = json_decode($result);
-
-            $wriplMonitorScript = $this->getMonitorScriptUrl();
-            $endpoint = $wriplApiBase . '/activity-update';
-
-            wp_enqueue_script('wripl-interest-monitor', $wriplMonitorScript);
-            wp_enqueue_script('wripl-interest-monitor-start', plugin_dir_url(__FILE__) . 'js/start_wripl_monitor.js');
-            wp_localize_script('wripl-interest-monitor-start', 'WriplMonitorProperties', array(
-                    'activityHashId' => $activitiesResponse->activity_hash_id,
-                    'endpoint' => $endpoint)
-            );
-        } catch (Exception $e) {
-            //var_dump($e);die;
-        }
+        return array_merge(
+            array(
+                'settings' => '<a href="' . get_bloginfo('wpurl') . '/wp-admin/options-general.php?page=wripl-settings">Settings</a>'
+            ),
+            $links);
     }
 
     public function onInstall()
@@ -300,29 +252,14 @@ class WriplWP
         $wpdb->query("DROP TABLE IF EXISTS $this->wriplTokenStoreTableName");
     }
 
+    public function settingsPageInit()
+    {
+        register_setting('wripl_plugin_settings', 'wripl_settings');
+    }
+
     public function settingsPageMenu()
     {
         add_options_page('Wripl Settings', 'Wripl', 'manage_options', 'wripl-settings', array($this, 'settingsPage'));
-    }
-
-    public function isSetup()
-    {
-        $options = get_option('wripl_settings');
-
-        if ($options) {
-            return isset($options['consumerKey']) && isset($options['consumerSecret']) ? true : false;
-        }
-
-        return false;
-    }
-
-    public function pluginActionLinks($links)
-    {
-        return array_merge(
-            array(
-                'settings' => '<a href="' . get_bloginfo('wpurl') . '/wp-admin/options-general.php?page=wripl-settings">Settings</a>'
-            ),
-            $links);
     }
 
     public function settingsPage()
@@ -402,7 +339,7 @@ class WriplWP
                     </td>
                 </tr>
             </table>
-            <input type="submit" name="submit" id="submit" class="button-primary" value="Save Settings">
+            <input type="submit" name="submit" id="submit" class="button-primary" value="Save Keys">
         </form>
 
         <br/>
@@ -432,9 +369,15 @@ class WriplWP
     <?php
     }
 
-    public function settingsPageInit()
+    public function isSetup()
     {
-        register_setting('wripl_plugin_settings', 'wripl_settings');
+        $options = get_option('wripl_settings');
+
+        if ($options) {
+            return isset($options['consumerKey']) && isset($options['consumerSecret']) ? true : false;
+        }
+
+        return false;
     }
 
     public function onPostPublish($postId)

@@ -26,7 +26,7 @@ class WriplPluginHelper
      */
     public function getPathUri()
     {
-        if (is_single() && !is_page()) {
+        if (is_single() && is_page()) {
             global $post;
 
             switch ($post->post_type) {
@@ -100,11 +100,15 @@ class WriplPluginHelper
         $indexedPosts = array();
         foreach ($posts as $post) {
             $indexedPosts[$post->ID] = $post;
+            $indexedPosts[$post->ID]->image = wp_get_attachment_image_src( get_post_thumbnail_id($post->ID), 'full' );
+            $indexedPosts[$post->ID]->permalink = get_permalink($post->ID);
         }
 
         $indexedPages = array();
         foreach ($pages as $page) {
             $indexedPages[$page->ID] = $page;
+            $indexedPages[$page->ID]->image = wp_get_attachment_image_src( get_post_thumbnail_id($page->ID), 'full' );
+            $indexedPages[$page->ID]->permalink = get_permalink($page->ID);
         }
 
         $indexedItems = array();

@@ -1,1 +1,0 @@
-wripl.main(WriplMonitorProperties);
