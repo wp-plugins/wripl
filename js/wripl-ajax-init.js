@@ -18,6 +18,9 @@
         ).done(function(response) {
 //                console.log(response);
                 $("body").trigger( INIT_LOGGED_IN_EVENT , response);
+                if(response.activityHashId) {
+                    wripl.main(response);
+                }
             }
         ).fail(function(response){
 

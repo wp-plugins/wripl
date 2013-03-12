@@ -64,14 +64,19 @@
 
     jQuery(document).ready(function () {
 
+        var template, compiledHtml, recommendationsArray;
+
         // Add listeners
         $("body").bind( "wripl-ajax-init-not-logged-in" , function (e, params) {
             console.log("Not logged in!");
             console.log(e);
             $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/recommendations-list-plugin-inactive.html', function(data) {
 
-                var template = Handlebars.compile(data);
-                var compiledHtml = template({ pluginPath: WriplAjaxProperties.pluginPath }); // (step 3)
+                template = Handlebars.compile(data);
+                compiledHtml = template({
+                    wriplWidgetProperties: WriplWidgetProperties,
+                    wriplAjaxProperties: WriplAjaxProperties
+                });
 
                 $('#wripl-widget-ajax-container').html(compiledHtml);
             });
@@ -80,14 +85,24 @@
         $("body").bind( "wripl-ajax-init-logged-in" , function (e, params) {
             console.log("Logged in!");
             console.log(params);
+            recommendationsArray = params.recommendations;
+
+            if( WriplWidgetProperties.maxRecommendations ){
+                recommendationsArray = recommendationsArray.slice(0 , WriplWidgetProperties.maxRecommendations);
+            }
 
             $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/recommendations-list-plugin-active.html', function(data) {
-                var template = Handlebars.compile(data);
-                var compiledHtml = template({ pluginPath: WriplAjaxProperties.pluginPath, recommendations:params.recommendations }); // (step 3)
+                template = Handlebars.compile(data);
+                compiledHtml = template({
+                    wriplWidgetProperties: WriplWidgetProperties,
+                    wriplAjaxProperties: WriplAjaxProperties,
+                    recommendations: recommendationsArray
+                });
+
                 $('#wripl-widget-ajax-container').html(compiledHtml);
             });
-
         });
+
 
     });
 
