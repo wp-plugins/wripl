@@ -1,12 +1,12 @@
 <ul>
     {{#recommendations}}
-    <li><a href="{{permalink}}">{{post_title}}</a></li>
+    <li><a href="{{permalink}}">{{{post_title}}}</a></li>
     {{/recommendations}}
 </ul>
 
 <div id="wripl-oauth-disconnect-button">
     <a href="http://wripl.com/interests"
        target="_blank">see your interests</a> |
-    <a href="{{wriplAjaxProperties.pluginPath}}/disconnect.php">disconnect</a>
+    <a href="{{wriplAjaxProperties.pluginPath}}disconnect.php">disconnect</a>
 </div>
 

@@ -70,7 +70,7 @@
         $("body").bind( "wripl-ajax-init-not-logged-in" , function (e, params) {
             console.log("Not logged in!");
             console.log(e);
-            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/recommendations-list-plugin-inactive.html', function(data) {
+            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-inactive.html', function(data) {
 
                 template = Handlebars.compile(data);
                 compiledHtml = template({
@@ -91,7 +91,7 @@
                 recommendationsArray = recommendationsArray.slice(0 , WriplWidgetProperties.maxRecommendations);
             }
 
-            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/recommendations-list-plugin-active.html', function(data) {
+            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-active.html', function(data) {
                 template = Handlebars.compile(data);
                 compiledHtml = template({
                     wriplWidgetProperties: WriplWidgetProperties,

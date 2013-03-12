@@ -7,13 +7,51 @@ jQuery(document).ready(function ($) {
     var slider = $("<div id='wripl-slider'><img src='/slide-out-from-side-mockup-withdropshadow.png'></div>")
         .css({
             position:'fixed',
-            bottom:0,
+            bottom:20,
             //left:$(this).width() - 50 + 'px'
             right: defaultPosition
         });
 
 
     $('body').append(slider);
+
+    // Add listeners
+    $("body").bind( "wripl-ajax-init-not-logged-in" , function (e, params) {
+        console.log("Not logged in!");
+        console.log(e);
+        $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/inactive.html', function(data) {
+
+            template = Handlebars.compile(data);
+            compiledHtml = template({
+                wriplWidgetProperties: WriplWidgetProperties,
+                wriplAjaxProperties: WriplAjaxProperties
+            });
+
+            $('#wripl-slider').html(compiledHtml);
+        });
+    });
+
+    $("body").bind( "wripl-ajax-init-logged-in" , function (e, params) {
+        console.log("Logged in!");
+        console.log(params);
+        recommendationsArray = params.recommendations;
+
+        if( WriplWidgetProperties.maxRecommendations ){
+            recommendationsArray = recommendationsArray.slice(0 , WriplWidgetProperties.maxRecommendations);
+        }
+
+        $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/active.html', function(data) {
+            template = Handlebars.compile(data);
+            compiledHtml = template({
+                wriplWidgetProperties: WriplWidgetProperties,
+                wriplAjaxProperties: WriplAjaxProperties,
+                recommendations: recommendationsArray
+            });
+
+            $('#wripl-slider').html(compiledHtml);
+        });
+    });
+
 
     $(document).scroll(function () {
 
@@ -24,7 +62,7 @@ jQuery(document).ready(function ($) {
         var showSlider = function () {
             slider.animate(
                 {
-                    right: 0
+                    right: 20
                 }
             );
         }

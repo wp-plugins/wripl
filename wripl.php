@@ -117,7 +117,13 @@ class WriplWP
 
         if(isset($featureSettings['sliderEnabled'])) {
             wp_enqueue_script('jquery-effects-slide');
-            wp_enqueue_script('wripl-slider', plugin_dir_url(__FILE__) . 'js/slider.js', array('jquery', 'jquery-effects-slide'));
+            wp_enqueue_script('wripl-slider', plugin_dir_url(__FILE__) . 'js/slider.js',
+                array(
+                    'jquery',
+                    'jquery-effects-slide',
+                    'handlebars.js',
+                )
+            );
         }
     }
 
