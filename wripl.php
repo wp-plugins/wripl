@@ -255,6 +255,7 @@ class WriplWP
     public function settingsPageInit()
     {
         register_setting('wripl_plugin_settings', 'wripl_settings');
+        register_setting('wripl_plugin_features', 'wripl_feature_settings');
     }
 
     public function settingsPageMenu()
@@ -266,37 +267,16 @@ class WriplWP
     {
         global $wpdb;
 
-        $options = get_option('wripl_settings');
-        $setUp = isset($options['consumerKey']) && isset($options['consumerSecret']) ? true : false;
+        $settings = get_option('wripl_settings');
+        $featureSettings = get_option('wripl_feature_settings');
+        $setUp = isset($settings['consumerKey']) && isset($settings['consumerSecret']) ? true : false;
 
         /**
          * When the items are queued
          */
         if (array_key_exists('action', $_POST) && 'queueContent' === $_POST['action']) {
-
-            $posts = get_posts(array('numberposts' => true));
-
-            foreach ($posts as $post) {
-
-                if ('publish' === $post->post_status) {
-                    wp_clear_scheduled_hook('wripl_index_content', array($post->ID, 'post'));
-                    wp_schedule_single_event(time(), 'wripl_index_content', array($post->ID, 'post'));
-                    $wpdb->query("DELETE FROM $this->wriplIndexQueueTableName WHERE id = " . $post->ID);
-                    $wpdb->insert($this->wriplIndexQueueTableName, array('id' => $post->ID, 'type' => 'post', 'status' => self::ITEM_QUEUED));
-                }
-            }
-
-            $pages = get_pages(array('number' => true));
-
-            foreach ($pages as $page) {
-
-                if ('publish' === $page->post_status) {
-                    wp_clear_scheduled_hook('wripl_index_content', array($page->ID, 'page'));
-                    wp_schedule_single_event(time(), 'wripl_index_content', array($page->ID, 'page'));
-                    $wpdb->query("DELETE FROM $this->wriplIndexQueueTableName WHERE id = " . $page->ID);
-                    $wpdb->insert($this->wriplIndexQueueTableName, array('id' => $page->ID, 'type' => 'page', 'status' => self::ITEM_QUEUED));
-                }
-            }
+            $this->queueUpItems();
+            return;
         }
 
         $totalItemsInQueue = $wpdb->get_var("SELECT COUNT(*) FROM $this->wriplIndexQueueTableName");
@@ -305,8 +285,8 @@ class WriplWP
     <div class="wrap">
 
         <!-- Display Plugin Icon, Header, and Description -->
-        <div class="icon32" id="icon-plugins"><br></div>
-        <h2>Wripl Settings</h2>
+        <div class="icon32" id="icon-tools"><br></div>
+        <h2>Wripl Setup</h2>
 
         <p>Below you can set your wripl tokens for secure communication with the wripl servers.</p>
 
@@ -323,14 +303,14 @@ class WriplWP
                     <th scope="row">Consumer Key</th>
                     <td>
                         <input type="text" size="57" name="wripl_settings[consumerKey]"
-                               value="<?php echo $options['consumerKey']; ?>"/>
+                               value="<?php echo $settings['consumerKey']; ?>"/>
                     </td>
                 </tr>
                 <tr>
                     <th scope="row">Consumer Secret</th>
                     <td>
                         <input type="text" size="57" name="wripl_settings[consumerSecret]"
-                               value="<?php echo $options['consumerSecret']; ?>"/>
+                               value="<?php echo $settings['consumerSecret']; ?>"/>
                     </td>
                 </tr>
                 <tr>
@@ -358,15 +338,73 @@ class WriplWP
 
         <h3>Step 3 : Add the recommendation widget</h3>
 
-        <p>Add a 'Wripl Recommendations' widget to your site <a
+        <p>You can now add the 'Wripl Recommendations' widget to your site <a
                 href="<?php echo get_admin_url() ?>widgets.php">here</a></p>
 
-        <p><em>We <strong>recommend</strong> using the "Wripl Recommendations (AJAX)" version - and it's <strong>essential</strong>
-            if you are using caching.</em></p>
+    </div>
+<br>
+    <div class="wrap">
+        <div class="icon32" id="icon-themes"><br></div>
+        <h2>Wripl Features</h2>
 
+        <form method="post" action="options.php">
+            <?php settings_fields('wripl_plugin_features'); ?>
+
+            <input type="submit" name="submit" id="submit" class="button-primary" value="Save wripl features">
+        </form>
     </div>
 
     <?php
+    }
+
+    public function queueUpItems()
+    {
+        set_time_limit(0);
+
+        echo '<div class="icon32" id="icon-plugins"><br></div>';
+        echo '<h2>Queuing content...</h2>';
+        flush();
+
+        global $wpdb;
+
+        $posts = get_posts(array('numberposts' => true));
+
+        $totalPostCount = count($posts);
+        $currentPostPosition = 0;
+
+        foreach ($posts as $post) {
+
+            echo '<p>post ' . ++$currentPostPosition . '/' . $totalPostCount . ' : ' . $post->post_title . '</p>';
+            flush();
+
+            if ('publish' === $post->post_status) {
+                wp_clear_scheduled_hook('wripl_index_content', array($post->ID, 'post'));
+                wp_schedule_single_event(time(), 'wripl_index_content', array($post->ID, 'post'));
+                $wpdb->query("DELETE FROM $this->wriplIndexQueueTableName WHERE id = " . $post->ID);
+                $wpdb->insert($this->wriplIndexQueueTableName, array('id' => $post->ID, 'type' => 'post', 'status' => self::ITEM_QUEUED));
+            }
+        }
+
+        $pages = get_pages(array('number' => true));
+
+        $totalPageCount = count($pages);
+        $currentPagePosition = 0;
+
+        foreach ($pages as $page) {
+
+            echo '<p>page ' . ++$currentPagePosition . '/' . $totalPageCount . ' : ' . $page->post_title . '</p>';
+            flush();
+
+            if ('publish' === $page->post_status) {
+                wp_clear_scheduled_hook('wripl_index_content', array($page->ID, 'page'));
+                wp_schedule_single_event(time(), 'wripl_index_content', array($page->ID, 'page'));
+                $wpdb->query("DELETE FROM $this->wriplIndexQueueTableName WHERE id = " . $page->ID);
+                $wpdb->insert($this->wriplIndexQueueTableName, array('id' => $page->ID, 'type' => 'page', 'status' => self::ITEM_QUEUED));
+            }
+        }
+
+        echo '<h4>done! <a href="' . get_bloginfo('wpurl') . '/wp-admin/options-general.php?page=wripl-settings">back to wripl settings</a></h4>';
+        flush();
     }
 
     public function isSetup()
