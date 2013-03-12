@@ -99,14 +99,12 @@
                     recommendations: recommendationsArray
                 });
 
+                console.log(compiledHtml);
                 $('#wripl-widget-ajax-container').html(compiledHtml);
             });
         });
 
 
     });
-
-
-
 
 })(jQuery);
