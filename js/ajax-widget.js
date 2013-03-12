@@ -62,13 +62,13 @@
      * NEW
      */
 
-
     jQuery(document).ready(function () {
 
         // Add listeners
-        $("body").bind( "wripl-ajax-init-done" , function (e, params) {
+        $("body").bind( "wripl-ajax-init-not-logged-in" , function (e, params) {
+            console.log("Not logged in!");
             console.log(e);
-            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/loggedout.html', function(data) {
+            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/recommendations-list-plugin-inactive.html', function(data) {
 
                 var template = Handlebars.compile(data);
                 var compiledHtml = template({ pluginPath: WriplAjaxProperties.pluginPath }); // (step 3)
@@ -77,7 +77,21 @@
             });
         });
 
+        $("body").bind( "wripl-ajax-init-logged-in" , function (e, params) {
+            console.log("Logged in!");
+            console.log(params);
+
+            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/recommendations-list-plugin-active.html', function(data) {
+                var template = Handlebars.compile(data);
+                var compiledHtml = template({ pluginPath: WriplAjaxProperties.pluginPath, recommendations:params.recommendations }); // (step 3)
+                $('#wripl-widget-ajax-container').html(compiledHtml);
+            });
+
+        });
+
     });
+
+
 
 
 })(jQuery);

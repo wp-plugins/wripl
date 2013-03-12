@@ -1,6 +1,7 @@
 (function ($) {
 
-    const INIT_DONE_EVENT = "wripl-ajax-init-done";
+    const INIT_LOGGED_IN_EVENT = "wripl-ajax-init-logged-in";
+    const INIT_NOT_LOGGED_IN_EVENT = "wripl-ajax-init-not-logged-in";
 
     $(document).ready(function () {
         init();
@@ -15,8 +16,8 @@
                 path:WriplAjaxProperties.path
             }
         ).done(function(response) {
-                console.log(response);
-                $("body").trigger( INIT_DONE_EVENT , response);
+//                console.log(response);
+                $("body").trigger( INIT_LOGGED_IN_EVENT , response);
             }
         ).fail(function(response){
 
@@ -36,8 +37,8 @@
                 {
 
                     case 403:
-                        console.log('not logged in');
-                        $("body").trigger( INIT_DONE_EVENT , response);
+//                        console.log('not logged in');
+                        $("body").trigger( INIT_NOT_LOGGED_IN_EVENT , response);
                         break;
                     default:
                         //$("#wripl-ajax-container").trigger('wriplEvent', response);
