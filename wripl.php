@@ -90,6 +90,8 @@ class WriplWP
      */
     public function enqueueScripts()
     {
+        $featureSettings = get_option('wripl_feature_settings');
+
         wp_register_script(
             'handlebars.js', //handle
             'http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js',
@@ -99,7 +101,6 @@ class WriplWP
         );
 
         wp_enqueue_script('handlebars.js');
-        wp_enqueue_script('jquery-effects-slide');
 
         wp_enqueue_style('wripl-style', plugins_url('style.css', __FILE__));
 
@@ -113,6 +114,11 @@ class WriplWP
             'path' => $this->wriplPluginHelper->getPathUri(),
             'pluginPath' => plugin_dir_url(__FILE__),
         ));
+
+        if(isset($featureSettings['sliderEnabled'])) {
+            wp_enqueue_script('jquery-effects-slide');
+            wp_enqueue_script('wripl-slider', plugin_dir_url(__FILE__) . 'js/slider.js', array('jquery', 'jquery-effects-slide'));
+        }
     }
 
     public function ajaxInit()
@@ -241,6 +247,7 @@ class WriplWP
         global $wpdb;
 
         delete_option('wripl_settings');
+        delete_option('wripl_feature_settings');
 
         $queuedItems = $wpdb->get_results("SELECT * FROM $this->wriplIndexQueueTableName WHERE status = " . self::ITEM_QUEUED);
 
@@ -281,6 +288,7 @@ class WriplWP
 
         $totalItemsInQueue = $wpdb->get_var("SELECT COUNT(*) FROM $this->wriplIndexQueueTableName");
         $totalItemsIndexed = $wpdb->get_var("SELECT COUNT(*) FROM $this->wriplIndexQueueTableName where status = " . self::ITEM_INDEXED);
+
         ?>
     <div class="wrap">
 
@@ -288,10 +296,9 @@ class WriplWP
         <div class="icon32" id="icon-tools"><br></div>
         <h2>Wripl Setup</h2>
 
-        <p>Below you can set your wripl tokens for secure communication with the wripl servers.</p>
-
         <h3>Step 1 : Set wripl OAuth Keys</h3>
 
+        <p>Here you can set your wripl tokens for secure communication with the wripl servers.</p>
         <p>If you don't haven credentials, contact me at <a href="mailto:brian@wripl.com">brian@wripl.com</a> and
             we'll
             get you set up.</p>
@@ -319,19 +326,22 @@ class WriplWP
                     </td>
                 </tr>
             </table>
-            <input type="submit" name="submit" id="submit" class="button-primary" value="Save Keys">
+            <p class="submit">
+                <input type="submit" name="submit" id="submit" class="button-primary" value="Save Keys">
+            </p>
         </form>
 
-        <br/>
-
-        <h3>Step 2 : Queue up content to send to wripl's api</h3>
+        <h3>Step 2 : Queue up content to send to wripl</h3>
 
         <p><em><?php echo $totalItemsIndexed ?>/<?php echo $totalItemsInQueue ?> content items sent...</em></p>
 
         <form method="post">
-            <input type="submit" name="submit" id="submit" class="button-primary"
-                   value="Queue Published Content" <?php echo $setUp ? '' : 'disabled="disabled"' ?>>
             <input type="hidden" name="action" value="queueContent">
+            <p class="submit">
+                <input type="submit" name="submit" id="submit" class="button-primary"
+                       value="Queue Published Content" <?php echo $setUp ? '' : 'disabled="disabled"' ?>>
+            </p>
+
         </form>
 
         <br/>
@@ -343,14 +353,35 @@ class WriplWP
 
     </div>
 <br>
+
     <div class="wrap">
+        <hr><br>
+
         <div class="icon32" id="icon-themes"><br></div>
         <h2>Wripl Features</h2>
 
         <form method="post" action="options.php">
             <?php settings_fields('wripl_plugin_features'); ?>
 
-            <input type="submit" name="submit" id="submit" class="button-primary" value="Save wripl features">
+
+            <table class="form-table">
+                <tbody>
+                <tr>
+                    <th scope="row">Enable Slider</th>
+                    <td>
+                        <label for="enableSlider">
+                            <input id="enableSlider" type="checkbox" name="wripl_feature_settings[sliderEnabled]" value="1"<?php checked( isset($featureSettings['sliderEnabled']) ); ?> />
+                            Show the wripl recommendations in a slider as your users read your posts.
+                        </label>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+            <p class="submit">
+                <input type="submit" name="submit" id="submit" class="button-primary" value="Save wripl features">
+            </p>
+
         </form>
     </div>
 
