@@ -35,18 +35,20 @@
         $("body").bind("wripl-ajax-init-logged-in", function (e, params) {
             console.log("Logged in!");
             console.log(params);
-            recommendationsArray = params.recommendations;
 
-            if (WriplWidgetProperties.maxRecommendations) {
-                recommendationsArray = recommendationsArray.slice(0, 1);
-            }
+
+
+            theRecommendation = params.recommendations[1];
+            if (theRecommendation.image) var firstImageUrl = theRecommendation.image[0];
+            console.log("firstImageUrl: "+firstImageUrl);
+
 
             $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/active.html', function (data) {
                 template = Handlebars.compile(data);
                 compiledHtml = template({
-                    wriplWidgetProperties:WriplWidgetProperties,
                     wriplAjaxProperties:WriplAjaxProperties,
-                    recommendations:recommendationsArray
+                    recommendation:theRecommendation,
+                    featuredImage:"test.png"
                 });
 
                 $('#wripl-slider').html(compiledHtml);

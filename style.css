@@ -4,6 +4,7 @@ div[id|=wripl-oauth] {
     text-align: center;
 }
 
+
 img#oauth-connect {
     display: block;
     margin-left: auto;
@@ -76,4 +77,64 @@ img.wripl-rotate {
     transition-property: transform;
 
     overflow:hidden;
+}
+
+#wripl-slider {
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
+    background-color: white;
+    padding-left: 20px;
+    width: 350px;
+}
+#wripl-slider .heading {
+    font-size: 13pt;
+    font-weight: 300;
+    padding: 20px 30px 10px 10px;
+    text-align: center;
+}
+#wripl-slider .slider-body {
+    padding-right: 30px;
+}
+#wripl-slider .slider-body  img {
+    vertical-align: middle;
+}
+#wripl-slider #wripl-logo{
+    float: left;
+}
+
+#wripl-slider .footer {
+    clear:both;
+    padding-bottom: 6px;
+    padding-right: 16px;
+    text-align: right;
+}
+#wripl-slider .footer img {
+    vertical-align: text-bottom;
+}
+#wripl-slider-header{
+    padding: 10px 20px 10px 10px;
+    margin-bottom: 12px;
+    letter-spacing: 0.5px;
+
+}
+#wripl-slider .heading-sml {
+    float: left;
+    color: #e77b12;
+    font-weight: 600;
+    font-size: 9pt;
+}
+
+#wripl-functions{
+    float: right;
+    font-weight: bold;
+    font-size: 8pt;
+}
+
+#wripl-functions a {
+    text-decoration: none;
+}
+#recommendations{
+    margin-right: 14px;
+    padding-top: 4px;
+    border-top: 1px solid #e0dfdf;
+    clear: both;
 }

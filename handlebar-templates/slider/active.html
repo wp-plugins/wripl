@@ -1,11 +1,28 @@
-<ul>
-    {{#recommendations}}
-    <li><a href="{{permalink}}">{{{post_title}}}</a></li>
-    {{/recommendations}}
-</ul>
 
-<div id="wripl-oauth-disconnect-button">
-    <a href="http://wripl.com/interests"
-       target="_blank">see your interests</a> |
-    <a href="{{wriplAjaxProperties.pluginPath}}disconnect.php">disconnect</a>
+<div id="wripl-slider-header">
+    <div class="heading-sml">
+        wripl recommends
+    </div>
+
+    <div id="wripl-functions">
+        <a href="http://wripl.com/interests"
+           target="_blank">see your interests</a> |
+        <a href="{{wriplAjaxProperties.pluginPath}}disconnect.php">disconnect</a>
+    </div>
 </div>
+
+<div id="recommendations">
+    {{#recommendation}}
+    {{{featuredImage}}}
+    <div id="post_title">
+        {{{featuredImage}}}
+        <a href="{{permalink}}">{{{post_title}}}</a>
+        <img id="post_image" src="{{featuredImage}}">
+    </div>
+
+    {{/recommendation}}
+
+</div>
+
+
+
