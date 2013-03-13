@@ -38,7 +38,7 @@
             recommendationsArray = params.recommendations;
 
             if (WriplWidgetProperties.maxRecommendations) {
-                recommendationsArray = recommendationsArray.slice(0, WriplWidgetProperties.maxRecommendations);
+                recommendationsArray = recommendationsArray.slice(0, 1);
             }
 
             $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/active.html', function (data) {
