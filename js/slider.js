@@ -36,10 +36,15 @@
             console.log("Logged in!");
             console.log(params);
 
-
+            var firstImageUrl;
 
             theRecommendation = params.recommendations[1];
-            if (theRecommendation.image) var firstImageUrl = theRecommendation.image[0];
+
+            if (theRecommendation.image){
+                firstImageUrl = theRecommendation.image[0];
+            }  else {
+                firstImageUrl = "test.png";
+            }
             console.log("firstImageUrl: "+firstImageUrl);
 
 
@@ -47,8 +52,9 @@
                 template = Handlebars.compile(data);
                 compiledHtml = template({
                     wriplAjaxProperties:WriplAjaxProperties,
-                    recommendation:theRecommendation,
-                    featuredImage:"test.png"
+                    post_title:theRecommendation.post_title,
+                    permalink:theRecommendation.permalink,
+                    featuredImage:firstImageUrl
                 });
 
                 $('#wripl-slider').html(compiledHtml);
