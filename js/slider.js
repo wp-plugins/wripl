@@ -45,10 +45,9 @@
             if (theRecommendation.image){
                 firstImageUrl = theRecommendation.image[0];
             }  else {
-                firstImageUrl = "test.png";
+                firstImageUrl = "wripl-logo-sml.png";
             }
             console.log("firstImageUrl: "+firstImageUrl);
-
 
             $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/active.html', function (data) {
                 template = Handlebars.compile(data);
@@ -67,9 +66,6 @@
         $('#wripl-slider').bind("mouseover", function(e) {
             console.log("If i want to do something on rollover");
         });
-
-
-
 
         $(document).scroll(function () {
 

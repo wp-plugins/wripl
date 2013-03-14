@@ -87,6 +87,12 @@ img.wripl-rotate {
     padding-left: 20px;
     width: 350px;
     height: 170px;
+
+    -webkit-box-shadow: 0 8px 6px -6px #c8c8c8;
+    -moz-box-shadow: 0 8px 6px -6px #c8c8c8;
+    box-shadow: 0 8px 6px -6px #c8c8c8;
+
+    border: solid 1px #EEEEEE;
 }
 #wripl-slider .heading {
     font-size: 13pt;
@@ -148,6 +154,7 @@ img.wripl-rotate {
     overflow: hidden;
     margin: 8px 12px 14px;
     float: right;
+    border: solid 1px #c8c8c8;
 }
 
 /*
@@ -156,7 +163,7 @@ img.wripl-rotate {
 .thumbnail img {
     width: auto;
     height: auto;
-    margin: -80px -324px;
+    margin: -80px -124px;
 }
 #wripl-functions{
     float: right;
