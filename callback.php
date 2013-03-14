@@ -16,10 +16,10 @@ $wriplApiBase = $wriplWP->wriplPluginHelper->getApiUrl();
 $consumerKey = $wriplSettings['consumerKey'];
 $consumerSecret = $wriplSettings['consumerSecret'];
 
-$config['apiBaseUrl'] = $wriplApiBase;
-$config['oauthBaseUrl'] = Wripl_Client::getOauthUrlFromApiUrl($wriplApiBase);
+$wriplApiConfig['apiBaseUrl'] = $wriplApiBase;
+$wriplApiConfig['oauthBaseUrl'] = Wripl_Client::getOauthUrlFromApiUrl($wriplApiBase);
 
-$client = new Wripl_Client(new Wripl_Oauth_Client_Adapter_OAuthSimple($consumerKey, $consumerSecret), $config);
+$client = new Wripl_Client(new Wripl_Oauth_Client_Adapter_OAuthSimple($consumerKey, $consumerSecret), $wriplApiConfig);
 
 $requestToken = WriplTokenStore::retrieveRequestToken();
 

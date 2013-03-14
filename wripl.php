@@ -94,19 +94,16 @@ class WriplWP
 
         wp_register_script(
             'handlebars.js', //handle
-            'http://cdnjs.cloudflare.com/ajax/libs/handlebars.js/1.0.0-rc.3/handlebars.min.js',
-            array(), //dependencies
-            false, //version
-            true //footer
+            plugin_dir_url(__FILE__) . 'js/dependencies/handlebars-1.0.0-rc.3.js'
         );
 
         wp_enqueue_script('handlebars.js');
 
         wp_enqueue_style('wripl-style', plugins_url('style.css', __FILE__));
 
-        wp_enqueue_script('wripl-piwik-script', 'http://piwik.wripl.com/piwik.js');
+        wp_enqueue_script('wripl-piwik-script', plugin_dir_url(__FILE__) . 'js/dependencies/piwik.js');
 
-        wp_enqueue_script('wripl-interest-monitor', $this->wriplPluginHelper->getMonitorScriptUrl());
+        wp_enqueue_script('wripl-interest-monitor', plugin_dir_url(__FILE__) . 'js/dependencies/wripl-compiled.js');
 
         wp_enqueue_script('wripl-ajax-properties', plugin_dir_url(__FILE__) . 'js/wripl-ajax-init.js', array('jquery', 'wripl-interest-monitor'));
         wp_localize_script('wripl-ajax-properties', 'WriplAjaxProperties', array(
