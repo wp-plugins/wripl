@@ -3,10 +3,11 @@
     jQuery(document).ready(function ($) {
 
         var sliderRevealed;
-        var defaultPosition = -370;
+        var defaultPosition = -320;
         var displayAtPercent = 10;
 
-        var slider = $("<div id='wripl-slider'><img src='/slide-out-from-side-mockup-withdropshadow.png'></div>")
+
+        var slider = $("<div id='wripl-slider'></div>")
             .css({
                 position:'fixed',
                 bottom:20,
@@ -29,6 +30,7 @@
                 });
 
                 $('#wripl-slider').html(compiledHtml);
+
             });
         });
 
@@ -38,7 +40,7 @@
 
             var firstImageUrl;
 
-            theRecommendation = params.recommendations[1];
+            theRecommendation = params.recommendations[0];
 
             if (theRecommendation.image){
                 firstImageUrl = theRecommendation.image[0];
@@ -55,11 +57,18 @@
                     post_title:theRecommendation.post_title,
                     permalink:theRecommendation.permalink,
                     featuredImage:firstImageUrl
+
                 });
 
                 $('#wripl-slider').html(compiledHtml);
             });
         });
+
+        $('#wripl-slider').bind("mouseover", function(e) {
+            console.log("If i want to do something on rollover");
+        });
+
+
 
 
         $(document).scroll(function () {

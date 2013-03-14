@@ -79,11 +79,14 @@ img.wripl-rotate {
     overflow:hidden;
 }
 
+
+/* TODO: Refactor the following css.. tis a bit messy*/
 #wripl-slider {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     background-color: white;
     padding-left: 20px;
     width: 350px;
+    height: 170px;
 }
 #wripl-slider .heading {
     font-size: 13pt;
@@ -93,6 +96,8 @@ img.wripl-rotate {
 }
 #wripl-slider .slider-body {
     padding-right: 30px;
+    padding-top: 10px;
+    padding-bottom: 10px;
 }
 #wripl-slider .slider-body  img {
     vertical-align: middle;
@@ -100,7 +105,6 @@ img.wripl-rotate {
 #wripl-slider #wripl-logo{
     float: left;
 }
-
 #wripl-slider .footer {
     clear:both;
     padding-bottom: 6px;
@@ -113,16 +117,15 @@ img.wripl-rotate {
 #wripl-slider-header{
     padding: 10px 20px 10px 10px;
     margin-bottom: 12px;
-    letter-spacing: 0.5px;
 }
 #wripl-slider #post_title {
-
-    padding: 14px;
+    float: left;
+    max-width: 160px;
+    padding: 16px 8px 8px 8px;
 }
-
 #wripl-slider #post_title a{
     text-decoration: none;
-    font-size: 18pt;
+    font-size: 14pt;
     color: black;
 }
 #wripl-slider #post_title a.hover{
@@ -136,12 +139,30 @@ img.wripl-rotate {
     font-size: 9pt;
 }
 
-#wripl-functions{
+/*
+  to control the size of the thumbnail adjust the .thumbnail width and height
+*/
+.thumbnail {
+    width: 132px;
+    height: 100px;
+    overflow: hidden;
+    margin: 8px 12px 14px;
     float: right;
-    font-weight: bold;
-    font-size: 8pt;
 }
 
+/*
+  to control the cropping adjust the .thumbnail img margin
+*/
+.thumbnail img {
+    width: auto;
+    height: auto;
+    margin: -80px -324px;
+}
+#wripl-functions{
+    float: right;
+    font-weight: 500;
+    font-size: 8pt;
+}
 #wripl-functions a {
     text-decoration: none;
 }
