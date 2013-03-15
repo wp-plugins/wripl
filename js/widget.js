@@ -50,6 +50,17 @@ console.log('widget.js');
             });
         });
 
+        $("body").bind( "wripl-ajax-init-error" , function (e) {
+            console.log("some error!");
+
+            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-error.html', function(data) {
+                template = Handlebars.compile(data);
+                compiledHtml = template();
+
+                $('#wripl-widget-ajax-container').html(compiledHtml);
+            });
+        });
+
     });
 
 })(jQuery,Handlebars);

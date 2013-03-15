@@ -37,6 +37,7 @@ console.log('slider.js');
             });
         });
 
+
         $("body").bind("wripl-ajax-init-logged-in", function (e, params) {
             console.log("Slider: wripl-ajax-init-logged-in heard");
 
@@ -44,10 +45,10 @@ console.log('slider.js');
 
             // If there are no recommendations!
             if (params.recommendations.length == 0) {
-                console.log("Slider: no recommendations - fetching template noRecommendations.html");
-                $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/noRecommendations.html', function (data) {
+                console.log("Slider: no recommendations - fetching template no-recommendations.html");
+                $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/no-recommendations.html', function (data) {
 
-                    console.log("Slider: template slider/noRecommendations.html fetched");
+                    console.log("Slider: template slider/no-recommendations.html fetched");
 
                     template = Handlebars.compile(data);
                     compiledHtml = template({
@@ -94,6 +95,12 @@ console.log('slider.js');
                 );
 
             });
+        });
+
+        $("body").bind("wripl-ajax-init-error", function (e, params) {
+            console.log("Slider: wripl-ajax-init-error heard");
+            $('#wripl-slider').remove();
+
         });
 
         $(document).scroll(function () {
