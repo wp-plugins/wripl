@@ -1,3 +1,4 @@
+console.log('widget.js');
 (function ($, Handlebars) {
 
     jQuery(document).ready(function () {

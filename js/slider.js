@@ -1,3 +1,4 @@
+console.log('slider.js');
 (function ($, Handlebars) {
 
     jQuery(document).ready(function ($) {
