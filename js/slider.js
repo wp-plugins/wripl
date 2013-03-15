@@ -20,7 +20,10 @@
         $("body").bind("wripl-ajax-init-not-logged-in", function (e, params) {
             console.log("Slider: wripl-ajax-init-not-logged-in heard");
 
+            console.log("Slider: not logged in - fetching template inactive.html");
             $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/inactive.html', function (data) {
+
+                console.log("Slider: template slider/inactive.html fetched");
 
                 template = Handlebars.compile(data);
                 compiledHtml = template({
@@ -43,7 +46,7 @@
                 console.log("Slider: no recommendations - fetching template noRecommendations.html");
                 $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/noRecommendations.html', function (data) {
 
-                    console.log("Slider: template noRecommendations.html fetched");
+                    console.log("Slider: template slider/noRecommendations.html fetched");
 
                     template = Handlebars.compile(data);
                     compiledHtml = template({
@@ -70,7 +73,7 @@
             console.log("Slider: recommendation stripped - fetching template active.html");
             $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/active.html', function (data) {
 
-                console.log("Slider: template active.html fetched");
+                console.log("Slider: template slider/active.html fetched");
 
                 template = Handlebars.compile(data);
                 compiledHtml = template({
