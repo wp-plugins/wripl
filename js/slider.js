@@ -6,7 +6,6 @@
         var defaultPosition = -320;
         var displayAtPercent = 10;
 
-
         var slider = $("<div id='wripl-slider'></div>")
             .css({
                 position:'fixed',
@@ -36,18 +35,30 @@
 
         $("body").bind("wripl-ajax-init-logged-in", function (e, params) {
             console.log("Logged in!");
-            console.log(params);
 
             var firstImageUrl;
 
+            // If there are no recommendations!
+            if (params.recommendations.length == 0) {
+                $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/noRecommendations.html', function (data) {
+                    template = Handlebars.compile(data);
+                    compiledHtml = template({
+                        wriplWidgetProperties:WriplWidgetProperties,
+                        wriplAjaxProperties:WriplAjaxProperties
+                    });
+                    $('#wripl-slider').html(compiledHtml);
+                });
+                return
+            }
+
+            params.recommendations = truncateTitles(params.recommendations);
             theRecommendation = params.recommendations[0];
 
-            if (theRecommendation.image){
+            if (theRecommendation.image) {
                 firstImageUrl = theRecommendation.image[0];
-            }  else {
-                firstImageUrl = "wripl-logo-sml.png";
+            } else {
+                firstImageUrl = WriplAjaxProperties.pluginPath + "/images/wripl-logo-sml.png";          //show our logo if there is no image
             }
-            console.log("firstImageUrl: "+firstImageUrl);
 
             $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/active.html', function (data) {
                 template = Handlebars.compile(data);
@@ -56,7 +67,6 @@
                     post_title:theRecommendation.post_title,
                     permalink:theRecommendation.permalink,
                     featuredImage:firstImageUrl
-
                 });
 
                 $('#wripl-slider').html(compiledHtml);
@@ -69,10 +79,6 @@
                 );
 
             });
-        });
-
-        $('#wripl-slider').bind("mouseover", function(e) {
-            console.log("If i want to do something on rollover");
         });
 
         $(document).scroll(function () {
@@ -109,4 +115,17 @@
 
         });
     });
+
+    String.prototype.trunc = function (n) {
+        return this.substr(0, n - 1) + (this.length > n ? '&hellip;' : '');
+    };
+
+    var truncateTitles = function (theArray) {
+        for (var i = 0; i < theArray.length; i++) {
+            theArray[i].post_title = theArray[i].post_title.trunc(47);
+        }
+        return theArray;
+    }
+
+
 })(jQuery, Handlebars);

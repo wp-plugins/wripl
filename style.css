@@ -4,7 +4,6 @@ div[id|=wripl-oauth] {
     text-align: center;
 }
 
-
 img#oauth-connect {
     display: block;
     margin-left: auto;
@@ -113,6 +112,7 @@ img.wripl-rotate {
 }
 #wripl-slider .footer {
     clear:both;
+    font-size: smaller;
     padding-bottom: 6px;
     padding-right: 16px;
     text-align: right;
@@ -127,17 +127,26 @@ img.wripl-rotate {
 #wripl-slider #post_title {
     float: left;
     max-width: 160px;
-    padding: 16px 8px 8px 8px;
+    padding: 12px 8px 8px 8px;
 }
+
+#wripl-slider #post_title a:hover{
+    text-decoration: underline;
+    border: 0px;
+}
+
+#wripl-slider a:hover{
+    text-decoration: underline;
+    border: 0px;
+}
+
 #wripl-slider #post_title a{
     text-decoration: none;
     font-size: 14pt;
     color: black;
+
 }
-#wripl-slider #post_title a.hover{
-    text-decoration: none;
-    color: black;
-}
+
 #wripl-slider .heading-sml {
     float: left;
     color: #e77b12;

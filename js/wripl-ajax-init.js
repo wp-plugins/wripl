@@ -2,6 +2,8 @@
 
     const INIT_LOGGED_IN_EVENT = "wripl-ajax-init-logged-in";
     const INIT_NOT_LOGGED_IN_EVENT = "wripl-ajax-init-not-logged-in";
+    const INIT_ERROR_EVENT = "wripl-ajax-init-error";
+
 
     $(document).ready(function () {
         init();
@@ -44,8 +46,7 @@
                         $("body").trigger( INIT_NOT_LOGGED_IN_EVENT , response);
                         break;
                     default:
-                        //$("#wripl-ajax-container").trigger('wriplEvent', response);
-                        console.log('in some error state. message : ' + response.responseText);
+                        $("body").trigger(INIT_ERROR_EVENT, response);
                         break;
                 }
             }
