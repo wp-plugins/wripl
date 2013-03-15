@@ -18,8 +18,8 @@
 
         // Add listeners
         $("body").bind("wripl-ajax-init-not-logged-in", function (e, params) {
-            console.log("Not logged in!");
-            console.log(e);
+            console.log("Slider: wripl-ajax-init-not-logged-in heard");
+
             $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/inactive.html', function (data) {
 
                 template = Handlebars.compile(data);
@@ -34,13 +34,17 @@
         });
 
         $("body").bind("wripl-ajax-init-logged-in", function (e, params) {
-            console.log("Logged in!");
+            console.log("Slider: wripl-ajax-init-logged-in heard");
 
             var firstImageUrl;
 
             // If there are no recommendations!
             if (params.recommendations.length == 0) {
+                console.log("Slider: no recommendations - fetching template noRecommendations.html");
                 $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/noRecommendations.html', function (data) {
+
+                    console.log("Slider: template noRecommendations.html fetched");
+
                     template = Handlebars.compile(data);
                     compiledHtml = template({
                         wriplWidgetProperties:WriplWidgetProperties,
@@ -48,6 +52,8 @@
                     });
                     $('#wripl-slider').html(compiledHtml);
                 });
+
+                //returning early
                 return
             }
 
@@ -60,7 +66,12 @@
                 firstImageUrl = WriplAjaxProperties.pluginPath + "/images/wripl-logo-sml.png";          //show our logo if there is no image
             }
 
+
+            console.log("Slider: recommendation stripped - fetching template active.html");
             $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/active.html', function (data) {
+
+                console.log("Slider: template active.html fetched");
+
                 template = Handlebars.compile(data);
                 compiledHtml = template({
                     wriplAjaxProperties:WriplAjaxProperties,

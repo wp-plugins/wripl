@@ -397,7 +397,8 @@ class WriplWP
 
     public function queueUpItems()
     {
-        set_time_limit(0);
+        //6 hours
+        set_time_limit(60 * 60 * 6);
 
         echo '<div class="icon32" id="icon-plugins"><br></div>';
         echo '<h2>Queuing content...</h2>';

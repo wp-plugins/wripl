@@ -1,3 +1,4 @@
+console.log('wripl-ajax-init.js');
 (function ($) {
 
     const INIT_LOGGED_IN_EVENT = "wripl-ajax-init-logged-in";
@@ -6,11 +7,13 @@
 
 
     $(document).ready(function () {
+        console.log('calling wripl init');
         init();
-
     });
 
     var init = function () {
+        console.log('wripl init called');
+
         $.post(
             WriplAjaxProperties.ajaxUrl,
             {
@@ -18,13 +21,17 @@
                 path:WriplAjaxProperties.path
             }
         ).done(function(response) {
-//                console.log(response);
+                console.log('init post success');
+                console.log(response);
+
                 $("body").trigger( INIT_LOGGED_IN_EVENT , response);
                 if(response.activityHashId) {
                     wripl.main(response);
                 }
             }
         ).fail(function(response){
+                console.log('init post fail');
+                console.log(response);
 
                 response.responseText = response.responseText || "{}";
 
@@ -40,9 +47,7 @@
 
                 switch(response.status)
                 {
-
                     case 403:
-//                        console.log('not logged in');
                         $("body").trigger( INIT_NOT_LOGGED_IN_EVENT , response);
                         break;
                     default:
@@ -52,6 +57,5 @@
             }
         );
     }
-
 
 })(jQuery);
