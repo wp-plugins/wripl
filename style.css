@@ -157,14 +157,6 @@ img.wripl-rotate {
     border: solid 1px #c8c8c8;
 }
 
-/*
-  to control the cropping adjust the .thumbnail img margin
-*/
-.thumbnail img {
-    width: auto;
-    height: auto;
-    margin: -80px -124px;
-}
 #wripl-functions{
     float: right;
     font-weight: 500;

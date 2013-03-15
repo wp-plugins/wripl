@@ -114,10 +114,14 @@ class WriplWP
 
         if(isset($featureSettings['sliderEnabled'])) {
             wp_enqueue_script('jquery-effects-slide');
+
+            wp_enqueue_script('jquery-nail-thumb', plugin_dir_url(__FILE__) . 'js/dependencies/jquery.nailthumb.1.1.js');
+
             wp_enqueue_script('wripl-slider', plugin_dir_url(__FILE__) . 'js/slider.js',
                 array(
                     'jquery',
                     'jquery-effects-slide',
+                    'jquery-nail-thumb',
                     'handlebars.js',
                 )
             );

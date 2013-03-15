@@ -60,6 +60,14 @@
                 });
 
                 $('#wripl-slider').html(compiledHtml);
+                $('#wripl-slider .thumbnail').nailthumb(
+                    {
+                        width:132,
+                        height:100,
+                        //method: 'resize'
+                    }
+                );
+
             });
         });
 
