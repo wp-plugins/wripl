@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Pluging to bring wripl's easy recomendations.
-  Version: 1.2.7
+  Version: 1.3.4
   Author: Brian Gallagher
   Author URI: http://wripl.com
  */
@@ -21,7 +21,7 @@ class WriplWP
     const ITEM_NEEDS_INDEXING = -1;
     const ITEM_QUEUED = 0;
     const ITEM_INDEXED = 1;
-    const VERSION = '1.2.7';
+    const VERSION = '1.3.4';
 
     public $wriplPluginHelper;
 
@@ -112,7 +112,7 @@ class WriplWP
             'pluginPath' => plugin_dir_url(__FILE__),
         ));
 
-        if(isset($featureSettings['sliderEnabled'])) {
+        if (isset($featureSettings['sliderEnabled'])) {
             wp_enqueue_script('jquery-effects-slide');
 
             wp_enqueue_script('jquery-nail-thumb', plugin_dir_url(__FILE__) . 'js/dependencies/jquery.nailthumb.1.1.js');
@@ -132,7 +132,7 @@ class WriplWP
     {
 
         $response = array();
-        $path = isset($_POST['path']) && $_POST['path'] !== 'null' ? $_POST['path'] : null;
+        $path = isset($_POST['path']) && !empty($_POST['path']) && $_POST['path'] !== 'null' ? $_POST['path'] : null;
 
         $accessToken = WriplTokenStore::retrieveAccessToken();
 
@@ -143,6 +143,8 @@ class WriplWP
             header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
 
         } else {
+
+            $response['piwikScript'] = $this->metricCollection(true, true);
 
             // 1.) If a proper post, fetch activity code
             if (!is_null($path)) {
@@ -162,12 +164,15 @@ class WriplWP
 
                     $response['activityHashId'] = $resultDecoded->activity_hash_id;
                     $response['endpoint'] = $endpoint;
-                    $response['piwikScript'] = $this->metricCollection(true, true);
+
 
                 } catch (Exception $e) {
-                    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-                    echo $e->getMessage();
-                    exit;
+                    //Probably should crash out here...
+                    //header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+                    //echo $e->getMessage();
+                    //exit;
+                    $response['errors']['retrievingActivityCode'] = $e->getMessage();
+
                 }
 
 
@@ -176,21 +181,15 @@ class WriplWP
             //2.) Get recommendations
             try {
 
-                if (is_null($accessToken)) {
+                $recommendations = $this->requestRecommendations();
 
-                    echo WriplRecommendationWidget::disconnectedHtml();
-                    exit;
-                } else {
+                $indexedItems = $this->wriplPluginHelper->sortRecommendations($recommendations);
 
-                    $recommendations = $this->requestRecommendations();
-
-                    $indexedItems = $this->wriplPluginHelper->sortRecommendations($recommendations);
-
-                    $response['recommendations'] = $indexedItems;
-                }
+                $response['recommendations'] = $indexedItems;
 
             } catch (Exception $exc) {
-                $response['recommendations'] = null;
+                $response['errors']['retrievingRecommendations'] = $e->getMessage();
+                $response['recommendations'] = array();
             }
 
         }
@@ -297,100 +296,104 @@ class WriplWP
         $totalItemsIndexed = $wpdb->get_var("SELECT COUNT(*) FROM $this->wriplIndexQueueTableName where status = " . self::ITEM_INDEXED);
 
         ?>
-    <div class="wrap">
+        <div class="wrap">
 
-        <!-- Display Plugin Icon, Header, and Description -->
-        <div class="icon32" id="icon-tools"><br></div>
-        <h2>Wripl Setup</h2>
+            <!-- Display Plugin Icon, Header, and Description -->
+            <div class="icon32" id="icon-tools"><br></div>
+            <h2>Wripl Setup</h2>
 
-        <h3>Step 1 : Set wripl OAuth Keys</h3>
+            <h3>Step 1 : Set wripl OAuth Keys</h3>
 
-        <p>Here you can set your wripl tokens for secure communication with the wripl servers.</p>
-        <p>If you don't haven credentials, contact me at <a href="mailto:brian@wripl.com">brian@wripl.com</a> and
-            we'll
-            get you set up.</p>
-        <!-- Beginning of the Plugin Options Form -->
-        <form method="post" action="options.php">
-            <?php settings_fields('wripl_plugin_settings'); ?>
-            <table class="form-table">
-                <tr>
-                    <th scope="row">Consumer Key</th>
-                    <td>
-                        <input type="text" size="57" name="wripl_settings[consumerKey]"
-                               value="<?php echo $settings['consumerKey']; ?>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row">Consumer Secret</th>
-                    <td>
-                        <input type="text" size="57" name="wripl_settings[consumerSecret]"
-                               value="<?php echo $settings['consumerSecret']; ?>"/>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <div/>
-                    </td>
-                </tr>
-            </table>
-            <p class="submit">
-                <input type="submit" name="submit" id="submit" class="button-primary" value="Save Keys">
-            </p>
-        </form>
+            <p>Here you can set your wripl tokens for secure communication with the wripl servers.</p>
 
-        <h3>Step 2 : Queue up content to send to wripl</h3>
+            <p>If you don't haven credentials, contact me at <a href="mailto:brian@wripl.com">brian@wripl.com</a> and
+                we'll
+                get you set up.</p>
+            <!-- Beginning of the Plugin Options Form -->
+            <form method="post" action="options.php">
+                <?php settings_fields('wripl_plugin_settings'); ?>
+                <table class="form-table">
+                    <tr>
+                        <th scope="row">Consumer Key</th>
+                        <td>
+                            <input type="text" size="57" name="wripl_settings[consumerKey]"
+                                   value="<?php echo $settings['consumerKey']; ?>"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Consumer Secret</th>
+                        <td>
+                            <input type="text" size="57" name="wripl_settings[consumerSecret]"
+                                   value="<?php echo $settings['consumerSecret']; ?>"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div/>
+                        </td>
+                    </tr>
+                </table>
+                <p class="submit">
+                    <input type="submit" name="submit" id="submit" class="button-primary" value="Save Keys">
+                </p>
+            </form>
 
-        <p><em><?php echo $totalItemsIndexed ?>/<?php echo $totalItemsInQueue ?> content items sent...</em></p>
+            <h3>Step 2 : Queue up content to send to wripl</h3>
 
-        <form method="post">
-            <input type="hidden" name="action" value="queueContent">
-            <p class="submit">
-                <input type="submit" name="submit" id="submit" class="button-primary"
-                       value="Queue Published Content" <?php echo $setUp ? '' : 'disabled="disabled"' ?>>
-            </p>
+            <p><em><?php echo $totalItemsIndexed ?>/<?php echo $totalItemsInQueue ?> content items sent...</em></p>
 
-        </form>
+            <form method="post">
+                <input type="hidden" name="action" value="queueContent">
 
-        <br/>
+                <p class="submit">
+                    <input type="submit" name="submit" id="submit" class="button-primary"
+                           value="Queue Published Content" <?php echo $setUp ? '' : 'disabled="disabled"' ?>>
+                </p>
 
-        <h3>Step 3 : Add the recommendation widget</h3>
+            </form>
 
-        <p>You can now add the 'Wripl Recommendations' widget to your site <a
-                href="<?php echo get_admin_url() ?>widgets.php">here</a></p>
+            <br/>
 
-    </div>
-<br>
+            <h3>Step 3 : Add the recommendation widget</h3>
 
-    <div class="wrap">
-        <hr><br>
+            <p>You can now add the 'Wripl Recommendations' widget to your site <a
+                    href="<?php echo get_admin_url() ?>widgets.php">here</a></p>
 
-        <div class="icon32" id="icon-themes"><br></div>
-        <h2>Wripl Features</h2>
+        </div>
+        <br>
 
-        <form method="post" action="options.php">
-            <?php settings_fields('wripl_plugin_features'); ?>
+        <div class="wrap">
+            <hr>
+            <br>
+
+            <div class="icon32" id="icon-themes"><br></div>
+            <h2>Wripl Features</h2>
+
+            <form method="post" action="options.php">
+                <?php settings_fields('wripl_plugin_features'); ?>
 
 
-            <table class="form-table">
-                <tbody>
-                <tr>
-                    <th scope="row">Enable Slider</th>
-                    <td>
-                        <label for="enableSlider">
-                            <input id="enableSlider" type="checkbox" name="wripl_feature_settings[sliderEnabled]" value="1"<?php checked( isset($featureSettings['sliderEnabled']) ); ?> />
-                            Show the wripl recommendations in a slider as your users read your posts.
-                        </label>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
+                <table class="form-table">
+                    <tbody>
+                    <tr>
+                        <th scope="row">Enable Slider</th>
+                        <td>
+                            <label for="enableSlider">
+                                <input id="enableSlider" type="checkbox" name="wripl_feature_settings[sliderEnabled]"
+                                       value="1"<?php checked(isset($featureSettings['sliderEnabled'])); ?> />
+                                Show the wripl recommendations in a slider as your users read your posts.
+                            </label>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
 
-            <p class="submit">
-                <input type="submit" name="submit" id="submit" class="button-primary" value="Save wripl features">
-            </p>
+                <p class="submit">
+                    <input type="submit" name="submit" id="submit" class="button-primary" value="Save wripl features">
+                </p>
 
-        </form>
-    </div>
+            </form>
+        </div>
 
     <?php
     }

@@ -28,7 +28,6 @@ console.log('slider.js');
 
                 template = Handlebars.compile(data);
                 compiledHtml = template({
-                    wriplWidgetProperties:WriplWidgetProperties,
                     wriplAjaxProperties:WriplAjaxProperties
                 });
 
@@ -52,7 +51,6 @@ console.log('slider.js');
 
                     template = Handlebars.compile(data);
                     compiledHtml = template({
-                        wriplWidgetProperties:WriplWidgetProperties,
                         wriplAjaxProperties:WriplAjaxProperties
                     });
                     $('#wripl-slider').html(compiledHtml);
