@@ -27,7 +27,7 @@ class WriplPluginHelper
     public function getPathUri()
     {
 
-        if (is_single()) {
+        if (is_single() || is_page()) {
 
             global $post;
 
