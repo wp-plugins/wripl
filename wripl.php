@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Pluging to bring wripl's easy recomendations.
-  Version: 1.3.2
+  Version: 1.3.3
   Author: Brian Gallagher
   Author URI: http://wripl.com
  */
@@ -21,7 +21,7 @@ class WriplWP
     const ITEM_NEEDS_INDEXING = -1;
     const ITEM_QUEUED = 0;
     const ITEM_INDEXED = 1;
-    const VERSION = '1.3.2';
+    const VERSION = '1.3.3';
 
     public $wriplPluginHelper;
 
@@ -144,6 +144,8 @@ class WriplWP
 
         } else {
 
+            $response['piwikScript'] = $this->metricCollection(true, true);
+
             // 1.) If a proper post, fetch activity code
             if (!is_null($path)) {
 
@@ -162,12 +164,15 @@ class WriplWP
 
                     $response['activityHashId'] = $resultDecoded->activity_hash_id;
                     $response['endpoint'] = $endpoint;
-                    $response['piwikScript'] = $this->metricCollection(true, true);
+
 
                 } catch (Exception $e) {
-                    header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-                    echo $e->getMessage();
-                    exit;
+                    //Probably should crash out here...
+                    //header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
+                    //echo $e->getMessage();
+                    //exit;
+                    $response['errors']['retrievingActivityCode'] = $e->getMessage();
+
                 }
 
 
@@ -183,7 +188,8 @@ class WriplWP
                 $response['recommendations'] = $indexedItems;
 
             } catch (Exception $exc) {
-                $response['recommendations'] = null;
+                $response['errors']['retrievingRecommendations'] = $e->getMessage();
+                $response['recommendations'] = array();
             }
 
         }
