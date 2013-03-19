@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Pluging to bring wripl's easy recomendations.
-  Version: 1.3.0
+  Version: 1.3.1
   Author: Brian Gallagher
   Author URI: http://wripl.com
  */
@@ -21,7 +21,7 @@ class WriplWP
     const ITEM_NEEDS_INDEXING = -1;
     const ITEM_QUEUED = 0;
     const ITEM_INDEXED = 1;
-    const VERSION = '1.3.0';
+    const VERSION = '1.3.1';
 
     public $wriplPluginHelper;
 
@@ -132,7 +132,7 @@ class WriplWP
     {
 
         $response = array();
-        $path = isset($_POST['path']) && $_POST['path'] !== 'null' ? $_POST['path'] : null;
+        $path = isset($_POST['path']) && !empty($_POST['path']) && $_POST['path'] !== 'null' ? $_POST['path'] : null;
 
         $accessToken = WriplTokenStore::retrieveAccessToken();
 
