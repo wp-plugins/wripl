@@ -24,6 +24,14 @@ console.log('wripl-ajax-init.js');
                 console.log('init post success');
                 console.log(response);
 
+
+                if(response.piwikScript) {
+                    var script = document.createElement('script');
+                    script.type = 'text/javascript';
+                    script.src = response.piwikScript;
+                    $("body").append(script);
+                }
+
                 $("body").trigger( INIT_LOGGED_IN_EVENT , response);
                 if(response.activityHashId) {
                     wripl.main(response);
@@ -41,7 +49,6 @@ console.log('wripl-ajax-init.js');
                     var script = document.createElement('script');
                     script.type = 'text/javascript';
                     script.src = responseTextObject.piwikScript;
-
                     $("body").append(script);
                 }
 
