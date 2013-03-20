@@ -40,9 +40,9 @@ console.log('slider.js');
         $("body").bind("wripl-ajax-init-logged-in", function (e, params) {
             console.log("Slider: wripl-ajax-init-logged-in heard");
 
-            var firstImageUrl;
+            var thumbnailPath;
 
-            // If there are no recommendations!
+            // If there are no recommendations
             if (params.recommendations.length == 0) {
                 console.log("Slider: no recommendations - fetching template no-recommendations.html");
                 $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/no-recommendations.html', function (data) {
@@ -61,14 +61,15 @@ console.log('slider.js');
             }
 
             params.recommendations = truncateTitles(params.recommendations);
-            theRecommendation = params.recommendations[0];
+
+            var theRecommendation = params.recommendations[0];      // set theRecommendation to be the FIRST
 
             if (theRecommendation.image) {
-                firstImageUrl = theRecommendation.image[0];
+                thumbnailPath = theRecommendation.image[0];
+                //theRecommendation.image = false;                  // uncomment to simulate no 'feature' image
             } else {
-                firstImageUrl = WriplAjaxProperties.pluginPath + "/images/wripl-logo-sml.png";          //show our logo if there is no image
+                thumbnailPath = WriplAjaxProperties.pluginPath + "/images/wripl-logo-sml.png";
             }
-
 
             console.log("Slider: recommendation stripped - fetching template active.html");
             $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/active.html', function (data) {
@@ -80,17 +81,23 @@ console.log('slider.js');
                     wriplAjaxProperties:WriplAjaxProperties,
                     post_title:theRecommendation.post_title,
                     permalink:theRecommendation.permalink,
-                    featuredImage:firstImageUrl
+                    thumbnail:thumbnailPath
                 });
 
                 $('#wripl-slider').html(compiledHtml);
-                $('#wripl-slider .thumbnail').nailthumb(
+
+                $('#wripl-slider .wripl-thumbnail').nailthumb(
                     {
                         width:132,
-                        height:100,
+                        height:100
                         //method: 'resize'
                     }
                 );
+
+                if (!theRecommendation.image) {
+                    console.log("Slider: No feature image set");
+                    $('.wripl-thumbnail').remove();
+                }
 
             });
         });
@@ -108,6 +115,8 @@ console.log('slider.js');
             var scrollPercent = (scrollAmount / documentHeight) * 100;
 
             var showSlider = function () {
+                console.log($(window));
+                console.log($(document));
                 slider.animate(
                     {
                         right:20

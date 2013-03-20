@@ -82,10 +82,10 @@ img.wripl-rotate {
 /* TODO: Refactor the following css.. tis a bit messy*/
 #wripl-slider {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
-    background-color: white;
+    background-color: #ffffff;
     padding-left: 20px;
     width: 350px;
-    height: 170px;
+    height: 160px;
 
     -webkit-box-shadow: 0 8px 6px -6px #c8c8c8;
     -moz-box-shadow: 0 8px 6px -6px #c8c8c8;
@@ -121,49 +121,47 @@ img.wripl-rotate {
     vertical-align: text-bottom;
 }
 #wripl-slider-header{
-    padding: 10px 20px 10px 10px;
+    padding: 10px 20px 10px 5px;
     margin-bottom: 12px;
 }
-#wripl-slider #post_title {
-    float: left;
-    max-width: 160px;
-    padding: 12px 8px 8px 8px;
-}
 
-#wripl-slider #post_title a:hover{
-    text-decoration: underline;
-    border: 0px;
-}
-
-#wripl-slider a:hover{
-    text-decoration: underline;
-    border: 0px;
-}
-
-#wripl-slider #post_title a{
+a#post_title {
     text-decoration: none;
     font-size: 14pt;
     color: black;
+}
+a#post_title:hover {
+    text-decoration: underline;
+}
 
+.nailthumb-container{
+    float:right;
 }
 
 #wripl-slider .heading-sml {
     float: left;
     color: #e77b12;
     font-weight: 600;
-    font-size: 9pt;
+    font-size: 11pt;
+}
+
+#recommendations{
+    margin-right: 14px;
+    padding-top: 18px;
+    border-top: 1px solid #e0dfdf;
 }
 
 /*
   to control the size of the thumbnail adjust the .thumbnail width and height
 */
-.thumbnail {
+.wripl-thumbnail {
     width: 132px;
     height: 100px;
     overflow: hidden;
-    margin: 8px 12px 14px;
+    margin-top: -4px;
+    margin-right: 4px;
     float: right;
-    border: solid 1px #c8c8c8;
+    border: solid 1px #e2e2e2;
 }
 
 #wripl-functions{
@@ -173,10 +171,9 @@ img.wripl-rotate {
 }
 #wripl-functions a {
     text-decoration: none;
+    color: #000000;
 }
-#recommendations{
-    margin-right: 14px;
-    padding-top: 4px;
-    border-top: 1px solid #e0dfdf;
-    clear: both;
+#wripl-functions a:hover {
+    text-decoration: underline;
+    color: #999999;
 }
