@@ -148,6 +148,7 @@ a#post_title:hover {
 #recommendations{
     margin-right: 14px;
     padding-top: 18px;
+    padding-right: 6px;
     border-top: 1px solid #e0dfdf;
 }
 
@@ -160,7 +161,6 @@ a#post_title:hover {
     overflow: hidden;
     margin-top: -4px;
     margin-right: 4px;
-    float: right;
     border: solid 1px #e2e2e2;
 }
 
