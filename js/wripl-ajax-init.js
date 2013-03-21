@@ -5,7 +5,6 @@ console.log('wripl-ajax-init.js');
     const INIT_NOT_LOGGED_IN_EVENT = "wripl-ajax-init-not-logged-in";
     const INIT_ERROR_EVENT = "wripl-ajax-init-error";
 
-
     $(document).ready(function () {
         console.log('calling wripl init');
         init();
@@ -21,9 +20,17 @@ console.log('wripl-ajax-init.js');
                 path:WriplAjaxProperties.path
             }
         ).done(function(response) {
+                if(typeof(response) !== "object") {
+
+                    console.log('init post success - but response is not an object');
+                    $("body").trigger(INIT_ERROR_EVENT, response);
+
+                    // return early
+                    return;
+                }
+
                 console.log('init post success');
                 console.log(response);
-
 
                 if(response.piwikScript) {
                     var script = document.createElement('script');
