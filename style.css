@@ -93,6 +93,7 @@ img.wripl-rotate {
 
     border: solid 1px #EEEEEE;
 }
+
 #wripl-slider .heading {
     font-size: 13pt;
     font-weight: 300;
@@ -124,6 +125,13 @@ img.wripl-rotate {
     padding: 10px 20px 10px 5px;
     margin-bottom: 12px;
 }
+/* wripl MOBILE specific styles */
+
+#wripl-slider .wripl-mobile {
+    width: 250px;
+    height: 100px;
+}
+
 
 a#post_title {
     text-decoration: none;
