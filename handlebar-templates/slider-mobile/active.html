@@ -1,18 +1,9 @@
-<div id="wripl-slider-header">
-    <div class="heading-sml">
-        wripl recommends
-    </div>
-
-    <div id="wripl-functions">
-        <a href="http://wripl.com/interests"
-           target="_blank">see your interests</a> |
-        <a href="{{wriplAjaxProperties.pluginPath}}disconnect.php">disconnect</a>
-    </div>
-</div>
-
-<div id="recommendations">
+<div id="recommendations" class="wripl-mobile" xmlns="http://www.w3.org/1999/html">
     <a id="post_title" href="{{permalink}}">
-        <img id="post_image" class="wripl-thumbnail floatRight" src="{{thumbnail}}" alt="{{{post_title}}}">
+        <img id="post_image" class="wripl-thumbnail wripl-mobile" src="{{thumbnail}}" alt="{{{post_title}}}">
+        <span class="heading-sml wripl-mobile">Recommended for you...</span>
+        </br>
         {{{post_title}}}
     </a>
+    <a class="slider-dismiss" href="#">x</a>
 </div>
