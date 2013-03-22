@@ -125,9 +125,10 @@ img.wripl-rotate {
     padding: 10px 20px 10px 5px;
     margin-bottom: 12px;
 }
-/* wripl MOBILE specific styles */
 
-#wripl-slider .wripl-mobile {
+/* wripl mobile specific styles */
+
+#wripl-slider.wripl-mobile {
     width: 250px;
     height: 100px;
 }
