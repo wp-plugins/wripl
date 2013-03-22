@@ -9,9 +9,18 @@
 set_include_path(dirname(__FILE__) . '/libs' . PATH_SEPARATOR . get_include_path());
 
 require_once dirname(__FILE__) . '/WriplRecommendationWidget.php';
-require_once dirname(__FILE__) . '/libs/OAuthSimple/OAuthSimple.php';
 require_once dirname(__FILE__) . '/WriplPluginHelper.php';
 require_once dirname(__FILE__) . '/WriplTokenStore.php';
+
+
+//Conditional includes to avoid conflicts with other plugins.
+if (!class_exists('Mobile_Detect')) {
+    require_once dirname(__FILE__) . '/libs/Mobile-Detect-2.5.7/Mobile_Detect.php';
+}
+
+if (!class_exists('OAuthSimple')) {
+    require_once dirname(__FILE__) . '/libs/OAuthSimple/OAuthSimple.php';
+}
 
 $wriplWP = new WriplWP();
 
@@ -29,10 +38,13 @@ class WriplWP
     static $instance;
     protected $apiUrl = 'http://api.wripl.com/v0.1';
 
+    protected $mobileDetect;
+
     public function __construct()
     {
 
         $this->wriplPluginHelper = new WriplPluginHelper($this->apiUrl);
+        $this->mobileDetect = new Mobile_Detect();
 
         global $wpdb;
 
@@ -112,20 +124,42 @@ class WriplWP
             'pluginPath' => plugin_dir_url(__FILE__),
         ));
 
+
         if (isset($featureSettings['sliderEnabled'])) {
+
             wp_enqueue_script('jquery-effects-slide');
 
             wp_enqueue_script('jquery-nail-thumb', plugin_dir_url(__FILE__) . 'js/dependencies/jquery.nailthumb.1.1.js');
 
-            wp_enqueue_script('wripl-slider', plugin_dir_url(__FILE__) . 'js/slider.js',
-                array(
-                    'jquery',
-                    'jquery-effects-slide',
-                    'jquery-nail-thumb',
-                    'handlebars.js',
-                )
-            );
+            /**
+             * if mobile, else...
+             */
+            if ($this->mobileDetect->isMobile() || $this->mobileDetect->isTablet()) {
+
+                wp_enqueue_script('wripl-slider', plugin_dir_url(__FILE__) . 'js/slider-mobile.js',
+                    array(
+                        'jquery',
+                        'jquery-effects-slide',
+                        'jquery-nail-thumb',
+                        'handlebars.js',
+                    )
+                );
+
+            } else {
+
+                wp_enqueue_script('wripl-slider', plugin_dir_url(__FILE__) . 'js/slider.js',
+                    array(
+                        'jquery',
+                        'jquery-effects-slide',
+                        'jquery-nail-thumb',
+                        'handlebars.js',
+                    )
+                );
+
+            }
+
         }
+
     }
 
     public function ajaxInit()
