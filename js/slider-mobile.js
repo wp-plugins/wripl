@@ -5,21 +5,84 @@ console.log('slider-mobile.js');
 
     jQuery(document).ready(function ($) {
 
-        var sliderRevealed;
-        var defaultPosition = -320;
+        var defaultPosition = -100;
         var displayAtPercent = 10;
+
+        console.log(defaultPosition);
 
         var slider = $("<div id='wripl-slider' class='wripl-mobile'></div>")
             .css({
-                position:'fixed',
-                bottom:20,
+                position: 'fixed',
+                bottom: 20,
                 //left:$(this).width() - 50 + 'px'
-                right:defaultPosition
+                right: defaultPosition,
+                "z-index": 100
             });
+
+        slider.forcedDisplayed = false;
+
+        slider.show = function () {
+            if(!this.displayed)
+            {
+                this.animate(
+                    {
+                        right: 20
+                    }
+                );
+            }
+
+            this.displayed = true;
+        }
+
+        slider.hide = function () {
+            if(this.displayed)
+            {
+                this.animate(
+                    {
+                        right: defaultPosition
+                    }
+                );
+            }
+
+            this.displayed = false;
+        }
 
         $('body').append(slider);
 
-        // Add listeners
+        $('#wripl-slider').click(function (event) {
+                event.stopPropagation()
+                slider.show();
+                slider.forcedDisplayed = true;
+            }
+        );
+
+        /**
+         * Watching for page scrolling
+         */
+        $(document).scroll(function () {
+
+            var scrollAmount = $(window).scrollTop();
+            var documentHeight = $(document).height();
+            var scrollPercent = (scrollAmount / documentHeight) * 100;
+
+            if(!slider.forcedDisplayed)
+            {
+                if (scrollPercent > displayAtPercent) {
+                    slider.show();
+                }
+
+                if (scrollPercent < displayAtPercent) {
+                    slider.hide();
+                }
+            }
+
+        });
+
+
+        /**
+         * Listeners below.
+         */
+
         $("body").bind("wripl-ajax-init-not-logged-in", function (e, params) {
             console.log("Slider: wripl-ajax-init-not-logged-in heard");
 
@@ -31,7 +94,7 @@ console.log('slider-mobile.js');
 
                 template = Handlebars.compile(data);
                 compiledHtml = template({
-                    wriplAjaxProperties:WriplAjaxProperties
+                    wriplAjaxProperties: WriplAjaxProperties
                 });
 
                 $('#wripl-slider').html(compiledHtml);
@@ -81,18 +144,18 @@ console.log('slider-mobile.js');
 
                 template = Handlebars.compile(data);
                 compiledHtml = template({
-                    wriplAjaxProperties:WriplAjaxProperties,
-                    post_title:theRecommendation.post_title,
-                    permalink:theRecommendation.permalink,
-                    thumbnail:thumbnailPath
+                    wriplAjaxProperties: WriplAjaxProperties,
+                    post_title: theRecommendation.post_title,
+                    permalink: theRecommendation.permalink,
+                    thumbnail: thumbnailPath
                 });
 
                 $('#wripl-slider').html(compiledHtml);
 
                 $('#wripl-slider .wripl-thumbnail').nailthumb(
                     {
-                        width:132,
-                        height:100
+                        width: 132,
+                        height: 100
                         //method: 'resize'
                     }
                 );
@@ -112,41 +175,7 @@ console.log('slider-mobile.js');
 
         });
 
-        $(document).scroll(function () {
 
-            var scrollAmount = $(window).scrollTop();
-            var documentHeight = $(document).height();
-            var scrollPercent = (scrollAmount / documentHeight) * 100;
-
-            var showSlider = function () {
-                console.log($(window));
-                console.log($(document));
-                slider.animate(
-                    {
-                        right:20
-                    }
-                );
-            }
-
-            var hideSlider = function () {
-                slider.animate(
-                    {
-                        right:defaultPosition
-                    }
-                );
-            }
-
-            if (scrollPercent > displayAtPercent && !sliderRevealed) {
-                showSlider();
-                sliderRevealed = true;
-            }
-
-            if (scrollPercent < displayAtPercent && sliderRevealed) {
-                hideSlider();
-                sliderRevealed = false;
-            }
-
-        });
     });
 
     String.prototype.trunc = function (n) {
