@@ -5,17 +5,15 @@ console.log('slider-mobile.js');
 
     jQuery(document).ready(function ($) {
 
-        var defaultPosition = -100;
+        var defaultPositionRight = 40;
         var displayAtPercent = 10;
 
-        console.log(defaultPosition);
 
         var slider = $("<div id='wripl-slider' class='wripl-mobile'></div>")
             .css({
                 position: 'fixed',
-                bottom: 20,
-                //left:$(this).width() - 50 + 'px'
-                right: defaultPosition,
+                bottom: 0,
+                right: ($(window).width() * -1) + defaultPositionRight,
                 "z-index": 100
             });
 
@@ -26,7 +24,7 @@ console.log('slider-mobile.js');
             {
                 this.animate(
                     {
-                        right: 20
+                        right: 0
                     }
                 );
             }
@@ -39,7 +37,7 @@ console.log('slider-mobile.js');
             {
                 this.animate(
                     {
-                        right: defaultPosition
+                        right: ($(window).width() * -1) + defaultPositionRight
                     }
                 );
             }
@@ -50,11 +48,22 @@ console.log('slider-mobile.js');
         $('body').append(slider);
 
         $('#wripl-slider').click(function (event) {
-                event.stopPropagation()
-                slider.show();
-                slider.forcedDisplayed = true;
+
+                if(!slider.displayed){
+                    event.preventDefault();
+                    slider.show();
+                    slider.forcedDisplayed = true;
+                }
+
             }
         );
+
+        $('#wripl-slider').on('click', 'a.dismiss', function (event){
+            event.stopPropagation();
+            slider.hide();
+            slider.forcedDisplayed = true;
+
+        });
 
         /**
          * Watching for page scrolling
@@ -154,8 +163,8 @@ console.log('slider-mobile.js');
 
                 $('#wripl-slider .wripl-thumbnail').nailthumb(
                     {
-                        width: 132,
-                        height: 100
+                        width: 80,
+                        height: 61
                         //method: 'resize'
                     }
                 );
