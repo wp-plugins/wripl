@@ -9,16 +9,16 @@ if (!$wriplWP->isSetup()) {
     exit('wripl doesn\'t seem to be set up yet');
 }
 
-$data['wriplWpVersion'] = WriplWP::VERSION;
+$wriplDebugData['wriplWpVersion'] = WriplWP::VERSION;
 
 
 if (isset($_POST['debug'])) {
-    $data['wriplSetup'] = (bool) $wriplWP->isSetup();
-    $data['wordpressVersion'] = $wp_version;
-    $data['curlVersion'] = function_exists('curl_version') ? curl_version() : false;
-    $data['phpVersion'] = phpversion();
-    $data['server'] = $_SERVER['SERVER_SOFTWARE'];
+    $wriplDebugData['wriplSetup'] = (bool) $wriplWP->isSetup();
+    $wriplDebugData['wordpressVersion'] = $wp_version;
+    $wriplDebugData['curlVersion'] = function_exists('curl_version') ? curl_version() : false;
+    $wriplDebugData['phpVersion'] = phpversion();
+    $wriplDebugData['server'] = $_SERVER['SERVER_SOFTWARE'];
 }
 
 header('Content-Type: application/json');
-echo json_encode($data);
+echo json_encode($wriplDebugData);
