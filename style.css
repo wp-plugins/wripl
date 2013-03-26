@@ -94,6 +94,11 @@ img.wripl-rotate {
     border: solid 1px #EEEEEE;
 }
 
+#wripl-slider img{
+    max-width: none;
+}
+
+
 #wripl-slider .heading {
     font-size: 13pt;
     font-weight: 300;
@@ -156,8 +161,12 @@ img.wripl-rotate {
     font-size: 1em;
 }
 
+/* Added margin here.. because theme stylesheets with  p *all selectors were overwriting the layout */
+/* Added max-width here to prevent the title text from getting too close to the '>>' buttons */
 #wripl-slider.wripl-mobile p{
     line-height: 1.4em;
+    margin: 4px;
+    max-width: 80%;
 }
 
 #wripl-slider.wripl-mobile a.dismiss {
@@ -182,10 +191,10 @@ img.wripl-rotate {
     font-size: 12pt;
 }
 
-#wripl-slider.wripl-mobile .nailthumb-container{
-    float:left;
-    margin: 0px;
-    margin-right: 10px;
+/* So this selector does not appear in any of the templates but it is created by the */
+.nailthumb-container{
+    float:right;
+    border: 1px solid #e0dfdf;
 }
 
 #wripl-slider .heading-sml.wripl-mobile {
@@ -196,6 +205,12 @@ img.wripl-rotate {
 
 /* wripl mobile specific styles ---------------------- MOBILE SPECIFIC*/
 
+#wripl-slider.wripl-mobile .nailthumb-container{
+    float:left;
+    margin: 0px;
+    margin-right: 10px;
+}
+
 a#post_title {
     text-decoration: none;
     font-size: 14pt;
@@ -203,10 +218,6 @@ a#post_title {
 }
 a#post_title:hover {
     text-decoration: underline;
-}
-
-.nailthumb-container{
-    float:right;
 }
 
 #wripl-slider .heading-sml {
@@ -218,20 +229,14 @@ a#post_title:hover {
 
 #recommendations{
     margin-right: 14px;
-    padding-top: 18px;
+    padding-top: 14px;
     padding-right: 6px;
     border-top: 1px solid #e0dfdf;
 }
 
-/*
-  to control the size of the thumbnail adjust the .thumbnail width and height
-*/
 .wripl-thumbnail {
-
-    overflow: hidden;
-    margin-top: -4px;
-    margin-right: 4px;
-    border: solid 1px #e2e2e2;
+    /*This is probably no longer necessary.. but i don't want to change the 'active.html' template just yet... so here she stays*/
+    /*margin-top: -4px;*/
 }
 
 #wripl-functions{
