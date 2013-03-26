@@ -5,7 +5,7 @@ console.log('slider.js');
 
         var sliderRevealed;
         var defaultPosition = -320;
-        var displayAtPercent = 10;
+        var displayAtPercent = 30;
 
         var slider = $("<div id='wripl-slider'></div>")
             .css({
@@ -35,7 +35,6 @@ console.log('slider.js');
 
             });
         });
-
 
         $("body").bind("wripl-ajax-init-logged-in", function (e, params) {
             console.log("Slider: wripl-ajax-init-logged-in heard");

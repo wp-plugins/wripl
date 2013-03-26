@@ -6,8 +6,7 @@ console.log('slider-mobile.js');
     jQuery(document).ready(function ($) {
 
         var defaultPositionRight = 40;
-        var displayAtPercent = 10;
-
+        var displayAtPercent = 50;
 
         var slider = $("<div id='wripl-slider' class='wripl-mobile'></div>")
             .css({
