@@ -92,13 +92,13 @@ console.log('slider-mobile.js');
          */
 
         $("body").bind("wripl-ajax-init-not-logged-in", function (e, params) {
-            console.log("Slider: wripl-ajax-init-not-logged-in heard");
+            console.log("Slider-Mobile: wripl-ajax-init-not-logged-in heard");
 
-            console.log("Slider: not logged in - fetching template inactive.html");
+            console.log("Slider-Mobile: not logged in - fetching template inactive.html");
 
             $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider-mobile/inactive.html', function (data) {
 
-                console.log("Slider: template slider/inactive.html fetched");
+                console.log("Slider-Mobile: template slider-mobile/inactive.html fetched");
 
                 template = Handlebars.compile(data);
                 compiledHtml = template({
@@ -111,7 +111,7 @@ console.log('slider-mobile.js');
         });
 
         $("body").bind("wripl-ajax-init-logged-in", function (e, params) {
-            console.log("Slider: wripl-ajax-init-logged-in heard");
+            console.log("Slider-Mobile: wripl-ajax-init-logged-in heard");
 
             var thumbnailPath;
 
@@ -121,7 +121,7 @@ console.log('slider-mobile.js');
 
 //                $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider/no-recommendations.html', function (data) {
 //
-//                    console.log("Slider: template slider/no-recommendations.html fetched");
+//                    console.log("Slider-Mobile: template slider/no-recommendations.html fetched");
 //
 //                    template = Handlebars.compile(data);
 //                    compiledHtml = template({
@@ -145,10 +145,10 @@ console.log('slider-mobile.js');
                 thumbnailPath = WriplAjaxProperties.pluginPath + "/images/wripl-logo-sml.png";
             }
 
-            console.log("Slider: recommendation stripped - fetching template active.html");
+            console.log("Slider-Mobile: recommendation stripped - fetching template active.html");
             $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/slider-mobile/active.html', function (data) {
 
-                console.log("Slider: template slider/active.html fetched");
+                console.log("Slider-Mobile: template slider-mobile/active.html fetched");
 
                 template = Handlebars.compile(data);
                 compiledHtml = template({
@@ -169,7 +169,7 @@ console.log('slider-mobile.js');
                 );
 
                 if (!theRecommendation.image) {
-                    console.log("Slider: No feature image set");
+                    console.log("Slider-Mobile: No feature image set");
                     $('.wripl-thumbnail').remove();
                 }
 
@@ -177,7 +177,7 @@ console.log('slider-mobile.js');
         });
 
         $("body").bind("wripl-ajax-init-error", function (e, params) {
-            console.log("Slider: wripl-ajax-init-error heard");
+            console.log("Slider-Mobile: wripl-ajax-init-error heard");
 
 //            $('#wripl-slider').remove();
 
