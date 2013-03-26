@@ -162,19 +162,15 @@ img.wripl-rotate {
 
 #wripl-slider.wripl-mobile a.dismiss {
     position:absolute;
-    top: 0;
-    right: 12px;
+    top: 24px;
+    right: 2px;
     cursor: pointer;
     clear: both;
     display: block;
-
-    /*position:absolute;*/
-    /*top: 0;*/
-    /*right: 12px;*/
-    /*margin: 2px;*/
-    /*font-weight: 600;*/
-    /*font-size: 12pt;*/
-    /*cursor: pointer;*/
+    padding: 0 16px ;
+}
+#wripl-slider.wripl-mobile a.dismiss:hover {
+    border: 0px;
 }
 
 #wripl-slider.wripl-mobile a.show {
