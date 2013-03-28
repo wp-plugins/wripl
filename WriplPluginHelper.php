@@ -116,10 +116,10 @@ class WriplPluginHelper
         $indexedItems = array();
 
         foreach ($itemOrder as $item) {
-            if (array_key_exists('post', $item)) {
+            if (array_key_exists('post', $item) && isset($indexedPosts[$item['post']])) {
                 $indexedItems[] = $indexedPosts[$item['post']];
             }
-            if (array_key_exists('page', $item)) {
+            if (array_key_exists('page', $item) && isset($indexedPages[$item['page']])) {
                 $indexedItems[] = $indexedPages[$item['page']];
             }
         }

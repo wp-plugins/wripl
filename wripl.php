@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Pluging to bring wripl's easy recomendations.
-  Version: 1.3.6
+  Version: 1.3.8
   Author: Brian Gallagher
   Author URI: http://wripl.com
  */
@@ -30,7 +30,7 @@ class WriplWP
     const ITEM_NEEDS_INDEXING = -1;
     const ITEM_QUEUED = 0;
     const ITEM_INDEXED = 1;
-    const VERSION = '1.3.6';
+    const VERSION = '1.3.8';
 
     public $wriplPluginHelper;
 
@@ -312,6 +312,7 @@ class WriplWP
 
     public function settingsPage()
     {
+
         global $wpdb;
 
         $settings = get_option('wripl_settings');
@@ -597,18 +598,35 @@ class WriplWP
         $title = $node->post_title;
         $body = $node->post_content;
 
+        $indexStatus = self::ITEM_INDEXED;
+
         try {
+
             $client->addToIndex($url, $title, $body, $tags, $publicationDate);
-            $wpdb->update($this->wriplIndexQueueTableName, array('status' => self::ITEM_INDEXED), array('id' => $id));
+
         } catch (Exception $e) {
-            error_log("index error : " . $e->getMessage());
-            error_log("index error : " . $e->getTraceAsString());
+
+            $error = array(
+                'Exception' => get_class($e),
+                'Message' => $e->getMessage(),
+                'Code' => $e->getCode()
+            );
+
+            error_log(json_encode($error));
+
             /**
-             * Queue up again on fail for 2 hours time
+             * Queue up again on fail for 2 hours time in the event of an error
              */
-            //wp_schedule_single_event(time(), 'wripl_index_content', array($id, $type));
-            wp_schedule_single_event(time() + 7200, 'wripl_index_content', array($id, $type));
+            if($e->getCode() === 500)
+            {
+                wp_schedule_single_event(time() + 7200, 'wripl_index_content', array($id, $type));
+                return;
+            }
+
         }
+
+        $wpdb->update($this->wriplIndexQueueTableName, array('status' => self::ITEM_INDEXED), array('id' => $id));
+
     }
 
     /**
