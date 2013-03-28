@@ -92,6 +92,9 @@ img.wripl-rotate {
     box-shadow: 0 8px 6px -6px #c8c8c8;
 
     border: solid 1px #EEEEEE;
+
+    position: fixed;
+    bottom: 20px;
 }
 
 #wripl-slider img{
@@ -138,13 +141,15 @@ img.wripl-rotate {
     height: 78px;
     padding-left: 0px;
 
-    /*-moz-box-shadow: -5px -5px #888;*/
-    /*-webkit-box-shadow: -5px -5px #888;*/
-    /*box-shadow: -5px -5px #888;*/
     -webkit-box-shadow: 0 -2px 6px #c8c8c8;
     -moz-box-shadow: 0 -2px 6px #c8c8c8;
     box-shadow: 0 -2px 6px #c8c8c8;
+
+    /* mobile slider will be flush to the bottom of the screen */
+    bottom:0;
+    z-index: 100;
 }
+
 #wripl-slider .slider-body.wripl-mobile {
     padding-top: 14px;
 }
