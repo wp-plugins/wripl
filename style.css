@@ -117,9 +117,6 @@ img.wripl-rotate {
 #wripl-slider .slider-body  img {
     vertical-align: middle;
 }
-#wripl-slider #wripl-logo{
-    float: left;
-}
 #wripl-slider .footer {
     clear:both;
     font-size: smaller;
@@ -160,9 +157,8 @@ img.wripl-rotate {
 #recommendations.wripl-mobile {
     border-top: 0px;
     margin-right: 0px;
-    padding-top: 0px;
-    padding-right: 0px;
     padding: 10px;
+    padding-top: 4px;
 }
 
 #wripl-slider.wripl-mobile a{
@@ -174,32 +170,26 @@ img.wripl-rotate {
 #wripl-slider.wripl-mobile p{
     line-height: 1.4em;
     margin: 4px;
-    max-width: 80%;
+    max-width: 90%;
 }
 
-#wripl-slider.wripl-mobile a.dismiss {
-    position:absolute;
-    top: 24px;
-    right: 2px;
-    cursor: pointer;
-    clear: both;
-    display: block;
-    padding: 0 16px ;
+#wripl-dismiss.wripl-mobile a{
+    padding-top: 28px;
+    padding-left: 6px;
 }
+
 #wripl-slider.wripl-mobile a.dismiss:hover {
     border: 0px;
 }
 
-#wripl-slider.wripl-mobile a.show {
-    position:absolute;
-    top: 0;
-    right: 12px;
-    margin: 2px;
-    font-weight: 600;
-    font-size: 12pt;
+#wripl-dismiss.wripl-mobile {
+    float: right;
+    width: 30px;
+    height: 100%;
+    border-left: 1px solid #ededed;
 }
 
-/* So this selector does not appear in any of the templates but it is created by the */
+/* So this selector does not appear in any of the templates but it is created on the fly */
 .nailthumb-container{
     float:right;
     border: 1px solid #e0dfdf;
@@ -268,7 +258,6 @@ a#post_title:hover {
 #wripl-dismiss {
     float: right;
     width: 20px;
-
     height: 100%;
     border-left: 1px solid #ededed;
 }
