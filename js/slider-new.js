@@ -36,6 +36,7 @@ console.log('slider-new.js');
             }
 
             this.displayed = true;
+            this.removeClass('show-left-pointer');
         };
 
         slider.hide = function () {
@@ -53,6 +54,7 @@ console.log('slider-new.js');
             }
 
             this.displayed = false;
+            this.addClass('show-left-pointer');
         };
 
 
@@ -86,7 +88,7 @@ console.log('slider-new.js');
 
         } else {
             sliderMode = "Slider";
-            defaultPosition = -320;
+            defaultPosition = -340;     // If the width of the slider changes.. so must this
             activePosition = 20;
 
             displayAtPercent = 70;
@@ -215,6 +217,8 @@ console.log('slider-new.js');
             }
 
         });
+
+
 
 
         /**

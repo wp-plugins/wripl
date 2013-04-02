@@ -84,17 +84,18 @@ img.wripl-rotate {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     background-color: #ffffff;
     padding-left: 20px;
-    width: 350px;
+    width: 370px;
     height: 160px;
 
     -webkit-box-shadow: 0 8px 6px -6px #c8c8c8;
     -moz-box-shadow: 0 8px 6px -6px #c8c8c8;
     box-shadow: 0 8px 6px -6px #c8c8c8;
 
-    border: solid 1px #EEEEEE;
+    border: solid 1px #EEE;
 
     position: fixed;
     bottom: 20px;
+    vertical-align: top;
 }
 
 #wripl-slider img{
@@ -130,11 +131,13 @@ img.wripl-rotate {
     vertical-align: text-bottom;
 }
 #wripl-slider-header{
-    padding: 10px 20px 10px 5px;
-    margin-bottom: 12px;
+    padding: 6px 6px 22px 6px;
+    border-bottom: 1px solid #ededed;
+    margin-right: 10px;
+    margin-left: -10px;
 }
 
-/* wripl mobile specific styles ---------------------- MOBILE SPECIFIC*/
+/* START ------- wripl mobile specific styles ---------------------- MOBILE SPECIFIC -------- START*/
 
 #wripl-slider.wripl-mobile {
     width: 100%;
@@ -207,8 +210,7 @@ img.wripl-rotate {
     float: none;
 }
 
-
-/* wripl mobile specific styles ---------------------- MOBILE SPECIFIC*/
+/* END END END ------ wripl mobile specific styles ---------------------- MOBILE SPECIFIC---- END END END*/
 
 #wripl-slider.wripl-mobile .nailthumb-container{
     float:left;
@@ -229,14 +231,14 @@ a#post_title:hover {
     float: left;
     color: #e77b12;
     font-weight: 600;
-    font-size: 11pt;
+    font-size: 10pt;
 }
 
 #recommendations{
     margin-right: 14px;
     padding-top: 14px;
     padding-right: 6px;
-    border-top: 1px solid #e0dfdf;
+    margin-left: -6px;
 }
 
 .wripl-thumbnail {
@@ -256,4 +258,35 @@ a#post_title:hover {
 #wripl-functions a:hover {
     text-decoration: underline;
     color: #999999;
+}
+
+#wripl-main{
+    float: left;
+    width: 348px;
+}
+
+#wripl-dismiss {
+    float: right;
+    width: 20px;
+
+    height: 100%;
+    border-left: 1px solid #ededed;
+}
+
+#wripl-dismiss a{
+    padding-top: 68px;
+    padding-left: 2px;
+    font-size: smaller;
+}
+
+a.fill-div-link {
+    display: block;
+    height: 100%;
+    width: 100%;
+    /*cursor: e-resize;*/
+    cursor: pointer;
+}
+
+.show-left-pointer {
+    cursor: w-resize;
 }
