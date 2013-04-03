@@ -150,8 +150,12 @@ img.wripl-rotate {
     z-index: 100;
 }
 
+/* Tricky positioning of the 'get recommendations' button within this element */
 #wripl-slider .slider-body.wripl-mobile {
-    padding-top: 14px;
+    padding-top: 16px;
+    padding-left: 15%;
+    width: 65%;
+    float: left;
 }
 
 #wripl-recommendations.wripl-mobile {
