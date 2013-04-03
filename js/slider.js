@@ -1,4 +1,4 @@
-console.log('slider-new.js');
+console.log('slider.js');
 (function ($, Handlebars) {
 
     jQuery(document).ready(function ($) {
@@ -88,7 +88,7 @@ console.log('slider-new.js');
 
         } else {
             sliderMode = "Slider";
-            defaultPosition = -340;     // If the width of the slider changes.. so must this
+            defaultPosition = -340;     // If the desired width of the slider changes.. so must this
             activePosition = 20;
 
             displayAtPercent = 70;
@@ -113,7 +113,7 @@ console.log('slider-new.js');
             console.log(sliderMode + ": wripl-ajax-init-not-logged-in heard");
             console.log(sliderMode + ": not logged in - fetching template inactive.html");
 
-            $.get(templatesPath + 'inactive.html', function (data) {
+            $.get(templatesPath + 'inactive.html?version=' + WriplAjaxProperties.pluginVersion, function (data) {
 
                 console.log(sliderMode + ": inactive.html fetched");
 
@@ -134,7 +134,7 @@ console.log('slider-new.js');
 
             // If there are no recommendations
             if (params.recommendations.length === 0) {
-                $.get(templatesPath + 'no-recommendations.html', function (data) {
+                $.get(templatesPath + 'no-recommendations.html?version=' + WriplAjaxProperties.pluginVersion, function (data) {
 
                     console.log(sliderMode + ": no-recommendations.html fetched");
                     template = Handlebars.compile(data);
@@ -161,7 +161,7 @@ console.log('slider-new.js');
 
             console.log(sliderMode + ": recommendation stripped - fetching template active.html");
 
-            $.get(templatesPath + 'active.html', function (data) {
+            $.get(templatesPath + 'active.html?version=' + WriplAjaxProperties.pluginVersion, function (data) {
 
                 console.log(sliderMode + ": active.html fetched");
 

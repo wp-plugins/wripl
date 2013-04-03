@@ -154,7 +154,7 @@ img.wripl-rotate {
     padding-top: 14px;
 }
 
-#recommendations.wripl-mobile {
+#wripl-recommendations.wripl-mobile {
     border-top: 0px;
     margin-right: 0px;
     padding: 10px;
@@ -174,7 +174,7 @@ img.wripl-rotate {
 }
 
 #wripl-dismiss.wripl-mobile a{
-    padding-top: 28px;
+    padding-top: 28px; /* The arrows's poisition from the top of the slider */
     padding-left: 6px;
 }
 
@@ -224,7 +224,7 @@ a#post_title:hover {
     font-size: 10pt;
 }
 
-#recommendations{
+#wripl-recommendations{
     margin-right: 14px;
     padding-top: 14px;
     padding-right: 6px;
@@ -263,7 +263,7 @@ a#post_title:hover {
 }
 
 #wripl-dismiss a{
-    padding-top: 68px;
+    padding-top: 68px;       /* The arrows's poisition from the top of the slider */
     padding-left: 2px;
     font-size: smaller;
 }
@@ -272,7 +272,6 @@ a.fill-div-link {
     display: block;
     height: 100%;
     width: 100%;
-    /*cursor: e-resize;*/
     cursor: pointer;
 }
 

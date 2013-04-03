@@ -117,6 +117,7 @@ class WriplWP
             'ajaxUrl' => admin_url('admin-ajax.php', $this->wriplPluginHelper->getCurrentProtocol()),
             'path' => $this->wriplPluginHelper->getPathUri(),
             'pluginPath' => plugin_dir_url(__FILE__),
+            'pluginVersion' => self::VERSION,
         ));
 
 
@@ -126,13 +127,14 @@ class WriplWP
 
             wp_enqueue_script('jquery-nail-thumb', plugin_dir_url(__FILE__) . 'js/dependencies/jquery.nailthumb.1.1.js');
 
-            wp_enqueue_script('wripl-slider', plugin_dir_url(__FILE__) . 'js/slider-new.js',
+            wp_enqueue_script('wripl-slider', plugin_dir_url(__FILE__) . 'js/slider.js',
                 array(
                     'jquery',
                     'jquery-effects-slide',
                     'jquery-nail-thumb',
                     'handlebars.js',
-                )
+                ),
+                self::VERSION
             );
 
         }
