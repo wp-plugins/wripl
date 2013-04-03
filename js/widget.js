@@ -10,7 +10,7 @@ console.log('widget.js');
             console.log("Widget: wripl-ajax-init-not-logged-in heard");
 
             console.log("Widget: not logged in - fetching template widget/recommendations-inactive.html");
-            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-inactive.html', function(data) {
+            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-inactive.html?ver=' + WriplAjaxProperties.pluginVersion, function(data) {
 
                 console.log("Widget: template widget/recommendations-inactive.html fetched");
 
@@ -35,7 +35,7 @@ console.log('widget.js');
 
             console.log("Widget: recommendation sliced - fetching template widget/recommendations-active.html");
 
-            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-active.html', function(data) {
+            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-active.html?ver=' + WriplAjaxProperties.pluginVersion, function(data) {
 
                 console.log("Widget: template widget/recommendations-active.html fetched");
 
@@ -53,7 +53,7 @@ console.log('widget.js');
         $("body").bind( "wripl-ajax-init-error" , function (e) {
             console.log("some error!");
 
-            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-error.html', function(data) {
+            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-error.html?ver=' + WriplAjaxProperties.pluginVersion, function(data) {
                 template = Handlebars.compile(data);
                 compiledHtml = template();
 
