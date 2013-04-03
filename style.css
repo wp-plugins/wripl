@@ -167,6 +167,10 @@ img.wripl-rotate {
 
 #wripl-slider.wripl-mobile a{
     font-size: 1em;
+    text-decoration: none;
+}
+#wripl-slider.wripl-mobile a:hover{
+    text-decoration: none;
 }
 
 /* Added margin here.. because theme stylesheets with  p *all selectors were overwriting the layout */
@@ -202,6 +206,10 @@ img.wripl-rotate {
 #wripl-slider .heading-sml.wripl-mobile {
     font-size: 8pt;
     float: none;
+}
+
+a#post_title:hover {
+    text-decoration: underline;
 }
 
 /* END END END ------ wripl mobile specific styles ---------------------- MOBILE SPECIFIC---- END END END*/
