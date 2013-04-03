@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Pluging to bring wripl's easy recomendations.
-  Version: 1.3.8
+  Version: 1.3.9
   Author: Brian Gallagher
   Author URI: http://wripl.com
  */
@@ -26,7 +26,7 @@ class WriplWP
     const ITEM_NEEDS_INDEXING = -1;
     const ITEM_QUEUED = 0;
     const ITEM_INDEXED = 1;
-    const VERSION = '1.3.8';
+    const VERSION = '1.3.9';
 
     public $wriplPluginHelper;
 
@@ -106,7 +106,7 @@ class WriplWP
 
         wp_enqueue_script('handlebars.js');
 
-        wp_enqueue_style('wripl-style', plugins_url('style.css', __FILE__));
+        wp_enqueue_style('wripl-style', plugins_url('style.css', __FILE__), array(), self::VERSION);
 
         wp_enqueue_script('wripl-piwik-script', plugin_dir_url(__FILE__) . 'js/dependencies/piwik.js');
 
@@ -180,7 +180,7 @@ class WriplWP
 
 
                 } catch (Exception $e) {
-                    //Probably should crash out here...
+                    //Probably shouldn't crash out here...
                     //header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
                     //echo $e->getMessage();
                     //exit;
