@@ -14,10 +14,6 @@ require_once dirname(__FILE__) . '/WriplTokenStore.php';
 
 
 //Conditional includes to avoid conflicts with other plugins.
-if (!class_exists('Mobile_Detect')) {
-    require_once dirname(__FILE__) . '/libs/Mobile-Detect-2.5.7/Mobile_Detect.php';
-}
-
 if (!class_exists('OAuthSimple')) {
     require_once dirname(__FILE__) . '/libs/OAuthSimple/OAuthSimple.php';
 }
@@ -44,7 +40,6 @@ class WriplWP
     {
 
         $this->wriplPluginHelper = new WriplPluginHelper($this->apiUrl);
-        $this->mobileDetect = new Mobile_Detect();
 
         global $wpdb;
 
@@ -131,32 +126,14 @@ class WriplWP
 
             wp_enqueue_script('jquery-nail-thumb', plugin_dir_url(__FILE__) . 'js/dependencies/jquery.nailthumb.1.1.js');
 
-            /**
-             * if mobile, else...
-             */
-            if ($this->mobileDetect->isMobile() || $this->mobileDetect->isTablet()) {
-
-                wp_enqueue_script('wripl-slider', plugin_dir_url(__FILE__) . 'js/slider-mobile.js',
-                    array(
-                        'jquery',
-                        'jquery-effects-slide',
-                        'jquery-nail-thumb',
-                        'handlebars.js',
-                    )
-                );
-
-            } else {
-
-                wp_enqueue_script('wripl-slider', plugin_dir_url(__FILE__) . 'js/slider.js',
-                    array(
-                        'jquery',
-                        'jquery-effects-slide',
-                        'jquery-nail-thumb',
-                        'handlebars.js',
-                    )
-                );
-
-            }
+            wp_enqueue_script('wripl-slider', plugin_dir_url(__FILE__) . 'js/slider-new.js',
+                array(
+                    'jquery',
+                    'jquery-effects-slide',
+                    'jquery-nail-thumb',
+                    'handlebars.js',
+                )
+            );
 
         }
 
@@ -603,6 +580,7 @@ class WriplWP
         try {
 
             $client->addToIndex($url, $title, $body, $tags, $publicationDate);
+            $wpdb->update($this->wriplIndexQueueTableName, array('status' => self::ITEM_INDEXED), array('id' => $id));
 
         } catch (Exception $e) {
 
@@ -615,17 +593,15 @@ class WriplWP
             error_log(json_encode($error));
 
             /**
-             * Queue up again on fail for 2 hours time in the event of an error
+             * Queue up again on server error for 2 hours time in the event of an error.
+             * If authentication fails, item will not be reattempted.
              */
             if($e->getCode() === 500)
             {
                 wp_schedule_single_event(time() + 7200, 'wripl_index_content', array($id, $type));
-                return;
             }
 
         }
-
-        $wpdb->update($this->wriplIndexQueueTableName, array('status' => self::ITEM_INDEXED), array('id' => $id));
 
     }
 
