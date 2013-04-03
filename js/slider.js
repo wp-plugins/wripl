@@ -113,7 +113,7 @@ console.log('slider.js');
             console.log(sliderMode + ": wripl-ajax-init-not-logged-in heard");
             console.log(sliderMode + ": not logged in - fetching template inactive.html");
 
-            $.get(templatesPath + 'inactive.html?version=' + WriplAjaxProperties.pluginVersion, function (data) {
+            $.get(templatesPath + 'inactive.html?ver=' + WriplAjaxProperties.pluginVersion, function (data) {
 
                 console.log(sliderMode + ": inactive.html fetched");
 
@@ -134,7 +134,7 @@ console.log('slider.js');
 
             // If there are no recommendations
             if (params.recommendations.length === 0) {
-                $.get(templatesPath + 'no-recommendations.html?version=' + WriplAjaxProperties.pluginVersion, function (data) {
+                $.get(templatesPath + 'no-recommendations.html?ver=' + WriplAjaxProperties.pluginVersion, function (data) {
 
                     console.log(sliderMode + ": no-recommendations.html fetched");
                     template = Handlebars.compile(data);
@@ -161,7 +161,7 @@ console.log('slider.js');
 
             console.log(sliderMode + ": recommendation stripped - fetching template active.html");
 
-            $.get(templatesPath + 'active.html?version=' + WriplAjaxProperties.pluginVersion, function (data) {
+            $.get(templatesPath + 'active.html?ver=' + WriplAjaxProperties.pluginVersion, function (data) {
 
                 console.log(sliderMode + ": active.html fetched");
 
