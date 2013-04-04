@@ -199,12 +199,9 @@ console.log('slider.js');
         /**
          * Watching for page scrolling
          */
-
         $(document).scroll(function () {
 
-            var scrollAmount = $(window).scrollTop();
-            var documentHeight = $(document).height();
-            var scrollPercent = (scrollAmount / documentHeight) * 100;
+            var scrollPercent = ($(window).scrollTop() / ($(document).height() - $(window).height())) * 100;
 
             if (!slider.forcedDisplayed) {
                 if (scrollPercent > displayAtPercent) {
@@ -218,20 +215,25 @@ console.log('slider.js');
 
         });
 
-
-
+        /**
+         * If page is too small to scroll,
+         * force the slider out.
+         */
+        if($(window).height() >= $(document).height())
+        {
+            slider.show();
+            slider.forcedDisplayed = true;
+        }
 
         /**
          * Add the slider to the page
          */
-
         $('body').append(slider);
 
 
         /**
          * Click Listeners below.
          */
-
         $('#wripl-slider').click(function (event) {
 
                 if (!slider.displayed) {
