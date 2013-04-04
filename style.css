@@ -169,6 +169,7 @@ img.wripl-rotate {
     font-size: 1em;
     text-decoration: none;
 }
+
 #wripl-slider.wripl-mobile a:hover{
     text-decoration: none;
 }
@@ -177,8 +178,9 @@ img.wripl-rotate {
 /* Added max-width here to prevent the title text from getting too close to the '>>' buttons */
 #wripl-slider.wripl-mobile p{
     line-height: 1.4em;
-    margin: 4px;
-    max-width: 90%;
+    margin: 1px;
+    padding-left: 2px;
+    font-size: 12pt;
 }
 
 #wripl-dismiss.wripl-mobile a{
@@ -206,10 +208,16 @@ img.wripl-rotate {
 #wripl-slider .heading-sml.wripl-mobile {
     font-size: 8pt;
     float: none;
+    padding-left: 4px;
 }
 
 a#post_title:hover {
     text-decoration: underline;
+}
+
+#wripl-main.wripl-mobile{
+    float: left;
+    width: 82%;
 }
 
 /* END END END ------ wripl mobile specific styles ---------------------- MOBILE SPECIFIC---- END END END*/
