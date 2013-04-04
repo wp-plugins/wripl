@@ -175,7 +175,6 @@ img.wripl-rotate {
 }
 
 /* Added margin here.. because theme stylesheets with  p *all selectors were overwriting the layout */
-/* Added max-width here to prevent the title text from getting too close to the '>>' buttons */
 #wripl-slider.wripl-mobile p{
     line-height: 1.4em;
     margin: 1px;
@@ -184,7 +183,7 @@ img.wripl-rotate {
 }
 
 #wripl-dismiss.wripl-mobile a{
-    padding-top: 28px; /* The arrows's poisition from the top of the slider */
+    padding-top: 28px; /* The arrows's position from the top of the slider */
     padding-left: 6px;
 }
 
