@@ -13,7 +13,7 @@ console.log('slider.js');
 
         var isMobile = (function () {
             var isMobileWide = (window.innerWidth < 768) ? true : false;
-            var isMobileHigh = (window.innerHeight < 700) ? true : false;
+            var isMobileHigh = (window.innerHeight < 500) ? true : false;
 
             return isMobileWide || isMobileHigh;
         }());
