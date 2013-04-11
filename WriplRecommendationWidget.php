@@ -20,30 +20,46 @@ class WriplRecommendationWidget extends WP_Widget
 
         //  Assigns values
         $instance = wp_parse_args((array)$instance, array('maxRecommendations' => '5'));
+        $instance = wp_parse_args((array)$instance, array('showImages' => ''));
+
         $maxRecommendations = strip_tags($instance['maxRecommendations']);
+        $showImages = strip_tags($instance['showImages']);
+
         ?>
 
-        <p>
-            <label for="<?php echo $this->get_field_id('maxRecommendations'); ?>">
-                <?php echo __('Max recommendations to display'); ?>:
+    <p xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+        <label for="<?php echo $this->get_field_id('maxRecommendations'); ?>">
+            <?php echo __('Max recommendations to display'); ?>:
+        </label>
+        <select class="widefat" id="<?php echo $this->get_field_id('maxRecommendations'); ?>"
+                name="<?php echo $this->get_field_name('maxRecommendations'); ?>">
+            <?php
+            for ($i = 1; $i <= 10; $i++) {
 
-            </label>
-            <select class="widefat" id="<?php echo $this->get_field_id('maxRecommendations'); ?>"
-                    name="<?php echo $this->get_field_name('maxRecommendations'); ?>">
-                <?php
-                for ($i = 1; $i <= 10; $i++) {
+                $selected = '';
 
-                    $selected = '';
-
-                    if ($i == $maxRecommendations) {
-                        $selected = ' selected="selected"';
-                    }
-
-                    echo "<option value='$i'$selected>$i</option>";
+                if ($i == $maxRecommendations) {
+                    $selected = ' selected="selected"';
                 }
-                ?>
-            </select>
-        </p>
+
+                echo "<option value='$i'$selected>$i</option>";
+            }
+            ?>
+        </select>
+
+        <br><br>
+
+        <label for="<?php echo $this->get_field_id('showImages'); ?>">
+            <?php _e('Show Images:', 'wp_widget_plugin'); ?>
+        </label>
+        <input id="<?php echo $this->get_field_id('showImages'); ?>"
+               name="<?php echo $this->get_field_name('showImages'); ?>"
+               type="checkbox"
+               value="1"
+            <?php checked('1', $showImages); ?>
+                />
+
+    </p>
 
     <?php
     }
@@ -52,14 +68,17 @@ class WriplRecommendationWidget extends WP_Widget
     {
         $instance = $oldInstance;
         $instance['maxRecommendations'] = strip_tags($newInstance['maxRecommendations']);
+        $instance['showImages'] = strip_tags($newInstance['showImages']);
 
         return $instance;
     }
 
     public function widget($args, $instance)
     {
-
-        $properties['maxRecommendations'] = $instance['maxRecommendations'];
+        $properties = array(
+            'maxRecommendations' => $instance['maxRecommendations'],
+            'showImages' => $instance['showImages'],
+        );
 
         $imageFolderUrl = plugins_url('images', __FILE__);
 

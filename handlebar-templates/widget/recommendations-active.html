@@ -1,6 +1,17 @@
 <ul>
     {{#recommendations}}
-    <li><a href="{{permalink}}">{{{post_title}}}</a></li>
+
+    <li>
+        <a href="{{permalink}}">
+            {{#if thumbnail}}
+                <img class="wripl-widget-thumbnail" src="{{thumbnail}}" alt="{{{post_title}}}">
+            {{/if}}
+            {{{post_title}}}
+            {{#if thumbnail}}
+                <br>
+            {{/if}}
+        </a>
+    </li>
     {{/recommendations}}
 </ul>
 

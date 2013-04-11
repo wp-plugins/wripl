@@ -29,11 +29,22 @@ console.log('widget.js');
 
             recommendationsArray = params.recommendations;
 
-            if( WriplWidgetProperties.maxRecommendations ){
+            if (WriplWidgetProperties.maxRecommendations) {
                 recommendationsArray = recommendationsArray.slice(0 , WriplWidgetProperties.maxRecommendations);
             }
-
             console.log("Widget: recommendation sliced - fetching template widget/recommendations-active.html");
+
+            for (var i = 0; i < recommendationsArray.length; i++) {
+                // if there is an image, and if the images should be displayed
+                if(WriplWidgetProperties.showImages !== ""){
+                    if (recommendationsArray[i].image) {
+                        // Adding a new object property called 'thumbnail' to each recommendation with an image
+                        recommendationsArray[i].thumbnail = recommendationsArray[i].image[0];
+                    }
+                } else {
+
+                }
+            }
 
             $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-active.html?ver=' + WriplAjaxProperties.pluginVersion, function(data) {
 
@@ -47,6 +58,22 @@ console.log('widget.js');
                 });
 
                 $('#wripl-widget-ajax-container').html(compiledHtml);
+
+                $('#wripl-widget-ajax-container .wripl-widget-thumbnail').nailthumb(
+                    {
+//                      good sizes:
+//                        height:161,
+//                        width:100,
+//                        width:113,
+//                        height:70
+//                        ... or no width at all
+                        height:90
+
+                    }
+                );
+                console.log("Widget: .nailthumb() called");
+                //$('wripl-widget-thumbnail').show();
+
             });
         });
 

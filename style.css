@@ -219,12 +219,18 @@ a#post_title:hover {
     width: 82%;
 }
 
-/* END END END ------ wripl mobile specific styles ---------------------- MOBILE SPECIFIC---- END END END*/
-
 #wripl-slider.wripl-mobile .nailthumb-container{
     float:left;
     margin: 0px;
     margin-right: 10px;
+}
+
+/* END END END ------ wripl mobile specific styles ---------------------- MOBILE SPECIFIC---- END END END*/
+
+/* This rule is explicitly for removing the .nailthumb-container rule of float right  */
+div#wripl-widget-ajax-container .nailthumb-container{
+    float:none;
+    margin-top: 18px;
 }
 
 a#post_title {
