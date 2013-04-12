@@ -8,6 +8,11 @@
 class WriplRecommendationWidget extends WP_Widget
 {
 
+    protected $defaults = array(
+        'maxRecommendations' => 5,
+        'showImages' => '0'
+    );
+
     public function WriplRecommendationWidget()
     {
         $widget_ops = array('classname' => 'wripl-widget-recommendation', 'description' => __('Displays wripl recommendations'));
@@ -19,8 +24,7 @@ class WriplRecommendationWidget extends WP_Widget
     {
 
         //  Assigns values
-        $instance = wp_parse_args((array)$instance, array('maxRecommendations' => '5'));
-        $instance = wp_parse_args((array)$instance, array('showImages' => ''));
+        $instance = wp_parse_args((array)$instance, $this->defaults);
 
         $maxRecommendations = strip_tags($instance['maxRecommendations']);
         $showImages = strip_tags($instance['showImages']);
@@ -75,6 +79,8 @@ class WriplRecommendationWidget extends WP_Widget
 
     public function widget($args, $instance)
     {
+        $instance = wp_parse_args((array)$instance, $this->defaults);
+
         $properties = array(
             'maxRecommendations' => $instance['maxRecommendations'],
             'showImages' => $instance['showImages'],
