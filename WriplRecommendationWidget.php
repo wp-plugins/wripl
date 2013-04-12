@@ -10,7 +10,7 @@ class WriplRecommendationWidget extends WP_Widget
 
     protected $defaults = array(
         'maxRecommendations' => 5,
-        'showImages' => '0'
+        'showImages' => ''
     );
 
     public function WriplRecommendationWidget()
@@ -59,8 +59,8 @@ class WriplRecommendationWidget extends WP_Widget
         <input id="<?php echo $this->get_field_id('showImages'); ?>"
                name="<?php echo $this->get_field_name('showImages'); ?>"
                type="checkbox"
-               value="1"
-            <?php checked('1', $showImages); ?>
+               value="true"
+            <?php checked('true', $showImages); ?>
                 />
 
     </p>

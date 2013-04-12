@@ -6,11 +6,11 @@ console.log('widget.js');
         var template, compiledHtml, recommendationsArray;
 
         // Add listeners
-        $("body").bind( "wripl-ajax-init-not-logged-in" , function (e, params) {
+        $("body").bind("wripl-ajax-init-not-logged-in", function (e, params) {
             console.log("Widget: wripl-ajax-init-not-logged-in heard");
 
             console.log("Widget: not logged in - fetching template widget/recommendations-inactive.html");
-            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-inactive.html?ver=' + WriplAjaxProperties.pluginVersion, function(data) {
+            $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-inactive.html?ver=' + WriplAjaxProperties.pluginVersion, function (data) {
 
                 console.log("Widget: template widget/recommendations-inactive.html fetched");
 
@@ -24,29 +24,30 @@ console.log('widget.js');
             });
         });
 
-        $("body").bind( "wripl-ajax-init-logged-in" , function (e, params) {
+        $("body").bind("wripl-ajax-init-logged-in", function (e, params) {
             console.log("Widget: wripl-ajax-init-logged-in heard");
 
             recommendationsArray = params.recommendations;
 
             if (WriplWidgetProperties.maxRecommendations) {
-                recommendationsArray = recommendationsArray.slice(0 , WriplWidgetProperties.maxRecommendations);
+                recommendationsArray = recommendationsArray.slice(0, WriplWidgetProperties.maxRecommendations);
             }
             console.log("Widget: recommendation sliced - fetching template widget/recommendations-active.html");
 
-            for (var i = 0; i < recommendationsArray.length; i++) {
-                // if there is an image, and if the images should be displayed
-                if(WriplWidgetProperties.showImages !== ""){
+            if (WriplWidgetProperties.showImages === "true") {
+
+                for (var i = 0; i < recommendationsArray.length; i++) {
+                    // if there is an image, and if the images should be displayed
+
                     if (recommendationsArray[i].image) {
                         // Adding a new object property called 'thumbnail' to each recommendation with an image
                         recommendationsArray[i].thumbnail = recommendationsArray[i].image[0];
                     }
-                } else {
-
                 }
+
             }
 
-            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-active.html?ver=' + WriplAjaxProperties.pluginVersion, function(data) {
+            $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-active.html?ver=' + WriplAjaxProperties.pluginVersion, function (data) {
 
                 console.log("Widget: template widget/recommendations-active.html fetched");
 
@@ -67,7 +68,7 @@ console.log('widget.js');
 //                        width:113,
 //                        height:70
 //                        ... or no width at all
-                        height:90
+                        height: 90
 
                     }
                 );
@@ -77,10 +78,10 @@ console.log('widget.js');
             });
         });
 
-        $("body").bind( "wripl-ajax-init-error" , function (e) {
+        $("body").bind("wripl-ajax-init-error", function (e) {
             console.log("some error!");
 
-            $.get( WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-error.html?ver=' + WriplAjaxProperties.pluginVersion, function(data) {
+            $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-error.html?ver=' + WriplAjaxProperties.pluginVersion, function (data) {
                 template = Handlebars.compile(data);
                 compiledHtml = template();
 
@@ -90,4 +91,4 @@ console.log('widget.js');
 
     });
 
-})(jQuery,Handlebars);
+})(jQuery, Handlebars);
