@@ -1,17 +1,24 @@
 <ul>
+
     {{#recommendations}}
 
-    <li>
-        <a href="{{permalink}}">
-            {{#if thumbnail}}
-                <img class="wripl-widget-thumbnail" src="{{thumbnail}}" alt="{{{post_title}}}">
-            {{/if}}
-            {{{post_title}}}
-            {{#if thumbnail}}
-                <br>
-            {{/if}}
-        </a>
-    </li>
+    {{#if thumbnail}}
+        <li class="image-recommendation">
+            <div style="position: relative">
+                <a href="{{permalink}}">
+                    <img class="wripl-widget-thumbnail " src="{{thumbnail}}" alt="{{{post_title}}}">
+                    <div class="wripl-widget-title-over-image">
+                        {{{post_title}}}
+                    </div>
+                    <br>
+                </a>
+            </div>
+        </li>
+
+    {{else}}
+        <li class="text-recommendation"><a href="{{permalink}}">{{{post_title}}}</a></li>
+    {{/if}}
+
     {{/recommendations}}
 </ul>
 

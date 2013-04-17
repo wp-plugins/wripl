@@ -10,7 +10,8 @@ class WriplRecommendationWidget extends WP_Widget
 
     protected $defaults = array(
         'maxRecommendations' => 5,
-        'showImages' => ''
+        'widgetFormat' => 'Text',
+        'includeRecommendationsWithoutImages' => 'hide'
     );
 
     public function WriplRecommendationWidget()
@@ -22,12 +23,12 @@ class WriplRecommendationWidget extends WP_Widget
 
     public function form($instance)
     {
-
         //  Assigns values
         $instance = wp_parse_args((array)$instance, $this->defaults);
 
         $maxRecommendations = strip_tags($instance['maxRecommendations']);
-        $showImages = strip_tags($instance['showImages']);
+        $widgetFormat = strip_tags($instance['widgetFormat']);
+        $includeRecommendationsWithoutImages = strip_tags($instance['includeRecommendationsWithoutImages']);
 
         ?>
 
@@ -53,16 +54,31 @@ class WriplRecommendationWidget extends WP_Widget
 
         <br><br>
 
-        <label for="<?php echo $this->get_field_id('showImages'); ?>">
-            <?php _e('Show Images:', 'wp_widget_plugin'); ?>
-        </label>
-        <input id="<?php echo $this->get_field_id('showImages'); ?>"
-               name="<?php echo $this->get_field_name('showImages'); ?>"
-               type="checkbox"
-               value="true"
-            <?php checked('true', $showImages); ?>
-                />
+        <?php _e('Widget style:'); ?><br>
+        <select class="widefat" id="<?php echo $this->get_field_id('widgetFormat'); ?>"
+                name="<?php echo $this->get_field_name('widgetFormat') ?>">
+            <option value="Text" <?php selected( $widgetFormat, 'Text' ); ?>>Text</option>
+            <option value="Fancy Images" <?php selected( $widgetFormat, 'Fancy Images' ); ?>>Fancy Images</option>
+        </select>
 
+        <br><br>
+
+        <span style="<?php if ( $widgetFormat === 'Text' ) echo 'display:none;'; ?>">
+            <?php _e('and'); ?>
+        </span>
+
+        <select id="<?php echo $this->get_field_id('includeRecommendationsWithoutImages'); ?>"
+                name="<?php echo $this->get_field_name('includeRecommendationsWithoutImages') ?>"
+                style="<?php if ( $widgetFormat === 'Text' ) echo 'display:none;'; ?>">
+            <option value="append" <?php selected( $includeRecommendationsWithoutImages, 'append' ); ?>>append</option>
+            <option value="hide" <?php selected( $includeRecommendationsWithoutImages, 'hide' ); ?>>hide</option>
+        </select>
+
+        <span style="<?php if ( $widgetFormat === 'Text' ) echo 'display:none;'; ?>">
+            <?php _e(' recommendations which have no featured image. '); ?>
+        </span>
+
+        <br><br>
     </p>
 
     <?php
@@ -72,8 +88,8 @@ class WriplRecommendationWidget extends WP_Widget
     {
         $instance = $oldInstance;
         $instance['maxRecommendations'] = strip_tags($newInstance['maxRecommendations']);
-        $instance['showImages'] = strip_tags($newInstance['showImages']);
-
+        $instance['widgetFormat'] = strip_tags($newInstance['widgetFormat']);
+        $instance['includeRecommendationsWithoutImages'] = strip_tags($newInstance['includeRecommendationsWithoutImages']);
         return $instance;
     }
 

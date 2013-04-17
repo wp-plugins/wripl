@@ -4,6 +4,12 @@ div[id|=wripl-oauth] {
     text-align: center;
 }
 
+
+img.wripl-widget-thumbnail.nailthumb-image{
+    margin: 0px;
+}
+
+
 img#oauth-connect {
     display: block;
     margin-left: auto;
@@ -230,8 +236,10 @@ a#post_title:hover {
 /* This rule is explicitly for removing the .nailthumb-container rule of float right  */
 div#wripl-widget-ajax-container .nailthumb-container{
     float:none;
-    margin-top: 18px;
+    margin-top: 8px;
 }
+
+
 
 a#post_title {
     text-decoration: none;
@@ -302,4 +310,15 @@ a.fill-div-link {
 
 .show-left-pointer {
     cursor: w-resize;
+}
+
+.wripl-widget-title-over-image{
+    position: absolute;
+    z-index: 1002;
+    bottom: 24px;
+    margin:1px;
+    left: 3px;
+    background-color:rgba(0,0,0,0.3);
+    padding: 4px 8px;
+    color: white;
 }
