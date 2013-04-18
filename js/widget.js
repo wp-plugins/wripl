@@ -34,12 +34,12 @@ console.log('widget.js');
             }
             console.log("Widget: recommendation sliced - fetching template widget/recommendations-active.html");
 
-            if (WriplWidgetProperties.widgetFormat === "Fancy Images") {
+            if (WriplWidgetProperties.widgetFormat === "withImages") {
 
                 for (var i = 0; i < recommendations.length; i++) {
                     if (recommendations[i].image) {
-                        // Adding a new property called 'thumbnail' to each recommendation which has an image
-                        recommendations[i].thumbnail = recommendations[i].image[0];
+                        // Adding a new property called 'imageSrc' to each recommendation which has an image
+                        recommendations[i].imageSrc = recommendations[i].image[0];
                     } else {
                         // remember the indexes of recommendations with no feature image
                         recommendationsWithNoImage.push(i);
@@ -47,11 +47,11 @@ console.log('widget.js');
                 }
             }
 
-            // removes items without images and conditionally.. moves them to the end of the recommendations array
+            // removes recommendations without images and conditionally.. moves them to the end of the recommendations array
             for (var j = recommendationsWithNoImage.length-1; j >= 0; j--) {
                 var toBeMoved = recommendations[recommendationsWithNoImage[j]];
                 recommendations.splice(recommendationsWithNoImage[j], 1);
-                if (WriplWidgetProperties.includeRecommendationsWithoutImages === "true") {
+                if (WriplWidgetProperties.handleRecommendationsWithoutImages === "append") {
                     recommendations.push(toBeMoved);
                 }
             }
@@ -77,7 +77,7 @@ console.log('widget.js');
 //                        width:113,
 //                        height:70
 //                        ... or no width at all
-                        height: 90
+                        height: WriplWidgetProperties.imageHeight
 
                     }
                 );

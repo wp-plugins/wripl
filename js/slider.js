@@ -130,7 +130,7 @@ console.log('slider.js');
         $("body").bind("wripl-ajax-init-logged-in", function (e, params) {
 
             console.log(sliderMode + ": wripl-ajax-init-logged-in heard");
-            var thumbnailPath;
+            var imageSrc;
 
             // If there are no recommendations
             if (params.recommendations.length === 0) {
@@ -153,10 +153,10 @@ console.log('slider.js');
             var theRecommendation = params.recommendations[0];      // set theRecommendation to be the FIRST
 
             if (theRecommendation.image) {
-                thumbnailPath = theRecommendation.image[0];
+                imageSrc = theRecommendation.image[0];
                 //theRecommendation.image = false;                  // uncomment to simulate no 'feature' image
             } else {
-                thumbnailPath = WriplAjaxProperties.pluginPath + "/images/wripl-logo-sml.png";
+                imageSrc = WriplAjaxProperties.pluginPath + "/images/wripl-logo-sml.png";
             }
 
             console.log(sliderMode + ": recommendation stripped - fetching template active.html");
@@ -170,7 +170,7 @@ console.log('slider.js');
                     wriplAjaxProperties:WriplAjaxProperties,
                     post_title:theRecommendation.post_title,
                     permalink:theRecommendation.permalink,
-                    thumbnail:thumbnailPath
+                    imageSrc:imageSrc
                 });
 
                 $('#wripl-slider').html(compiledHtml);

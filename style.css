@@ -314,7 +314,6 @@ a.fill-div-link {
 
 .wripl-widget-title-over-image{
     position: absolute;
-    z-index: 1002;
     bottom: 24px;
     margin:1px;
     left: 3px;

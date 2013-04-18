@@ -2,11 +2,11 @@
 
     {{#recommendations}}
 
-    {{#if thumbnail}}
+    {{#if imageSrc}}
         <li class="image-recommendation">
             <div style="position: relative">
                 <a href="{{permalink}}">
-                    <img class="wripl-widget-thumbnail " src="{{thumbnail}}" alt="{{{post_title}}}">
+                    <img class="wripl-widget-thumbnail " src="{{imageSrc}}" alt="{{{post_title}}}">
                     <div class="wripl-widget-title-over-image">
                         {{{post_title}}}
                     </div>

@@ -10,8 +10,9 @@ class WriplRecommendationWidget extends WP_Widget
 
     protected $defaults = array(
         'maxRecommendations' => 5,
-        'widgetFormat' => 'Text',
-        'includeRecommendationsWithoutImages' => 'hide'
+        'widgetFormat' => 'text',
+        'imageHeight' => '90',
+        'handleRecommendationsWithoutImages' => 'hide'
     );
 
     public function WriplRecommendationWidget()
@@ -28,7 +29,8 @@ class WriplRecommendationWidget extends WP_Widget
 
         $maxRecommendations = strip_tags($instance['maxRecommendations']);
         $widgetFormat = strip_tags($instance['widgetFormat']);
-        $includeRecommendationsWithoutImages = strip_tags($instance['includeRecommendationsWithoutImages']);
+        $imageHeight = strip_tags($instance['imageHeight']);
+        $handleRecommendationsWithoutImages = strip_tags($instance['handleRecommendationsWithoutImages']);
 
         ?>
 
@@ -57,28 +59,34 @@ class WriplRecommendationWidget extends WP_Widget
         <?php _e('Widget style:'); ?><br>
         <select class="widefat" id="<?php echo $this->get_field_id('widgetFormat'); ?>"
                 name="<?php echo $this->get_field_name('widgetFormat') ?>">
-            <option value="Text" <?php selected( $widgetFormat, 'Text' ); ?>>Text</option>
-            <option value="Fancy Images" <?php selected( $widgetFormat, 'Fancy Images' ); ?>>Fancy Images</option>
+            <option value="text" <?php selected($widgetFormat, 'text'); ?>>Just Links</option>
+            <option value="withImages" <?php selected($widgetFormat, 'withImages'); ?>>Fancy Images</option>
         </select>
 
         <br><br>
 
-        <span style="<?php if ( $widgetFormat === 'Text' ) echo 'display:none;'; ?>">
-            <?php _e('and'); ?>
-        </span>
 
-        <select id="<?php echo $this->get_field_id('includeRecommendationsWithoutImages'); ?>"
-                name="<?php echo $this->get_field_name('includeRecommendationsWithoutImages') ?>"
-                style="<?php if ( $widgetFormat === 'Text' ) echo 'display:none;'; ?>">
-            <option value="append" <?php selected( $includeRecommendationsWithoutImages, 'append' ); ?>>append</option>
-            <option value="hide" <?php selected( $includeRecommendationsWithoutImages, 'hide' ); ?>>hide</option>
-        </select>
+        <?php
+        if ($widgetFormat !== 'text'): ?>
+            Image Height: (default: 90 pixels)<br>
+            <input class="widefat"
+                   type="text"
+                   id="<?php echo $this->get_field_id('imageHeight'); ?>"
+                   name="<?php echo $this->get_field_name('imageHeight'); ?>"
+                   value="<?php echo $imageHeight; ?>"
+                    >
+            <p>
+                and
+                <select id="<?php echo $this->get_field_id('handleRecommendationsWithoutImages'); ?>"
+                        name="<?php echo $this->get_field_name('handleRecommendationsWithoutImages') ?>">
+                    <option value="hide" <?php selected($handleRecommendationsWithoutImages, 'hide'); ?>>hide</option>
+                    <option value="append" <?php selected($handleRecommendationsWithoutImages, 'append'); ?>>append</option>
+                </select>
 
-        <span style="<?php if ( $widgetFormat === 'Text' ) echo 'display:none;'; ?>">
-            <?php _e(' recommendations which have no featured image. '); ?>
-        </span>
+                recommendations which have no featured image.
+            </p>
 
-        <br><br>
+        <?php endif ?>
     </p>
 
     <?php
@@ -86,10 +94,19 @@ class WriplRecommendationWidget extends WP_Widget
 
     function update($newInstance, $oldInstance)
     {
-        $instance = $oldInstance;
+        $instance = array();
+        //Popping the defaults into the old values
+        $oldInstance = wp_parse_args((array)$oldInstance, $this->defaults);
+
         $instance['maxRecommendations'] = strip_tags($newInstance['maxRecommendations']);
         $instance['widgetFormat'] = strip_tags($newInstance['widgetFormat']);
-        $instance['includeRecommendationsWithoutImages'] = strip_tags($newInstance['includeRecommendationsWithoutImages']);
+
+        /**
+         * If the new values are absent or invalid, then save the old ones.
+         */
+        $instance['imageHeight'] =  ((int) strip_tags($newInstance['imageHeight']) ? (int) strip_tags($newInstance['imageHeight']) : $oldInstance['imageHeight']);
+        $instance['handleRecommendationsWithoutImages'] = strip_tags($newInstance['handleRecommendationsWithoutImages']) ? strip_tags($newInstance['handleRecommendationsWithoutImages']) : $oldInstance['handleRecommendationsWithoutImages'];
+
         return $instance;
     }
 
