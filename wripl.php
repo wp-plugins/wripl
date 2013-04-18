@@ -2,8 +2,8 @@
 /*
   Plugin Name: Wripl
   Description: Pluging to bring wripl's easy recomendations.
-  Version: 1.3.11
-  Author: Brian Gallagher
+  Version: 1.3.12
+  Author: Wripl
   Author URI: http://wripl.com
  */
 set_include_path(dirname(__FILE__) . '/libs' . PATH_SEPARATOR . get_include_path());
@@ -26,7 +26,7 @@ class WriplWP
     const ITEM_NEEDS_INDEXING = -1;
     const ITEM_QUEUED = 0;
     const ITEM_INDEXED = 1;
-    const VERSION = '1.3.11';
+    const VERSION = '1.3.12';
 
     public $wriplPluginHelper;
 
@@ -104,6 +104,8 @@ class WriplWP
             plugin_dir_url(__FILE__) . 'js/dependencies/handlebars-1.0.0-rc.3.js'
         );
 
+        wp_enqueue_script('jquery-nail-thumb', plugin_dir_url(__FILE__) . 'js/dependencies/jquery.nailthumb.1.1.js', array('jquery'));
+
         wp_enqueue_script('handlebars.js');
 
         wp_enqueue_style('wripl-style', plugins_url('style.css', __FILE__), array(), self::VERSION);
@@ -124,8 +126,6 @@ class WriplWP
         if (isset($featureSettings['sliderEnabled'])) {
 
             wp_enqueue_script('jquery-effects-slide');
-
-            wp_enqueue_script('jquery-nail-thumb', plugin_dir_url(__FILE__) . 'js/dependencies/jquery.nailthumb.1.1.js');
 
             wp_enqueue_script('wripl-slider', plugin_dir_url(__FILE__) . 'js/slider.js',
                 array(

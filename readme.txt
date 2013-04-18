@@ -4,7 +4,7 @@ Donate link:
 Tags: recommendations, personalisation, personalization, related posts, recommended articles, semantic analysis, correlation, related, blog, growth, engagement, sidebar, widget, slider
 Requires at least: 3.0.1
 Tested up to: 3.5
-Stable tag: 1.3.11
+Stable tag: 1.3.12
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -62,6 +62,11 @@ For more info on how wripl works differently to other plugins... check out http:
 8. Plugin configuration.
 
 == Changelog ==
+
+= 1.3.12 =
+* Option to include images in the widget & configure sizes.
+* Tweaked some css styles.
+* A bunch of nerdy code stuff.
 
 = 1.3.10 =
 * Small change to the height tolerances for display of the mobile version of the slider
