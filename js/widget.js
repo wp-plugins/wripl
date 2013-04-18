@@ -3,7 +3,7 @@ console.log('widget.js');
 
     jQuery(document).ready(function () {
 
-        var template, compiledHtml, recommendations, recommendationsWithNoImage = [];
+        var template, compiledHtml, recommendations, recommendationsWithImage = [], recommendationsWithNoImage = [], sortedRecommendations = [];
 
         // Add listeners
         $("body").bind("wripl-ajax-init-not-logged-in", function (e, params) {
@@ -37,23 +37,30 @@ console.log('widget.js');
             if (WriplWidgetProperties.widgetFormat === "withImages") {
 
                 for (var i = 0; i < recommendations.length; i++) {
+//                    recommendations[i].image = false;
                     if (recommendations[i].image) {
-                        // Adding a new property called 'imageSrc' to each recommendation which has an image
-                        recommendations[i].imageSrc = recommendations[i].image[0];
+
+                        recommendationsWithImage.unshift(i);                            // remembering the index of each rec WITH an image
+                        recommendations[i].imageSrc = recommendations[i].image[0];      // Adding a new property called 'imageSrc' to each recommendation which has an image
+
                     } else {
-                        // remember the indexes of recommendations with no feature image
-                        recommendationsWithNoImage.push(i);
+                        recommendationsWithNoImage.unshift(i);                          // remembering the index of each rec WITHOUT an image
                     }
                 }
-            }
 
-            // removes recommendations without images and conditionally.. moves them to the end of the recommendations array
-            for (var j = recommendationsWithNoImage.length-1; j >= 0; j--) {
-                var toBeMoved = recommendations[recommendationsWithNoImage[j]];
-                recommendations.splice(recommendationsWithNoImage[j], 1);
-                if (WriplWidgetProperties.handleRecommendationsWithoutImages === "append") {
-                    recommendations.push(toBeMoved);
+                for (var k = 0; k < recommendationsWithImage.length; k++) {
+                    sortedRecommendations.unshift(recommendations[recommendationsWithImage[k]]);
                 }
+
+                if (WriplWidgetProperties.handleRecommendationsWithoutImages === "append") {
+                    recommendationsWithNoImage.reverse();                               // reverse the order.. to maintain integrity as push(ing) will naturally reverse.
+                    for (var l = 0; l < recommendationsWithNoImage.length; l++) {
+                        sortedRecommendations.push(recommendations[recommendationsWithNoImage[l]]);
+                    }
+                }
+
+            } else {
+                sortedRecommendations = recommendations;
             }
 
             $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-active.html?ver=' + WriplAjaxProperties.pluginVersion, function (data) {
@@ -64,21 +71,14 @@ console.log('widget.js');
                 compiledHtml = template({
                     wriplWidgetProperties: WriplWidgetProperties,
                     wriplAjaxProperties: WriplAjaxProperties,
-                    recommendations: recommendations
+                    recommendations: sortedRecommendations
                 });
 
                 $('#wripl-widget-ajax-container').html(compiledHtml);
 
-                $('#wripl-widget-ajax-container .wripl-widget-thumbnail').nailthumb(
+                $('#wripl-widget-ajax-container .nailthumb-container').nailthumb(
                     {
-//                      good sizes:
-//                        height:161,
-//                        width:100,
-//                        width:113,
-//                        height:70
-//                        ... or no width at all
                         height: WriplWidgetProperties.imageHeight
-
                     }
                 );
                 console.log("Widget: .nailthumb() called");

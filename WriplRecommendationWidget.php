@@ -12,7 +12,7 @@ class WriplRecommendationWidget extends WP_Widget
         'maxRecommendations' => 5,
         'widgetFormat' => 'text',
         'imageHeight' => '90',
-        'handleRecommendationsWithoutImages' => 'hide'
+        'handleRecommendationsWithoutImages' => 'append'
     );
 
     public function WriplRecommendationWidget()
@@ -79,8 +79,8 @@ class WriplRecommendationWidget extends WP_Widget
                 and
                 <select id="<?php echo $this->get_field_id('handleRecommendationsWithoutImages'); ?>"
                         name="<?php echo $this->get_field_name('handleRecommendationsWithoutImages') ?>">
-                    <option value="hide" <?php selected($handleRecommendationsWithoutImages, 'hide'); ?>>hide</option>
                     <option value="append" <?php selected($handleRecommendationsWithoutImages, 'append'); ?>>append</option>
+                    <option value="hide" <?php selected($handleRecommendationsWithoutImages, 'hide'); ?>>hide</option>
                 </select>
 
                 recommendations which have no featured image.
