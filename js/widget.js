@@ -29,11 +29,6 @@ console.log('widget.js');
 
             recommendations = params.recommendations;
 
-            if (WriplWidgetProperties.maxRecommendations) {
-                recommendations = recommendations.slice(0, WriplWidgetProperties.maxRecommendations);
-            }
-            console.log("Widget: recommendation sliced - fetching template widget/recommendations-active.html");
-
             if (WriplWidgetProperties.widgetFormat === "withImages") {
 
                 for (var i = 0; i < recommendations.length; i++) {
@@ -63,6 +58,11 @@ console.log('widget.js');
             } else {
                 sortedRecommendations = recommendations;
             }
+
+            if (WriplWidgetProperties.maxRecommendations) {
+                sortedRecommendations = sortedRecommendations.slice(0, WriplWidgetProperties.maxRecommendations);
+            }
+            console.log("Widget: recommendation sliced based on maxRecommendations - fetching template widget/recommendations-active.html");
 
             $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-active.html?ver=' + WriplAjaxProperties.pluginVersion, function (data) {
 
