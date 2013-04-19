@@ -42,6 +42,7 @@ console.log('widget.js');
 
                         recommendationsWithImage.unshift(i);                            // remembering the index of each rec WITH an image
                         recommendations[i].imageSrc = recommendations[i].image[0];      // Adding a new property called 'imageSrc' to each recommendation which has an image
+                        recommendations[i].imageHeight = WriplWidgetProperties.imageHeight;
 
                     } else {
                         recommendationsWithNoImage.unshift(i);                          // remembering the index of each rec WITHOUT an image
@@ -76,11 +77,7 @@ console.log('widget.js');
 
                 $('#wripl-widget-ajax-container').html(compiledHtml);
 
-                $('#wripl-widget-ajax-container .nailthumb-container').nailthumb(
-                    {
-                        height: WriplWidgetProperties.imageHeight
-                    }
-                );
+                $('#wripl-widget-ajax-container .nailthumb-container').nailthumb();
                 console.log("Widget: .nailthumb() called");
 
             });

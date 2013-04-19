@@ -4,7 +4,6 @@ div[id|=wripl-oauth] {
     text-align: center;
 }
 
-
 img.wripl-widget-thumbnail.nailthumb-image{
     margin: 0px;
 }
@@ -210,6 +209,7 @@ img.wripl-rotate {
     border: 1px solid #e0dfdf;
 }
 
+
 #wripl-slider .heading-sml.wripl-mobile {
     font-size: 8pt;
     float: none;
@@ -236,9 +236,13 @@ a#post_title:hover {
 /* This rule is explicitly for removing the .nailthumb-container rule of float right  */
 div#wripl-widget-ajax-container .nailthumb-container{
     float:none;
-    margin-top: 8px;
+    margin-top: 4px;
 }
 
+
+.widgets {
+    display: inline;
+}
 
 
 a#post_title {
@@ -262,11 +266,6 @@ a#post_title:hover {
     padding-top: 14px;
     padding-right: 6px;
     margin-left: -6px;
-}
-
-.wripl-thumbnail {
-    /*This is probably no longer necessary.. but i don't want to change the 'active.html' template just yet... so here she stays*/
-    /*margin-top: -4px;*/
 }
 
 #wripl-functions{
@@ -315,9 +314,11 @@ a.fill-div-link {
 .wripl-widget-title-over-image{
     position: absolute;
     bottom: 24px;
-    margin:1px;
-    left: 3px;
+    margin-left: 2px;
+    margin-right: 2px;
+    margin-bottom: 1px;
+    max-width: 96%;
     background-color:rgba(0,0,0,0.3);
-    padding: 4px 8px;
+    padding: 4px 8px ;
     color: white;
 }
