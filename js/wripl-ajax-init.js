@@ -10,7 +10,12 @@ console.log('wripl-ajax-init.js');
         init();
     });
 
+    $(document).bind('wripl-connect-button-clicked',function () {
+        openWriplAuthWindow();
+    });
+
     var init = function () {
+
         console.log('wripl init called');
 
         $.post(
@@ -70,6 +75,25 @@ console.log('wripl-ajax-init.js');
                 }
             }
         );
-    }
+    };
+
+    // showTheSlider = false;
+
+    var openWriplAuthWindow = function () {
+        var params = 'location=0,status=0,menubar=0,titlebar=0,width=800,height=600';
+        myWindow = window.open( WriplAjaxProperties.pluginPath + 'connect.php', 'wriplAuthWindow', params);
+
+        // set 'showTheSlider' to be true.. so that the slider will popout after authorisation
+        // showTheSlider = true;
+
+        var timer = setInterval(checkChild, 500);
+
+        function checkChild() {
+            if (myWindow.closed) {
+                clearInterval(timer);
+                init();
+            }
+        }
+    };
 
 })(jQuery);

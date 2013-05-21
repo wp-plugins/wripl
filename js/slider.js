@@ -36,6 +36,7 @@ console.log('slider.js');
             }
 
             this.displayed = true;
+            showTheSlider = false;
             this.removeClass('show-left-pointer');
         };
 
@@ -187,9 +188,13 @@ console.log('slider.js');
                     $('.wripl-thumbnail').remove();
                 }
 
+//                if (slider && showTheSlider) {
+//                    slider.show();
+//                }
             });
         });
 
+        // If there is an error with wripl.. hide the slider
         $("body").bind("wripl-ajax-init-error", function (e, params) {
             console.log(sliderMode + ": wripl-ajax-init-error heard");
             $('#wripl-slider').remove();
@@ -212,7 +217,6 @@ console.log('slider.js');
                     slider.hide();
                 }
             }
-
         });
 
         /**

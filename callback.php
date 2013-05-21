@@ -32,7 +32,13 @@ WriplTokenStore::deleteRequestToken();
 
 $referer = $wriplWP->wriplPluginHelper->retrieveOauthRefererUrl();
 $wriplWP->wriplPluginHelper->deleteOauthRefererUrl();
-
-header("Location: $referer");
-exit;
 ?>
+
+<!doctype html>
+<html>
+    <body>
+        <script>
+            window.close();
+        </script>
+    </body>
+</html>

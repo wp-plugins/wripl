@@ -9,10 +9,11 @@ img.wripl-widget-thumbnail.nailthumb-image{
 }
 
 
-img#oauth-connect {
+img.wripl-oauth-connect {
     display: block;
     margin-left: auto;
     margin-right: auto;
+    cursor:pointer;
 }
 
 img.wripl-rotate {

@@ -8,8 +8,8 @@ console.log('widget.js');
         // Add listeners
         $("body").bind("wripl-ajax-init-not-logged-in", function (e, params) {
             console.log("Widget: wripl-ajax-init-not-logged-in heard");
-
             console.log("Widget: not logged in - fetching template widget/recommendations-inactive.html");
+
             $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-inactive.html?ver=' + WriplAjaxProperties.pluginVersion, function (data) {
 
                 console.log("Widget: template widget/recommendations-inactive.html fetched");
@@ -21,6 +21,14 @@ console.log('widget.js');
                 });
 
                 $('#wripl-widget-ajax-container').html(compiledHtml);
+
+                // Adds the 'spinning logo' upon clicking the connect button
+                $('img.wripl-oauth-connect').click(function () {
+                    var htmlOfSpinningLogo = "\<img class='wripl-rotate' src='" + WriplAjaxProperties.pluginPath + "images/wripl-logo-rotate-orng-sml.png' >";
+                    $('#wripl-widget-ajax-container').html(htmlOfSpinningLogo);
+
+                    $("body").trigger('wripl-connect-button-clicked');
+                });
             });
         });
 
