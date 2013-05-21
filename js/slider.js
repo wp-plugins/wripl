@@ -77,7 +77,7 @@ console.log('slider.js');
 
             displayAtPercent = 50;
 
-            thumbnailWidth = 90;
+            thumbnailWidth = 110;
             thumbnailHeight = 67;
 
             templatesPath = WriplAjaxProperties.pluginPath + TEMPLATES_BASE_PATH + TEMPLATES_MOBILE_SLIDER_PATH;
