@@ -1,7 +1,7 @@
 <?php
 /*
   Plugin Name: Wripl
-  Description: Pluging to bring wripl's easy recomendations.
+  Description: Plugin to bring wripl's easy recommendations to Wordpress.
   Version: 1.3.14
   Author: Wripl
   Author URI: http://wripl.com
