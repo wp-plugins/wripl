@@ -36,7 +36,6 @@ console.log('slider.js');
             }
 
             this.displayed = true;
-            showTheSlider = false;
             this.removeClass('show-left-pointer');
         };
 
@@ -188,9 +187,6 @@ console.log('slider.js');
                     $('.wripl-thumbnail').remove();
                 }
 
-//                if (slider && showTheSlider) {
-//                    slider.show();
-//                }
             });
         });
 
@@ -223,8 +219,7 @@ console.log('slider.js');
          * If page is too small to scroll,
          * force the slider out.
          */
-        if($(window).height() >= $(document).height())
-        {
+        if ($(window).height() >= $(document).height()) {
             slider.show();
             slider.forcedDisplayed = true;
         }
@@ -239,14 +234,12 @@ console.log('slider.js');
          * Click Listeners below.
          */
         $('#wripl-slider').click(function (event) {
-
-                if (!slider.displayed) {
-                    event.preventDefault();
-                    slider.show();
-                    slider.forcedDisplayed = true;
-                }
+            if (!slider.displayed) {
+                event.preventDefault();
+                slider.show();
+                slider.forcedDisplayed = true;
             }
-        );
+        });
 
         $('#wripl-slider').on('click', 'a.dismiss', function (event) {
             event.stopPropagation();
@@ -254,7 +247,6 @@ console.log('slider.js');
             slider.forcedDisplayed = true;
 
         });
-
 
     });
 

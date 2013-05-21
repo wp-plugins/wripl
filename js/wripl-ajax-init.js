@@ -70,21 +70,16 @@ console.log('wripl-ajax-init.js');
                         $("body").trigger( INIT_NOT_LOGGED_IN_EVENT , response);
                         break;
                     default:
-                        $("body").trigger(INIT_ERROR_EVENT, response);
+                        $("body").trigger( INIT_ERROR_EVENT , response);
                         break;
                 }
             }
         );
     };
 
-    // showTheSlider = false;
-
     var openWriplAuthWindow = function () {
         var params = 'location=0,status=0,menubar=0,titlebar=0,width=800,height=600';
         myWindow = window.open( WriplAjaxProperties.pluginPath + 'connect.php', 'wriplAuthWindow', params);
-
-        // set 'showTheSlider' to be true.. so that the slider will popout after authorisation
-        // showTheSlider = true;
 
         var timer = setInterval(checkChild, 500);
 

@@ -24,7 +24,7 @@ console.log('widget.js');
 
                 // Adds the 'spinning logo' upon clicking the connect button
                 $('img.wripl-oauth-connect').click(function () {
-                    var htmlOfSpinningLogo = "\<img class='wripl-rotate' src='" + WriplAjaxProperties.pluginPath + "images/wripl-logo-rotate-orng-sml.png' >";
+                    var htmlOfSpinningLogo = "<img class='wripl-rotate' src='" + WriplAjaxProperties.pluginPath + "images/wripl-logo-rotate-orng-sml.png' >";
                     $('#wripl-widget-ajax-container').html(htmlOfSpinningLogo);
 
                     $("body").trigger('wripl-connect-button-clicked');
@@ -92,7 +92,6 @@ console.log('widget.js');
         });
 
         $("body").bind("wripl-ajax-init-error", function (e) {
-//            console.log("some error!");
             console.log("Widget: wripl-ajax-init-error heard");
 
             $.get(WriplAjaxProperties.pluginPath + 'handlebar-templates/widget/recommendations-error.html?ver=' + WriplAjaxProperties.pluginVersion, function (data) {
