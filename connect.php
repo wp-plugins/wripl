@@ -43,10 +43,11 @@ try {
 
     if (isset($_GET['debug'])) {
         echo json_encode(array(
+            'exception' => get_class($e),
             'message' => $e->getMessage(),
             'code' => $e->getCode(),
         ));
     }
 
-    error_log('message : ' . $e->getMessage() . ' code: ' . $e->getCode());
+    error_log('exception:' . get_class($e) . ', message: ' . $e->getMessage() . ', code: ' . $e->getCode());
 }
