@@ -102,6 +102,8 @@ img.wripl-rotate {
     position: fixed;
     bottom: 20px;
     vertical-align: top;
+
+    z-index: 100;
 }
 
 #wripl-slider img{
@@ -153,7 +155,6 @@ img.wripl-rotate {
 
     /* mobile slider will be flush to the bottom of the screen */
     bottom:0;
-    z-index: 100;
 }
 
 /* Tricky positioning of the 'get recommendations' button within this element */

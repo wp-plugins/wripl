@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Plugin to bring wripl's easy recommendations to Wordpress.
-  Version: 1.3.16
+  Version: 1.3.17
   Author: Wripl
   Author URI: http://wripl.com
  */
@@ -26,7 +26,7 @@ class WriplWP
     const ITEM_NEEDS_INDEXING = -1;
     const ITEM_QUEUED = 0;
     const ITEM_INDEXED = 1;
-    const VERSION = '1.3.16';
+    const VERSION = '1.3.17';
 
     public $wriplPluginHelper;
 
