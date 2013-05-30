@@ -78,13 +78,14 @@ console.log('wripl-ajax-init.js');
     };
 
     var openWriplAuthWindow = function () {
+        console.log('opening window');
         var params = 'location=0,status=0,menubar=0,titlebar=0,width=800,height=600';
-        myWindow = window.open( WriplAjaxProperties.pluginPath + 'connect.php', 'wriplAuthWindow', params);
+        var wriplOauthPopupWindow = window.open( WriplAjaxProperties.pluginPath + 'connect.php', 'wriplAuthWindow', params);
 
         var timer = setInterval(checkChild, 500);
 
         function checkChild() {
-            if (myWindow.closed) {
+            if (wriplOauthPopupWindow.closed) {
                 clearInterval(timer);
                 init();
             }
