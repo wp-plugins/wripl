@@ -124,6 +124,11 @@ console.log('slider.js');
 
                 $('#wripl-slider').html(compiledHtml);
 
+                // Fire the custom event upon click.
+                $('div#wripl-slider img.wripl-oauth-connect').click(function () {
+                    $("body").trigger('wripl-connect-button-clicked');
+                });
+
             });
         });
 
@@ -195,7 +200,6 @@ console.log('slider.js');
             console.log(sliderMode + ": wripl-ajax-init-error heard");
             $('#wripl-slider').remove();
         });
-
 
         /**
          * Watching for page scrolling

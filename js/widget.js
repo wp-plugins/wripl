@@ -23,10 +23,8 @@ console.log('widget.js');
                 $('#wripl-widget-ajax-container').html(compiledHtml);
 
                 // Adds the 'spinning logo' upon clicking the connect button
-                $('img.wripl-oauth-connect').click(function () {
-                    var htmlOfSpinningLogo = "<img class='wripl-rotate' src='" + WriplAjaxProperties.pluginPath + "images/wripl-logo-rotate-orng-sml.png' >";
-                    $('#wripl-widget-ajax-container').html(htmlOfSpinningLogo);
 
+                $('div#wripl-widget-ajax-container img.wripl-oauth-connect').click(function () {
                     $("body").trigger('wripl-connect-button-clicked');
                 });
             });
@@ -101,6 +99,14 @@ console.log('widget.js');
                 $('#wripl-widget-ajax-container').html(compiledHtml);
             });
         });
+
+        $("body").bind("wripl-connect-button-clicked", function (e) {
+            console.log("Widget: wripl-connect-button-clicked heard");
+
+            var htmlOfSpinningLogo = "<img class='wripl-rotate' src='" + WriplAjaxProperties.pluginPath + "images/wripl-logo-rotate-orng-sml.png' >";
+            $('#wripl-widget-ajax-container').html(htmlOfSpinningLogo);
+        });
+
 
     });
 
