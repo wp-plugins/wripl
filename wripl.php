@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Plugin to bring wripl's easy recommendations to Wordpress.
-  Version: 1.3.18
+  Version: 1.3.19
   Author: Wripl
   Author URI: http://wripl.com
  */
@@ -26,7 +26,7 @@ class WriplWP
     const ITEM_NEEDS_INDEXING = -1;
     const ITEM_QUEUED = 0;
     const ITEM_INDEXED = 1;
-    const VERSION = '1.3.18';
+    const VERSION = '1.3.19';
 
     public $wriplPluginHelper;
 
@@ -414,6 +414,7 @@ class WriplWP
 
     public function queueUpItems()
     {
+        error_log("queueing...");
         //6 hours
         set_time_limit(60 * 60 * 6);
 
@@ -576,12 +577,20 @@ class WriplWP
 
         $title = $node->post_title;
         $body = $node->post_content;
+        $absoluteUrl = get_permalink($id);
+        $imageUrl = null;
+
+        $image =  wp_get_attachment_image_src( get_post_thumbnail_id($id), 'full' );
+
+        if($image) {
+            $imageUrl = $image[0];
+        }
 
         $indexStatus = self::ITEM_INDEXED;
 
         try {
 
-            $client->addToIndex($url, $title, $body, $tags, $publicationDate);
+            $client->addToIndex($url, $title, $body, $absoluteUrl, $imageUrl, $tags, $publicationDate);
             $wpdb->update($this->wriplIndexQueueTableName, array('status' => self::ITEM_INDEXED), array('id' => $id));
 
         } catch (Exception $e) {
