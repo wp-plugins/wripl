@@ -131,24 +131,31 @@ class Wripl_Client
     }
 
     /**
-     *
-     * @param String $path
-     * @param String $siteId
-     * @param String $title
-     * @param String $body
-     * @return String Responce body from service
+     * @param $path
+     * @param $title
+     * @param $body
+     * @param $absoluteUrl
+     * @param null $imageUrl
+     * @param array $tags
+     * @param DateTime $publicationDate
+     * @return mixed
      */
-    public function addToIndex($path, $title, $body, array $tags = array(), DateTime $publicationDate = null)
+    public function addToIndex($path, $title, $body, $absoluteUrl, $imageUrl = null, array $tags = array(), DateTime $publicationDate = null)
     {
         $endPointUrl = $this->config['apiBaseUrl'] . '/' . self::$DOCUMENTS_ENDPOINT;
 
         $params['path'] = $path;
         $params['title'] = $title;
         $params['body'] = $body;
+        $params['absolute_url'] = $absoluteUrl;
         $params['tags'] = implode(',', $tags);
 
         if ($publicationDate) {
             $params['publication_date'] = $publicationDate->format(DateTime::ISO8601);
+        }
+
+        if($imageUrl) {
+            $params['image_url'] = $imageUrl;
         }
 
         return $this->oauthAdapter->post($endPointUrl, $params);

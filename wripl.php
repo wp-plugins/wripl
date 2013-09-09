@@ -414,6 +414,7 @@ class WriplWP
 
     public function queueUpItems()
     {
+        error_log("queueing...");
         //6 hours
         set_time_limit(60 * 60 * 6);
 
@@ -576,12 +577,20 @@ class WriplWP
 
         $title = $node->post_title;
         $body = $node->post_content;
+        $absoluteUrl = get_permalink($id);
+        $imageUrl = null;
+
+        $image =  wp_get_attachment_image_src( get_post_thumbnail_id($id), 'full' );
+
+        if($image) {
+            $imageUrl = $image[0];
+        }
 
         $indexStatus = self::ITEM_INDEXED;
 
         try {
 
-            $client->addToIndex($url, $title, $body, $tags, $publicationDate);
+            $client->addToIndex($url, $title, $body, $absoluteUrl, $imageUrl, $tags, $publicationDate);
             $wpdb->update($this->wriplIndexQueueTableName, array('status' => self::ITEM_INDEXED), array('id' => $id));
 
         } catch (Exception $e) {
