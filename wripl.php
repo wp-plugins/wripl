@@ -97,7 +97,14 @@ class WriplWP
      */
     public function enqueueScripts()
     {
+        if (!$this->isSetup()) {
+            return;
+        }
+
         $featureSettings = get_option('wripl_feature_settings');
+
+        $wriplSettings = get_option('wripl_settings');
+        $consumerKey = $wriplSettings['consumerKey'];
 
         wp_register_script(
             'handlebars.js', //handle
@@ -114,6 +121,8 @@ class WriplWP
 
         wp_enqueue_script('wripl-interest-monitor', plugin_dir_url(__FILE__) . 'js/dependencies/wripl-compiled.js');
 
+        /**
+         * Old user init
         wp_enqueue_script('wripl-ajax-properties', plugin_dir_url(__FILE__) . 'js/wripl-ajax-init.js', array('jquery', 'wripl-interest-monitor'));
         wp_localize_script('wripl-ajax-properties', 'WriplAjaxProperties', array(
             'ajaxUrl' => admin_url('admin-ajax.php', $this->wriplPluginHelper->getCurrentProtocol()),
@@ -121,7 +130,16 @@ class WriplWP
             'pluginPath' => plugin_dir_url(__FILE__),
             'pluginVersion' => self::VERSION,
         ));
+        **/
 
+        wp_enqueue_script('wripl-properties', plugin_dir_url(__FILE__) . 'js/wripl-anon-init.js', array('jquery', 'wripl-interest-monitor'), self::VERSION);
+        wp_localize_script('wripl-properties', 'WriplProperties', array(
+            'apiBase' => $this->wriplPluginHelper->getApiUrl(),
+            'path' => $this->wriplPluginHelper->getPathUri(),
+            'pluginPath' => plugin_dir_url(__FILE__),
+            'pluginVersion' => self::VERSION,
+            'key' => $consumerKey
+        ));
 
         if (isset($featureSettings['sliderEnabled'])) {
 
@@ -136,9 +154,7 @@ class WriplWP
                 ),
                 self::VERSION
             );
-
         }
-
     }
 
     public function ajaxInit()
@@ -185,10 +201,7 @@ class WriplWP
                     //echo $e->getMessage();
                     //exit;
                     $response['errors']['retrievingActivityCode'] = $e->getMessage();
-
                 }
-
-
             }
 
             //2.) Get recommendations
@@ -204,7 +217,6 @@ class WriplWP
                 $response['errors']['retrievingRecommendations'] = $e->getMessage();
                 $response['recommendations'] = array();
             }
-
         }
 
         header("Content-Type: application/json");
