@@ -1,0 +1,30 @@
+<ul>
+
+    {{#recommendations}}
+    {{#if imageUrl}}
+    <li class="image-recommendation">
+        <div style="position: relative">
+            <a href="{{linkUrl}}">
+                <div class="nailthumb-container" style="height:{{imageHeight}}px; overflow: hidden;">
+                    <img class="wripl-widget-thumbnail " src="{{imageUrl}}" alt="{{{title}}}">
+                    <div class="wripl-widget-title-over-image" >
+                        {{{title}}}
+                    </div>
+                </div>
+
+                <br>
+            </a>
+        </div>
+    </li>
+    {{else}}
+    <li class="text-recommendation"><a href="{{permalink}}">{{{title}}}</a></li>
+    {{/if}}
+
+    {{/recommendations}}
+
+</ul>
+
+<div id="wripl-oauth-disconnect-button">
+    <a href="http://wripl.com/features"
+       target="_blank">How does wripl work?</a>
+</div>
