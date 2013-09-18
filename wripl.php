@@ -145,7 +145,7 @@ class WriplWP
 
             wp_enqueue_script('jquery-effects-slide');
 
-            wp_enqueue_script('wripl-slider', plugin_dir_url(__FILE__) . 'js/slider.js',
+            wp_enqueue_script('wripl-slider', plugin_dir_url(__FILE__) . 'js/slider-anon.js',
                 array(
                     'jquery',
                     'jquery-effects-slide',
