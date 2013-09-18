@@ -62,6 +62,7 @@ class WriplWP
         add_action('wp_ajax_wripl-ajax-init', array($this, 'ajaxInit'));
 
         add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'pluginActionLinks'));
+        add_filter('the_content', array($this, 'addRecommendationsToEndOfContent'));
 
         register_activation_hook(__FILE__, array($this, 'onInstall'));
         register_deactivation_hook(__FILE__, array($this, 'onUninstall'));
@@ -248,6 +249,15 @@ class WriplWP
 
         wp_enqueue_script('wripl-piwik-script', 'http://piwik.wripl.com/piwik.js');
         wp_enqueue_script('wripl-piwik-tracking-code', "$piwitWriplScript");
+    }
+
+    public function addRecommendationsToEndOfContent($content)
+    {
+        if (is_single() || is_page()) {
+            return $content . '<div id="wripl-end-of-contnet"></div>';
+        }
+
+        return $content;
     }
 
     public function pluginActionLinks($links)
