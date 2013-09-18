@@ -1,11 +1,12 @@
-console.log('wripl-anon-init.js');
-(function ($) {
+var WriplEvents = {
+    'INIT_START': 'wripl-anonymous-initialisation-start',
+    'INIT_COMPLETE': 'wripl-anonymous-initialisation-complete',
+    'INIT_ERROR': 'wripl-anonymous-initialisation-error'
+};
 
-    var events = {
-        'INIT_ERROR_EVENT': 'wripl-anonymous-initialisation-error',
-        'INIT_COMPLETE': 'wripl-anonymous-initialisation-complete',
-        'START_SPINNING_LOGO': 'wripl-start-spinning-logo'
-    };
+console.log('wripl-anon-init.js');
+
+(function ($) {
 
     $(document).ready(function () {
         console.log('calling wripl anon init');
@@ -14,97 +15,77 @@ console.log('wripl-anon-init.js');
 
     var init = function () {
 
-        var url = WriplProperties.apiBase + "/anonymous/activities";
+        $("body").trigger(WriplEvents.INIT_START);
 
-        var params = {
+        var activitiesEndpoint = WriplProperties.apiBase + "/anonymous/activities";
+
+        var parameters = {
             key: WriplProperties.key,
             path: WriplProperties.path
         };
 
-        console.dir(params);
+        console.dir(parameters);
 
         $.ajax({
             type: 'GET',
-            url: url,
-            data: params,
-            async: false,
+            url: activitiesEndpoint,
+            data: parameters,
             contentType: "application/json",
             dataType: 'jsonp'
         })
             .done(function (response) {
 
-                $("body").trigger(events.START_SPINNING_LOGO);
-
                 console.dir(response);
-
-                if (typeof(response) !== "object") {
-                    console.log('init get success - but response is not an object');
-                    $("body").trigger(events.INIT_ERROR_EVENT, response);
-                    return;
-                }
 
                 if (response.activity_hash_id) {
                     wripl.main(
                         {
-                            activityHashId : response.activity_hash_id,
-                            endpoint : WriplProperties.apiBase + "/anonymous/activity-update"
+                            activityHashId: response.activity_hash_id,
+                            endpoint: WriplProperties.apiBase + "/anonymous/activity-update"
                         }
                     );
                 }
-
-                getRecommendations(response);
+                getRecommendations(response.activity_hash_id);
             })
 
             .fail(function (xhr, ajaxOptions, thrownError) {
-                alert("Aw snap! Something went wrong: " + thrownError);
-                $("body").trigger(events.INIT_ERROR_EVENT, xhr);
-            })
-
-            .always(function (response) {
-                console.log('always!');
+                console.log("Aw snap! Something went wrong: " + thrownError);
+                $("body").trigger(WriplEvents.INIT_ERROR, xhr);
             });
     };
 
-    var getRecommendations = function (response, maxRecommendations) {
+    var getRecommendations = function () {
 
-        var endpoint = "http://api.wripl.dev/v0.1/anonymous/recommendations";
+        var recommendationsEndpoint = WriplProperties.apiBase + "/anonymous/recommendations";
 
-        console.log("response.activity_hash_id: " + response.activity_hash_id);
-        console.log('simulating the call to /anonymous/recommendations against: ' +endpoint);
-
-        var params = {
-            key: WriplProperties.key,
-            max: WriplWidgetProperties.maxRecommendations
+        var parameters = {
+            key: WriplProperties.key
         };
 
-        console.log(params);
+        console.log(parameters);
 
         $.ajax({
             type: 'GET',
-            url: endpoint,
-            data: params,
+            url: recommendationsEndpoint,
+            data: parameters,
             contentType: "application/json",
             dataType: 'jsonp'
         })
             .done(function (response) {
+
                 console.dir(response);
-                if (typeof(response) !== "object") {
-                    console.log('getRecommendations() success - but response is not an object');
-                    $("body").trigger(events.INIT_ERROR_EVENT, response);
-                    return;
-                }
 
                 if (response) {
                     console.log("response with recommendations:");
                     console.log(response);
                 }
 
-                $("body").trigger(events.INIT_COMPLETE, { 'recommendations': response });
+                $("body").trigger(WriplEvents.INIT_COMPLETE, { 'recommendations': response });
             })
 
             .fail(function (xhr, ajaxOptions, thrownError) {
-                alert("Aw snap! Something went wrong: " + thrownError);
-                $("body").trigger(events.INIT_ERROR_EVENT, xhr);
+                console.log("Aw snap! Something went wrong: " + thrownError);
+                $("body").trigger(WriplEvents.INIT_ERROR, xhr);
             });
     };
 

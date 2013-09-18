@@ -1,18 +1,12 @@
 console.log('widget-anon.js');
 (function ($, Handlebars) {
 
-    var events = {
-        'INIT_ERROR_EVENT': 'wripl-anonymous-initialisation-error',
-        'INIT_COMPLETE': 'wripl-anonymous-initialisation-complete',
-        'START_SPINNING_LOGO': 'wripl-start-spinning-logo'
-    };
-
     jQuery(document).ready(function () {
 
         var template, templateName, compiledHtml, recommendations, recommendationsWithImage = [], recommendationsWithNoImage = [], sortedRecommendations = [];
 
         // Add  the listeners
-        $("body").bind(events.INIT_COMPLETE, function (e, response) {
+        $("body").bind(WriplEvents.INIT_COMPLETE, function (e, response) {
             console.log("Anonymous Widget: " + e.type + " heard");
 
             recommendations = response.recommendations;
@@ -47,9 +41,15 @@ console.log('widget-anon.js');
                 sortedRecommendations = recommendations;
             }
 
+            if (WriplWidgetProperties.maxRecommendations) {
+                sortedRecommendations = sortedRecommendations.slice(0, WriplWidgetProperties.maxRecommendations);
+            }
+
+            console.log("Widget: recommendation sliced based on maxRecommendations");
+
             if(!templateName){
                 console.log("Wripl anonymous initialisation error! There is no templateName set. Please contact your local wripl administrator.");
-                $("body").trigger(events.INIT_ERROR_EVENT);
+                $("body").trigger(WriplEvents.INIT_ERROR);
                 return;
             }
 
@@ -71,7 +71,7 @@ console.log('widget-anon.js');
             });
         });
 
-        $("body").bind(events.INIT_ERROR_EVENT, function (e) {
+        $("body").bind(WriplEvents.INIT_ERROR, function (e) {
             console.log("Anonymous Widget: " + e.type + " heard");
 
             $.get(WriplProperties.pluginPath + 'handlebar-templates/widget/recommendations-error.html?ver=' + WriplProperties.pluginVersion, function (data) {
@@ -81,9 +81,10 @@ console.log('widget-anon.js');
             });
         });
 
-        $("body").bind(events.START_SPINNING_LOGO, function (e) {
+        $("body").bind(WriplEvents.INIT_START, function (e) {
             console.log("Anonymous Widget: " + e.type + " heard");
 
+            // Spin the logo
             var htmlOfSpinningLogo = "<img class='wripl-rotate' src='" + WriplProperties.pluginPath + "images/wripl-logo-rotate-orng-sml.png' >";
             $('#wripl-widget-ajax-container').html(htmlOfSpinningLogo);
         });
