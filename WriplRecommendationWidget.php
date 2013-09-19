@@ -119,7 +119,7 @@ class WriplRecommendationWidget extends WP_Widget
         wp_enqueue_script('wripl-ajax-widget', plugin_dir_url(__FILE__) . 'js/widget-anon.js', array('jquery', 'handlebars.js'), WriplWP::VERSION);
         wp_localize_script('wripl-ajax-widget', 'WriplWidgetProperties', $instance);
 
-        $title = 'wripl recommends...';
+        $title = 'Suggestions For You:';
 
         $out = $args['before_widget'];
         $out .= $args['before_title'] . $title . $args['after_title'];

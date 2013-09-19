@@ -126,12 +126,12 @@ class WriplWP
          * Old user init
         wp_enqueue_script('wripl-ajax-properties', plugin_dir_url(__FILE__) . 'js/wripl-ajax-init.js', array('jquery', 'wripl-interest-monitor'));
         wp_localize_script('wripl-ajax-properties', 'WriplAjaxProperties', array(
-            'ajaxUrl' => admin_url('admin-ajax.php', $this->wriplPluginHelper->getCurrentProtocol()),
-            'path' => $this->wriplPluginHelper->getPathUri(),
-            'pluginPath' => plugin_dir_url(__FILE__),
-            'pluginVersion' => self::VERSION,
+        'ajaxUrl' => admin_url('admin-ajax.php', $this->wriplPluginHelper->getCurrentProtocol()),
+        'path' => $this->wriplPluginHelper->getPathUri(),
+        'pluginPath' => plugin_dir_url(__FILE__),
+        'pluginVersion' => self::VERSION,
         ));
-        **/
+         **/
 
         wp_enqueue_script('wripl-properties', plugin_dir_url(__FILE__) . 'js/wripl-anon-init.js', array('jquery', 'wripl-interest-monitor'), self::VERSION);
         wp_localize_script('wripl-properties', 'WriplProperties', array(
@@ -231,33 +231,40 @@ class WriplWP
      * Tracking scripts for trial sites only.
      * Will be removed in future.
      *
+     * @deprecated
      * @param bool $wriplEnabled
      */
     public function metricCollection($wriplEnabled = false, $return = false)
     {
         $wriplSettings = get_option('wripl_settings');
 
-        $piwitWriplScript = "http://wripl.com/" . "metrics/{$wriplSettings['consumerKey']}.js";
+        $piwikWriplScript = "http://wripl.com/" . "metrics/{$wriplSettings['consumerKey']}.js";
 
         if ($wriplEnabled) {
-            $piwitWriplScript .= '?wripl=on';
+            $piwikWriplScript .= '?wripl=on';
         }
 
         if ($return) {
-            return $piwitWriplScript;
+            return $piwikWriplScript;
         }
 
         wp_enqueue_script('wripl-piwik-script', 'http://piwik.wripl.com/piwik.js');
-        wp_enqueue_script('wripl-piwik-tracking-code', "$piwitWriplScript");
+        wp_enqueue_script('wripl-piwik-tracking-code', "$piwikWriplScript");
     }
 
     public function addRecommendationsToEndOfContent($content)
     {
-        if (is_single() || is_page()) {
+        $featureSettings = get_option('wripl_feature_settings');
+        $featureSettings['endOfContentEnabled'] = true;
+
+        if (isset($featureSettings['endOfContentEnabled']) && (is_single() || is_page())) {
+
             return $content . '<div id="wripl-end-of-contnet"></div>';
+
         }
 
         return $content;
+
     }
 
     public function pluginActionLinks($links)
@@ -602,9 +609,9 @@ class WriplWP
         $absoluteUrl = get_permalink($id);
         $imageUrl = null;
 
-        $image =  wp_get_attachment_image_src( get_post_thumbnail_id($id), 'full' );
+        $image = wp_get_attachment_image_src(get_post_thumbnail_id($id), 'full');
 
-        if($image) {
+        if ($image) {
             $imageUrl = $image[0];
         }
 
@@ -629,8 +636,7 @@ class WriplWP
              * Queue up again on server error for 2 hours time in the event of an error.
              * If authentication fails, item will not be reattempted.
              */
-            if($e->getCode() === 500)
-            {
+            if ($e->getCode() === 500) {
                 wp_schedule_single_event(time() + 7200, 'wripl_index_content', array($id, $type));
             }
 
