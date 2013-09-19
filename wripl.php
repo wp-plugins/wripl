@@ -119,6 +119,7 @@ class WriplWP
         wp_enqueue_style('wripl-style', plugins_url('style.css', __FILE__), array(), self::VERSION);
 
         wp_enqueue_script('wripl-piwik-script', plugin_dir_url(__FILE__) . 'js/dependencies/piwik.js');
+        wp_enqueue_script('wripl-piwik-tracking-code', "http://wripl.com/metrics/$consumerKey.js", array('wripl-piwik-script'));
 
         wp_enqueue_script('wripl-interest-monitor', plugin_dir_url(__FILE__) . 'js/dependencies/wripl-compiled.js');
 
