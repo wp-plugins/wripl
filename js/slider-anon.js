@@ -21,7 +21,6 @@ console.log('slider-anon.js');
          */
 
         var slider = $("<div id='wripl-slider'></div>");
-
         slider.forcedDisplayed = false;
 
         slider.show = function (isMobile) {
@@ -29,28 +28,29 @@ console.log('slider-anon.js');
                 if (!this.displayed) {
                     this.animate(
                         {
-                            bottom: defaultPosition
+                            bottom: activePosition
                         }
                     );
+                    this.displayed = true;
+                    this.removeClass('show-left-pointer');
                 }
             } else {
                 if (!this.displayed) {
                     this.animate(
                         {
-                            right:activePosition
+                            right: activePosition
                         }
                     );
+                    this.displayed = true;
+                    this.removeClass('show-left-pointer');
                 }
             }
-
-            this.displayed = true;
-            this.removeClass('show-left-pointer');
         };
 
         slider.hide = function (isMobile) {
             if (isMobile) {
                 if (this.displayed) {
-                    this.animate({bottom: activePosition});
+                    this.animate({bottom: defaultPosition});
                 }
 
             } else {
@@ -81,12 +81,11 @@ console.log('slider-anon.js');
 
         if (isMobile) {
             sliderMode = "Slider-Mobile";
-            defaultPosition = -78;
-//            displayAtPercent = 50;
-            activePosition = 0;
+            defaultPosition = -80;
+            activePosition = 0;         // activePosition for the mobile slider is flush to the bottom of the screen
 
             thumbnailWidth = 110;
-            thumbnailHeight = 67;
+            thumbnailHeight = 68;
 
             templatesPath = WriplProperties.pluginPath + TEMPLATES_BASE_PATH + TEMPLATES_MOBILE_SLIDER_PATH;
 
@@ -97,7 +96,7 @@ console.log('slider-anon.js');
             defaultPosition = -340;     // If the desired width of the slider changes.. so must this
             activePosition = 20;
 
-            displayAtPercent = 70;
+            displayAtPercent = 65;
 
             thumbnailWidth = 132;
             thumbnailHeight = 100;
@@ -125,12 +124,12 @@ console.log('slider-anon.js');
 
             if (theRecommendation.imageUrl !== "") {
                 imageSrc = theRecommendation.imageUrl;
-                //theRecommendation.imageUrl = "";                  // uncomment to simulate no 'feature' image
+//                theRecommendation.imageUrl = "";                  // uncomment to simulate no 'feature' image
             } else {
                 imageSrc = WriplProperties.pluginPath + "/images/wripl-logo-sml.png";
             }
 
-            console.log(sliderMode + ": recommendation stripped - fetching template active.html");
+            console.log(sliderMode + ": first recommendation set - fetching template 'recommendations.html'");
 
             $.get(templatesPath + 'recommendations.html?ver=' + WriplProperties.pluginVersion, function (data) {
 
@@ -139,17 +138,17 @@ console.log('slider-anon.js');
                 template = Handlebars.compile(data);
                 compiledHtml = template({
                     wriplProperties:WriplProperties,
-                    title:theRecommendation.title,
-                    linkUrl:theRecommendation.linkUrl,
-                    imageSrc:imageSrc
+                    title: theRecommendation.title,
+                    linkUrl: theRecommendation.linkUrl,
+                    imageSrc: imageSrc
                 });
 
                 $('#wripl-slider').html(compiledHtml);
 
                 $('#wripl-slider .wripl-thumbnail').nailthumb(
                     {
-                        width:thumbnailWidth,
-                        height:thumbnailHeight
+                        width: thumbnailWidth,
+                        height: thumbnailHeight
                     }
                 );
 
@@ -158,12 +157,16 @@ console.log('slider-anon.js');
                     $('.wripl-thumbnail').remove();
                 }
 
+                // hide the slider by default
+                slider.displayed = true;
+                slider.hide(isMobile);
+
             });
         });
 
-        // If there is an error with wripl.. hide the slider
-        $("body").bind("wripl-ajax-init-error", function (e, params) {
-            console.log(sliderMode + ": wripl-ajax-init-error heard");
+        // If there is an error with wripl.. remove the slider
+        $("body").bind(WriplEvents.INIT_ERROR, function (e, params) {
+            console.log(sliderMode + " " + e.type + " : heard");
             $('#wripl-slider').remove();
         });
 
@@ -186,19 +189,18 @@ console.log('slider-anon.js');
                 }
             }
 
-            if (isMobile){
+            if (isMobile) {
+
                 var st = $(this).scrollTop();
-                if (st > lastScrollTop){
+
+                if (st > lastScrollTop) {
                     // downscroll code
-                    console.log('scrolldown');
-                    slider.show(isMobile);
+                    slider.hide(isMobile);
                 } else {
                     // upscroll code
-                    console.log('scrollup');
-                    slider.hide(isMobile);
-//                    slider.hideOnMobile();
-
+                    slider.show(isMobile);
                 }
+
                 lastScrollTop = st;
             }
 
@@ -209,8 +211,8 @@ console.log('slider-anon.js');
          * force the slider out.
          */
         if ($(window).height() >= $(document).height()) {
-            slider.show(isMobile);
             slider.forcedDisplayed = true;
+            slider.show(isMobile);
         }
 
         /**
@@ -231,14 +233,15 @@ console.log('slider-anon.js');
         });
 
         $('#wripl-slider').on('click', 'a.dismiss', function (event) {
+
             event.stopPropagation();
+            console.log(slider.displayed);
             slider.hide(isMobile);
             slider.forcedDisplayed = true;
 
         });
 
     });
-
 
     /**
      * Some Helpers

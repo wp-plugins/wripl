@@ -90,7 +90,7 @@ img.wripl-rotate {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     background-color: #ffffff;
     padding-left: 20px;
-    width: 370px;
+    /*width: 370px;*/
     height: 160px;
 
     -webkit-box-shadow: 0 8px 6px -6px #c8c8c8;
@@ -100,10 +100,10 @@ img.wripl-rotate {
     border: solid 1px #e6e6e6;
 
     position: fixed;
-    bottom: 20px;
+    bottom: 46px;
     vertical-align: top;
 
-    z-index: 100;
+    z-index: 2147483648;
 }
 
 #wripl-slider img{
@@ -149,14 +149,15 @@ img.wripl-rotate {
 #wripl-slider.wripl-mobile {
     width: 100%;
     height: 78px;
-    padding-left: 0px;
+    padding: 0px;
 
     -webkit-box-shadow: 0 -2px 6px #c8c8c8;
     -moz-box-shadow: 0 -2px 6px #c8c8c8;
     box-shadow: 0 -2px 6px #c8c8c8;
 
-    /* mobile slider will be flush to the bottom of the screen */
+    /* mobile slider will be flush to the edges of the screen */
     bottom:0;
+    left: 0;
 }
 
 /* Tricky positioning of the 'get recommendations' button within this element */
@@ -194,6 +195,7 @@ img.wripl-rotate {
 #wripl-dismiss.wripl-mobile a{
     padding-top: 28px; /* The arrows's position from the top of the slider */
     padding-left: 6px;
+    font-size: 0.8em;
 }
 
 #wripl-slider.wripl-mobile a.dismiss:hover {
