@@ -45,7 +45,7 @@ console.log('wripl-anon-init.js');
                         }
                     );
                 }
-                getRecommendations(response.activity_hash_id);
+                getRecommendations();
             })
 
             .fail(function (xhr, ajaxOptions, thrownError) {
