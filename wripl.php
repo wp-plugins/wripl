@@ -157,11 +157,20 @@ class WriplWP
                 self::VERSION
             );
         }
+
+        if (isset($featureSettings['endOfContentEnabled'])) {
+            wp_enqueue_script('wripl-end-of-content', plugin_dir_url(__FILE__) . 'js/endOfContent-anon.js',
+                array(
+                    'jquery',
+                    'handlebars.js',
+                ),
+                self::VERSION
+            );
+        }
     }
 
     public function ajaxInit()
     {
-
         $response = array();
         $path = isset($_POST['path']) && !empty($_POST['path']) && $_POST['path'] !== 'null' ? $_POST['path'] : null;
 
@@ -256,16 +265,12 @@ class WriplWP
     public function addRecommendationsToEndOfContent($content)
     {
         $featureSettings = get_option('wripl_feature_settings');
-        $featureSettings['endOfContentEnabled'] = true;
 
         if (isset($featureSettings['endOfContentEnabled']) && (is_single() || is_page())) {
-
             return $content . '<div id="wripl-end-of-contnet"></div>';
-
         }
 
         return $content;
-
     }
 
     public function pluginActionLinks($links)
@@ -416,7 +421,6 @@ class WriplWP
             <form method="post" action="options.php">
                 <?php settings_fields('wripl_plugin_features'); ?>
 
-
                 <table class="form-table">
                     <tbody>
                     <tr>
@@ -426,6 +430,16 @@ class WriplWP
                                 <input id="enableSlider" type="checkbox" name="wripl_feature_settings[sliderEnabled]"
                                        value="1"<?php checked(isset($featureSettings['sliderEnabled'])); ?> />
                                 Show the wripl recommendations in a slider as your users read your posts.
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Enable Recommendation at end of posts</th>
+                        <td>
+                            <label for="endOfContent">
+                                <input id="endOfContent" type="checkbox" name="wripl_feature_settings[endOfContentEnabled]"
+                                       value="1"<?php checked(isset($featureSettings['endOfContentEnabled'])); ?> />
+                                Show the wripl recommendations at the end of your posts.
                             </label>
                         </td>
                     </tr>
