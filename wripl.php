@@ -267,7 +267,7 @@ class WriplWP
         $featureSettings = get_option('wripl_feature_settings');
 
         if (isset($featureSettings['endOfContentEnabled']) && (is_single() || is_page())) {
-            return $content . '<div id="wripl-end-of-contnet"></div>';
+            return $content . '<div id="wripl-end-of-content"></div>';
         }
 
         return $content;
