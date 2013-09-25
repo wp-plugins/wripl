@@ -3,18 +3,22 @@ console.log('slider-anon.js');
 
     jQuery(document).ready(function ($) {
 
-        var TEMPLATES_BASE_PATH = "handlebar-templates/";
-        var TEMPLATES_MOBILE_SLIDER_PATH = "anonymous-slider-mobile/";
-        var TEMPLATES_SLIDER_PATH = "anonymous-slider/";
-
-        var recommendations, templatesPath, sliderMode, defaultPosition, activePosition, displayAtPercent, thumbnailWidth, thumbnailHeight;
-
-        var isMobile = (function () {
-            var isMobileWide = (window.innerWidth < 768) ? true : false;
-            var isMobileHigh = (window.innerHeight < 500) ? true : false;
-
-            return isMobileWide || isMobileHigh;
-        }());
+        var TEMPLATES_BASE_PATH = "handlebar-templates/",
+            TEMPLATES_MOBILE_SLIDER_PATH = "anonymous-slider-mobile/",
+            TEMPLATES_SLIDER_PATH = "anonymous-slider/",
+            recommendations,
+            templatesPath,
+            sliderMode,
+            defaultPosition,
+            activePosition,
+            displayAtPercent,
+            thumbnailWidth,
+            thumbnailHeight,
+            isMobile = (function () {
+                var isMobileWide = (window.innerWidth < 768) ? true : false;
+                var isMobileHigh = (window.innerHeight < 500) ? true : false;
+                return isMobileWide || isMobileHigh;
+            }());
 
         /**
          * Setup slider and add slider properties and methods for showing and hiding of component
@@ -122,9 +126,8 @@ console.log('slider-anon.js');
 
             var theRecommendation = recommendations[0];      // set theRecommendation to be the FIRST
 
-            if (theRecommendation.imageUrl !== "") {
+            if (theRecommendation.hasOwnProperty('imageUrl')) {
                 imageSrc = theRecommendation.imageUrl;
-//                theRecommendation.imageUrl = "";                  // uncomment to simulate no 'feature' image
             } else {
                 imageSrc = WriplProperties.pluginPath + "/images/wripl-logo-sml.png";
             }
@@ -152,7 +155,7 @@ console.log('slider-anon.js');
                     }
                 );
 
-                if (theRecommendation.imageUrl === "") {
+                if (imageSrc === "") {
                     console.log(sliderMode + ": No feature image set");
                     $('.wripl-thumbnail').remove();
                 }
@@ -177,7 +180,9 @@ console.log('slider-anon.js');
          */
         $(document).scroll(function () {
 
-            var scrollPercent = ($(window).scrollTop() / ($(document).height() - $(window).height())) * 100;
+            var scrollPercent = (
+                $(window).scrollTop() / ($(document).height() - $(window).height())
+            ) * 100;
 
             if (!slider.forcedDisplayed) {
                 if (scrollPercent > displayAtPercent) {
@@ -200,7 +205,6 @@ console.log('slider-anon.js');
                     // upscroll code
                     slider.show(isMobile);
                 }
-
                 lastScrollTop = st;
             }
 
@@ -219,7 +223,6 @@ console.log('slider-anon.js');
          * Add the slider to the page
          */
         $('body').append(slider);
-
 
         /**
          * Click Listeners below.

@@ -1,0 +1,26 @@
+
+<H3>
+    <Span>
+        Suggestions for you:
+    </Span>
+</H3>
+<div class="wripl-eoc-inner">
+    {{#recommendations}}
+    <a class="wripl-eoc-item" href="{{linkUrl}}&region=end_of_content" title="{{{title}}}">
+        <div class="wripl-eoc-img-span nailthumb-eoc-container">
+            <img class="wripl-eoc-img nailthumb-eoc-image" src="{{imageUrl}}" alt="{{{title}}}" title="{{{title}}}">
+        </div>
+        <span class="wripol-eoc-text">
+            <span class="wripl-eoc-post-title">
+                {{{title}}}
+            </span>
+
+        </span>
+    </a>
+    {{/recommendations}}
+    <div style="clear: both;"></div>
+
+</div>
+
+
+

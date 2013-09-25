@@ -3,7 +3,10 @@ console.log('widget-anon.js');
 
     jQuery(document).ready(function () {
 
-        var template, templateName, compiledHtml, recommendations, recommendationsWithImage = [], recommendationsWithNoImage = [], sortedRecommendations = [];
+        var template, templateName, compiledHtml, recommendations,
+            recommendationsWithImage = [],
+            recommendationsWithNoImage = [],
+            sortedRecommendations = [];
 
         // Add  the listeners
         $("body").bind(WriplEvents.INIT_COMPLETE, function (e, response) {
@@ -16,7 +19,7 @@ console.log('widget-anon.js');
 
                 for (var i = 0; i < recommendations.length; i++) {
 
-                    if (recommendations[i].imageUrl) {
+                    if (recommendations[i].hasOwnProperty('imageUrl')) {
                         recommendationsWithImage.unshift(i);                                    // remembering the index of each rec WITH an image
                         recommendations[i].imageHeight = WriplWidgetProperties.imageHeight;     // adding an 'imageHeight' property to each recommendation to get around the scope issue within
                                                                                                 // handlebars template iterators. This is a hacky fix. Todo: Review this hack... There's probably a handlebars helper to sort this out.
