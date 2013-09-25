@@ -4,7 +4,7 @@ div[id|=wripl-oauth] {
     text-align: center;
 }
 
-img.wripl-widget-thumbnail.nailthumb-image{
+img.wripl-widget-thumbnail.nailthumb-image {
     margin: 0px;
 }
 
@@ -12,7 +12,7 @@ img.wripl-oauth-connect {
     display: block;
     margin-left: auto;
     margin-right: auto;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 img.wripl-rotate {
@@ -22,11 +22,10 @@ img.wripl-rotate {
     margin-right: auto;
 }
 
-.wripl-rotate:hover
-{
-    -webkit-transform:rotate(720deg);
-    -moz-transform:rotate(720deg);
-    -o-transform:rotate(720deg);
+.wripl-rotate:hover {
+    -webkit-transform: rotate(720deg);
+    -moz-transform: rotate(720deg);
+    -o-transform: rotate(720deg);
 }
 
 @-webkit-keyframes rotate-webkit {
@@ -37,6 +36,7 @@ img.wripl-rotate {
         -webkit-transform: rotate(359deg);
     }
 }
+
 @-moz-keyframes rotate-moz {
     from {
         -moz-transform: rotate(0deg);
@@ -45,6 +45,7 @@ img.wripl-rotate {
         -moz-transform: rotate(359deg);
     }
 }
+
 @-o-keyframes rotate-o {
     from {
         -o-transform: rotate(0deg);
@@ -53,21 +54,21 @@ img.wripl-rotate {
         -o-transform: rotate(359deg);
     }
 }
-.wripl-rotate
-{
-    -webkit-animation-name:             rotate-webkit;
-    -webkit-animation-duration:         1.5s;
-    -webkit-animation-iteration-count:  infinite;
+
+.wripl-rotate {
+    -webkit-animation-name: rotate-webkit;
+    -webkit-animation-duration: 1.5s;
+    -webkit-animation-iteration-count: infinite;
     -webkit-animation-timing-function: linear;
 
-    -moz-animation-name:             rotate-moz;
-    -moz-animation-duration:         1.5s;
-    -moz-animation-iteration-count:  infinite;
+    -moz-animation-name: rotate-moz;
+    -moz-animation-duration: 1.5s;
+    -moz-animation-iteration-count: infinite;
     -moz-animation-timing-function: linear;
 
-    -o-animation-name:             rotate-o;
-    -o-animation-duration:         4.5s;
-    -o-animation-iteration-count:  infinite;
+    -o-animation-name: rotate-o;
+    -o-animation-duration: 4.5s;
+    -o-animation-iteration-count: infinite;
     -o-animation-timing-function: linear;
 
     -webkit-transition-duration: 0.8s;
@@ -80,9 +81,8 @@ img.wripl-rotate {
     -o-transition-property: -o-transform;
     transition-property: transform;
 
-    overflow:hidden;
+    overflow: hidden;
 }
-
 
 /* TODO: Refactor the following css.. tis a bit messy*/
 #wripl-slider {
@@ -105,10 +105,9 @@ img.wripl-rotate {
     z-index: 2147483648;
 }
 
-#wripl-slider img{
+#wripl-slider img {
     max-width: none;
 }
-
 
 #wripl-slider .heading {
     font-size: 13pt;
@@ -117,26 +116,31 @@ img.wripl-rotate {
     text-align: center;
     color: black;
 }
+
 #wripl-slider .slider-body {
     padding-right: 30px;
     padding-top: 10px;
     padding-bottom: 10px;
 }
+
 #wripl-slider .slider-body  img {
     vertical-align: middle;
 }
+
 #wripl-slider .footer {
-    clear:both;
+    clear: both;
     font-size: smaller;
     padding-bottom: 6px;
     padding-right: 16px;
     text-align: right;
     color: #c8c8c8;
 }
+
 #wripl-slider .footer img {
     vertical-align: text-bottom;
 }
-#wripl-slider-header{
+
+#wripl-slider-header {
     padding: 6px 6px 22px 6px;
     border-bottom: 1px solid #ededed;
     margin-right: 10px;
@@ -155,7 +159,7 @@ img.wripl-rotate {
     box-shadow: 0 -2px 6px #c8c8c8;
 
     /* mobile slider will be flush to the edges of the screen */
-    bottom:0;
+    bottom: 0;
     left: 0;
 }
 
@@ -174,24 +178,24 @@ img.wripl-rotate {
     padding-top: 4px;
 }
 
-#wripl-slider.wripl-mobile a{
+#wripl-slider.wripl-mobile a {
     font-size: 1em;
     text-decoration: none;
 }
 
-#wripl-slider.wripl-mobile a:hover{
+#wripl-slider.wripl-mobile a:hover {
     text-decoration: none;
 }
 
 /* Added margin here.. because theme stylesheets with  p *all selectors were overwriting the layout */
-#wripl-slider.wripl-mobile p{
+#wripl-slider.wripl-mobile p {
     line-height: 1.4em;
     margin: 1px;
     padding-left: 2px;
     font-size: 12pt;
 }
 
-#wripl-dismiss.wripl-mobile a{
+#wripl-dismiss.wripl-mobile a {
     padding-top: 28px; /* The arrows's position from the top of the slider */
     padding-left: 6px;
     font-size: 0.8em;
@@ -209,11 +213,10 @@ img.wripl-rotate {
 }
 
 /* So this selector does not appear in any of the templates but it is created on the fly */
-.nailthumb-container{
-    float:right;
+.nailthumb-container {
+    float: right;
     border: 1px solid #e0dfdf;
 }
-
 
 #wripl-slider .heading-sml.wripl-mobile {
     font-size: 8pt;
@@ -225,13 +228,13 @@ a#post_title:hover {
     text-decoration: underline;
 }
 
-#wripl-main.wripl-mobile{
+#wripl-main.wripl-mobile {
     float: left;
     width: 82%;
 }
 
-#wripl-slider.wripl-mobile .nailthumb-container{
-    float:left;
+#wripl-slider.wripl-mobile .nailthumb-container {
+    float: left;
     margin: 0px;
     margin-right: 10px;
 }
@@ -239,22 +242,21 @@ a#post_title:hover {
 /* END END END ------ wripl mobile specific styles ---------------------- MOBILE SPECIFIC---- END END END*/
 
 /* This rule is explicitly for removing the .nailthumb-container rule of float right  */
-div#wripl-widget-ajax-container .nailthumb-container{
-    float:none;
+div#wripl-widget-ajax-container .nailthumb-container {
+    float: none;
     margin-top: 4px;
 }
-
 
 .widgets {
     display: inline;
 }
-
 
 a#post_title {
     text-decoration: none;
     font-size: 14pt;
     color: black;
 }
+
 a#post_title:hover {
     text-decoration: underline;
 }
@@ -266,28 +268,30 @@ a#post_title:hover {
     font-size: 10pt;
 }
 
-#wripl-recommendations{
+#wripl-recommendations {
     margin-right: 14px;
     padding-top: 14px;
     padding-right: 6px;
     margin-left: -6px;
 }
 
-#wripl-functions{
+#wripl-functions {
     float: right;
     font-weight: 500;
     font-size: 8pt;
 }
+
 #wripl-functions a {
     text-decoration: none;
     color: #000000;
 }
+
 #wripl-functions a:hover {
     text-decoration: underline;
     color: #999999;
 }
 
-#wripl-main{
+#wripl-main {
     float: left;
     width: 348px;
 }
@@ -299,8 +303,8 @@ a#post_title:hover {
     border-left: 1px solid #ededed;
 }
 
-#wripl-dismiss a{
-    padding-top: 68px;       /* The arrows's poisition from the top of the slider */
+#wripl-dismiss a {
+    padding-top: 68px; /* The arrows's poisition from the top of the slider */
     padding-left: 2px;
     font-size: smaller;
 }
@@ -316,14 +320,82 @@ a.fill-div-link {
     cursor: w-resize;
 }
 
-.wripl-widget-title-over-image{
+.wripl-widget-title-over-image {
     position: absolute;
     bottom: 24px;
     margin-left: 2px;
     margin-right: 2px;
     margin-bottom: 1px;
     max-width: 96%;
-    background-color:rgba(0,0,0,0.3);
-    padding: 4px 8px ;
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 4px 8px;
     color: white;
+}
+
+/* -----------------NEW NEW NEW---------------- */
+
+#wripl-end-of-content{
+    border: 0;
+    margin: 0 0 10px;
+    padding: 0;
+    outline: 0;
+    background: 0;
+    overflow: hidden;
+    width: 100%;
+    clear: both;
+
+    -moz-box-shadow: none;
+    -webkit-box-shadow: none;
+    -khtml-box-shadow: none;
+    box-shadow: none;
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0;
+    border-radius: 0;
+    -webkit-transform: none;
+    -moz-transform: none;
+    -o-transform: none;
+    clear: both;
+}
+
+
+#wripl-end-of-content img {
+    max-width: none !important;
+    padding: 0;
+    margin: 0;
+    border: 0;
+}
+
+.wripl-eoc-img{
+    clear: both;
+}
+
+.nailthumb-eoc-container{
+    float: left;
+    border: 1px solid #e0dfdf;
+}
+
+.wripl-eoc-inner{
+    clear: both;
+    width: 100%;
+    max-height: 190px;
+    overflow: hidden;
+}
+
+.wripl-eoc-item{
+    float: left;
+    height: 210px;
+}
+
+.wripl-eoc-post-title {
+    width: 126px;
+    line-height: 1.4;
+    display: block;
+    word-wrap: break-word;
+    text-align: left;
+    font-size: 90%;
+    font-weight: 400;
+    border: 0px;
+    padding: 4px;
+    margin-top: 126px;
+    outline: 0px;
 }
