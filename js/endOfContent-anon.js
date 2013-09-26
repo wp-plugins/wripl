@@ -3,7 +3,7 @@ console.log('endOfContent-anon.js');
 
     jQuery(document).ready(function () {
 
-        var template, templateName, compiledHtml, recommendations,
+        var template, templateName, compiledHtml,
             recommendationsWithImage = [],
             recommendationsWithNoImage = [],
             sortedRecommendations = [],
@@ -13,15 +13,19 @@ console.log('endOfContent-anon.js');
         $("body").bind(WriplEvents.INIT_COMPLETE, function (e, response) {
             console.log("Anonymous end-of-content: " + e.type + " heard");
 
-            recommendations = response.recommendations;
+            var recommendations = response.recommendations;
 
             templateName = "recommendations";
 
             for (var i = 0; i < recommendations.length; i++) {
-                if (recommendations[i].hasOwnProperty('imageUrl')) {
-                    recommendationsWithImage.unshift(i);
+                if (recommendations[i].hasOwnProperty('imageUrl')) {                            // IF the recommendation has a property called 'imageURL'
+                    if (recommendations[i].imageUrl !== ""){                                    // AND IF the imageUrl is not empty
+                        recommendationsWithImage.unshift(i);
+                    } else {
+                        recommendationsWithNoImage.unshift(i);                                  // remembering the index of each rec WITHOUT an image
+                    }
                 } else {
-                    recommendationsWithNoImage.unshift(i);                                  // remembering the index of each rec WITHOUT an image
+                    $("body").trigger(WriplEvents.INIT_ERROR);
                 }
             }
 
@@ -35,8 +39,8 @@ console.log('endOfContent-anon.js');
                 return;
             }
 
-            if (recommendationsWithImage.length === 0) {
-                console.log("Wripl Anonymous end-of-content: No feature images in any reccomendations - removing the #wripl-end-of-content element");
+            if (recommendationsWithImage.length < 1) {
+                console.log("Wripl Anonymous end-of-content: No feature images in any recommendations - removing the #wripl-end-of-content element");
                 $('#wripl-end-of-content').remove();
                 return;
             }
@@ -66,7 +70,7 @@ console.log('endOfContent-anon.js');
 
         $("body").bind(WriplEvents.INIT_ERROR, function (e) {
             console.log("Anonymous end-of-content: " + e.type + " heard");
-            alert('hide the endofcontent stuff due to an error');
+            $('#wripl-end-of-content').remove();
 
         });
 
