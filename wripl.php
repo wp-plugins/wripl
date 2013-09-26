@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Plugin to bring wripl's easy recommendations to Wordpress.
-  Version: 1.4.1
+  Version: 1.4.2
   Author: Wripl
   Author URI: http://wripl.com
  */
@@ -26,7 +26,7 @@ class WriplWP
     const ITEM_NEEDS_INDEXING = -1;
     const ITEM_QUEUED = 0;
     const ITEM_INDEXED = 1;
-    const VERSION = '1.4.1';
+    const VERSION = '1.4.2';
 
     public $wriplPluginHelper;
 
@@ -439,7 +439,7 @@ class WriplWP
                             <label for="endOfContent">
                                 <input id="endOfContent" type="checkbox" name="wripl_feature_settings[endOfContentEnabled]"
                                        value="1"<?php checked(isset($featureSettings['endOfContentEnabled'])); ?> />
-                                Show the wripl recommendations at the end of your posts.
+                                Show the wripl recommendations at the end of your posts. <em>(Only works with posts containing a featured image)</em>
                             </label>
                         </td>
                     </tr>
