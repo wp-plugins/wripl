@@ -40,8 +40,8 @@ console.log('endOfContent-anon.js');
             }
 
             if (recommendationsWithImage.length < 1) {
-                console.log("Wripl Anonymous end-of-content: No feature images in any recommendations - removing the #wripl-end-of-content element");
-                $('#wripl-end-of-content').remove();
+                console.log("Wripl Anonymous end-of-content: No feature images in any recommendations - removing the #wripl-end-of-content-container element");
+                $('#wripl-end-of-content-container').remove();
                 return;
             }
 
@@ -54,8 +54,8 @@ console.log('endOfContent-anon.js');
                     recommendations: sortedRecommendations
                 });
 
-                $('#wripl-end-of-content').html(compiledHtml);
-                $('#wripl-end-of-content .nailthumb-eoc-container').nailthumb(
+                $('#wripl-end-of-content-container').html(compiledHtml);
+                $('#wripl-end-of-content-container .nailthumb-eoc-container').nailthumb(
                     {
                         width: thumbNailSize,
                         height: thumbNailSize,
@@ -65,12 +65,13 @@ console.log('endOfContent-anon.js');
                 );
                 console.log("Anonymous end-of-content: .nailthumb() called");
 
+                $("body").trigger(WriplEvents.TEMPLATE_FETCHED);
             });
         });
 
         $("body").bind(WriplEvents.INIT_ERROR, function (e) {
             console.log("Anonymous end-of-content: " + e.type + " heard");
-            $('#wripl-end-of-content').remove();
+            $('#wripl-end-of-content-container').remove();
 
         });
 
@@ -79,7 +80,7 @@ console.log('endOfContent-anon.js');
 
             // Spin the logo
             var htmlOfSpinningLogo = "<img class='wripl-rotate' src='" + WriplProperties.pluginPath + "images/wripl-logo-rotate-orng-sml.png' >";
-            $('#wripl-end-of-content').html(htmlOfSpinningLogo);
+            $('#wripl-end-of-content-container').html(htmlOfSpinningLogo);
         });
     });
 

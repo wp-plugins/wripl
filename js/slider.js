@@ -22,7 +22,7 @@ console.log('slider.js');
          * Setup slider and add slider properties and methods for showing and hiding of component
          */
 
-        var slider = $("<div id='wripl-slider'></div>");
+        var slider = $("<div id='wripl-slider-container'></div>");
 
         slider.forcedDisplayed = false;
 
@@ -66,7 +66,7 @@ console.log('slider.js');
          * - nailthumb sizes
          * - template files location
          *
-         * *NOTE* some visual config exists in style.css in #wripl-slider and #wripl-slider.wripl-mobile rules.
+         * *NOTE* some visual config exists in style.css in #wripl-slider-container and #wripl-slider-container.wripl-mobile rules.
          */
 
         if (isMobile) {
@@ -122,10 +122,10 @@ console.log('slider.js');
                     wriplAjaxProperties:WriplAjaxProperties
                 });
 
-                $('#wripl-slider').html(compiledHtml);
+                $('#wripl-slider-container').html(compiledHtml);
 
                 // Fire the custom event upon click.
-                $('div#wripl-slider img.wripl-oauth-connect').click(function () {
+                $('div#wripl-slider-container img.wripl-oauth-connect').click(function () {
                     $("body").trigger('wripl-connect-button-clicked');
                 });
 
@@ -146,7 +146,7 @@ console.log('slider.js');
                     compiledHtml = template({
                         wriplAjaxProperties:WriplAjaxProperties
                     });
-                    $('#wripl-slider').html(compiledHtml);
+                    $('#wripl-slider-container').html(compiledHtml);
                 });
 
                 //returning early
@@ -178,9 +178,9 @@ console.log('slider.js');
                     imageSrc:imageSrc
                 });
 
-                $('#wripl-slider').html(compiledHtml);
+                $('#wripl-slider-container').html(compiledHtml);
 
-                $('#wripl-slider .wripl-thumbnail').nailthumb(
+                $('#wripl-slider-container .wripl-thumbnail').nailthumb(
                     {
                         width:thumbnailWidth,
                         height:thumbnailHeight
@@ -198,7 +198,7 @@ console.log('slider.js');
         // If there is an error with wripl.. hide the slider
         $("body").bind("wripl-ajax-init-error", function (e, params) {
             console.log(sliderMode + ": wripl-ajax-init-error heard");
-            $('#wripl-slider').remove();
+            $('#wripl-slider-container').remove();
         });
 
         /**
@@ -237,7 +237,7 @@ console.log('slider.js');
         /**
          * Click Listeners below.
          */
-        $('#wripl-slider').click(function (event) {
+        $('#wripl-slider-container').click(function (event) {
             if (!slider.displayed) {
                 event.preventDefault();
                 slider.show();
@@ -245,13 +245,12 @@ console.log('slider.js');
             }
         });
 
-        $('#wripl-slider').on('click', 'a.dismiss', function (event) {
+        $('#wripl-slider-container').on('click', 'a.dismiss', function (event) {
             event.stopPropagation();
             slider.hide();
             slider.forcedDisplayed = true;
 
         });
-
     });
 
 

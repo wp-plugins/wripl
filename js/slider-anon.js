@@ -24,7 +24,7 @@ console.log('slider-anon.js');
          * Setup slider and add slider properties and methods for showing and hiding of component
          */
 
-        var slider = $("<div id='wripl-slider'></div>");
+        var slider = $("<div id='wripl-slider-container' class='wripl-ajax-container'></div>");
         slider.forcedDisplayed = false;
 
         slider.show = function (isMobile) {
@@ -80,7 +80,7 @@ console.log('slider-anon.js');
          * - nailthumb sizes
          * - template files location
          *
-         * *NOTE* some visual config exists in style.css in #wripl-slider and #wripl-slider.wripl-mobile rules.
+         * *NOTE* some visual config exists in style.css in #wripl-slider-container and #wripl-slider-container.wripl-mobile rules.
          */
 
         if (isMobile) {
@@ -146,9 +146,9 @@ console.log('slider-anon.js');
                     imageSrc: imageSrc
                 });
 
-                $('#wripl-slider').html(compiledHtml);
+                $('#wripl-slider-container').html(compiledHtml);
 
-                $('#wripl-slider .wripl-thumbnail').nailthumb(
+                $('#wripl-slider-container .wripl-thumbnail').nailthumb(
                     {
                         width: thumbnailWidth,
                         height: thumbnailHeight
@@ -170,7 +170,7 @@ console.log('slider-anon.js');
         // If there is an error with wripl.. remove the slider
         $("body").bind(WriplEvents.INIT_ERROR, function (e, params) {
             console.log(sliderMode + " " + e.type + " : heard");
-            $('#wripl-slider').remove();
+            $('#wripl-slider-container').remove();
         });
 
         var lastScrollTop = 0;
@@ -227,7 +227,7 @@ console.log('slider-anon.js');
         /**
          * Click Listeners below.
          */
-        $('#wripl-slider').click(function (event) {
+        $('#wripl-slider-container').click(function (event) {
             if (!slider.displayed) {
                 event.preventDefault();
                 slider.show(isMobile);
@@ -235,7 +235,7 @@ console.log('slider-anon.js');
             }
         });
 
-        $('#wripl-slider').on('click', 'a.dismiss', function (event) {
+        $('#wripl-slider-container').on('click', 'a.dismiss', function (event) {
 
             event.stopPropagation();
             console.log(slider.displayed);

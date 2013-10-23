@@ -18,11 +18,13 @@ Wripl is a service which provides personalised, user controlled recommendations 
 
 The wripl recommendations plugin allows you to provide a way for your blog readers to get accurate and timely recommendations on what to read next from your blog, based on the content they typically like to read.
 
-There are currently 2 ways to deliver recommendations to your readers.
+There are currently 3 ways to deliver recommendations to your readers.
 
 **The widget** - a simple list of text recommendations for use in sidebars.
 
 **The slider** - a responsive, mobile friendly slider which is designed to give timely and prominent recommendations to your readers.
+
+**The 'end of content' suggestions ** - a list of recommendations at the bottom of your posts. Currently requires featured images.
 
 See wripl in action on these sites: http://wripl.com/sites
 
@@ -63,8 +65,11 @@ For more info on how wripl works differently to other plugins... check out http:
 
 == Changelog ==
 
+= 1.4.3 =
+* Added 'go mobile' feature which allows you to link wripl sessions across devices using a qr code.
+
 = 1.4.1 =
-* Added option to included recommendations at the end of posts.
+* Added option to included a list of recommendations at the 'end of content'.
 
 = 1.4.0 =
 * No longer require your readers to sign in!

@@ -124,7 +124,7 @@ class WriplRecommendationWidget extends WP_Widget
         $out = $args['before_widget'];
         $out .= $args['before_title'] . $title . $args['after_title'];
 
-        $out .= "<div id='wripl-widget-ajax-container'><img class='wripl-rotate' src='$imageFolderUrl/wripl-logo-rotate-orng-sml.png'></div>";
+        $out .= "<div id='wripl-widget-container' class='wripl-ajax-container'><img class='wripl-rotate' src='$imageFolderUrl/wripl-logo-rotate-orng-sml.png'></div>";
 
         $out .= $args['after_widget'];
 

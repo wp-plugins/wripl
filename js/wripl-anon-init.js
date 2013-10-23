@@ -1,7 +1,8 @@
 var WriplEvents = {
     'INIT_START': 'wripl-anonymous-initialisation-start',
     'INIT_COMPLETE': 'wripl-anonymous-initialisation-complete',
-    'INIT_ERROR': 'wripl-anonymous-initialisation-error'
+    'INIT_ERROR': 'wripl-anonymous-initialisation-error',
+    'TEMPLATE_FETCHED': 'wripl-template-fetched'
 };
 
 console.log('wripl-anon-init.js');
@@ -52,12 +53,74 @@ console.log('wripl-anon-init.js');
                 console.log("Aw snap! Something went wrong: " + thrownError);
                 $("body").trigger(WriplEvents.INIT_ERROR, xhr);
             });
+
+        /*
+            The following listens to see if any wripl template is fetched (and used) via  event "WriplEvents.TEMPLATE_FETCHED"
+            the widget,
+            the slider,
+            or the end of content.
+
+            If so it creates the qrDialog html and appends it to the body.
+
+            subsequently a click event listener is added to each button with a class of ".go-cross-device-button"
+         */
+        $("body").bind(WriplEvents.TEMPLATE_FETCHED, function (e, response) {
+
+            if (document.getElementById("wripl-qr-dialog")) {
+                // do nothing
+            } else {
+                var qrDialog = $('<div id="wripl-qr-dialog"/>')
+                    .appendTo('body')
+                    .append("<p>Scan to continue on another device...</p>")
+                    .prepend($('<img>', {
+                        src: WriplProperties.pluginPath + 'images/go-mobile.png'
+                    }))
+                    .prepend($('<img>', {
+                        src: WriplProperties.apiBase + '/anonymous/sync/qr.png?redirect=' + window.location
+                    }));
+
+                qrDialog.dialog({
+                    autoOpen: false,
+                    modal: true,
+                    resizable: false,
+                    closeText: "done",
+                    draggable: false,
+                    show: {
+                        effect: "fade",
+                        duration: 150
+                    },
+                    hide: {
+                        effect: "fade",
+                        duration: 150
+                    },
+                    buttons: {
+                        "Done": function () {
+                            $(this).dialog("close");
+                        }
+                    },
+                    open: function () {
+                        $("button").blur();                 // remove the default autofocus
+                    }
+                });
+                console.log(".dialog() called");
+
+                $(".ui-dialog-titlebar").hide();                                                        // remove the whole titlebar
+//                qrDialog.dialog().siblings('.ui-dialog-titlebar').removeClass('ui-widget-header');      // remove the titlebar but not the close button
+
+                $('.wripl-ajax-container').on('click', '.go-cross-device-button', function (){
+                    qrDialog
+                        .data('link', WriplProperties.apiBase + '/anonymous/sync/qr.png?redirect=' + window.location)
+                        .dialog('open');
+                    return false;
+                });
+            }
+
+
+        });
     };
 
     var getRecommendations = function () {
-
         var recommendationsEndpoint = WriplProperties.apiBase + "/anonymous/recommendations";
-
         var parameters = {
             key: WriplProperties.key
         };
@@ -90,3 +153,4 @@ console.log('wripl-anon-init.js');
     };
 
 })(jQuery);
+

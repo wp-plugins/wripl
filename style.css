@@ -85,7 +85,7 @@ img.wripl-rotate {
 }
 
 /* TODO: Refactor the following css.. tis a bit messy*/
-#wripl-slider {
+#wripl-slider-container {
     font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", sans-serif;
     background-color: #ffffff;
     padding-left: 20px;
@@ -105,11 +105,11 @@ img.wripl-rotate {
     z-index: 2147483648;
 }
 
-#wripl-slider img {
+#wripl-slider-container img {
     max-width: none;
 }
 
-#wripl-slider .heading {
+#wripl-slider-container .heading {
     font-size: 13pt;
     font-weight: 300;
     padding: 20px 30px 10px 10px;
@@ -117,17 +117,17 @@ img.wripl-rotate {
     color: black;
 }
 
-#wripl-slider .slider-body {
+#wripl-slider-container .slider-body {
     padding-right: 30px;
     padding-top: 10px;
     padding-bottom: 10px;
 }
 
-#wripl-slider .slider-body  img {
+#wripl-slider-container .slider-body  img {
     vertical-align: middle;
 }
 
-#wripl-slider .footer {
+#wripl-slider-container .footer {
     clear: both;
     font-size: smaller;
     padding-bottom: 6px;
@@ -136,7 +136,7 @@ img.wripl-rotate {
     color: #c8c8c8;
 }
 
-#wripl-slider .footer img {
+#wripl-slider-container .footer img {
     vertical-align: text-bottom;
 }
 
@@ -149,7 +149,7 @@ img.wripl-rotate {
 
 /* START ------- wripl mobile specific styles ---------------------- MOBILE SPECIFIC -------- START*/
 
-#wripl-slider.wripl-mobile {
+#wripl-slider-container.wripl-mobile {
     width: 100%;
     height: 78px;
     padding: 0px;
@@ -164,7 +164,7 @@ img.wripl-rotate {
 }
 
 /* Tricky positioning of the 'get recommendations' button within this element */
-#wripl-slider .slider-body.wripl-mobile {
+#wripl-slider-container .slider-body.wripl-mobile {
     padding-top: 16px;
     padding-left: 15%;
     width: 65%;
@@ -178,17 +178,17 @@ img.wripl-rotate {
     padding-top: 4px;
 }
 
-#wripl-slider.wripl-mobile a {
+#wripl-slider-container.wripl-mobile a {
     font-size: 1em;
     text-decoration: none;
 }
 
-#wripl-slider.wripl-mobile a:hover {
+#wripl-slider-container.wripl-mobile a:hover {
     text-decoration: none;
 }
 
 /* Added margin here.. because theme stylesheets with  p *all selectors were overwriting the layout */
-#wripl-slider.wripl-mobile p {
+#wripl-slider-container.wripl-mobile p {
     line-height: 1.4em;
     margin: 1px;
     padding-left: 2px;
@@ -201,7 +201,7 @@ img.wripl-rotate {
     font-size: 0.8em;
 }
 
-#wripl-slider.wripl-mobile a.dismiss:hover {
+#wripl-slider-container.wripl-mobile a.dismiss:hover {
     border: 0px;
 }
 
@@ -218,7 +218,7 @@ img.wripl-rotate {
     border: 1px solid #e0dfdf;
 }
 
-#wripl-slider .heading-sml.wripl-mobile {
+#wripl-slider-container .heading-sml.wripl-mobile {
     font-size: 8pt;
     float: none;
     padding-left: 4px;
@@ -233,7 +233,7 @@ a#post_title:hover {
     width: 82%;
 }
 
-#wripl-slider.wripl-mobile .nailthumb-container {
+#wripl-slider-container.wripl-mobile .nailthumb-container {
     float: left;
     margin: 0px;
     margin-right: 10px;
@@ -242,7 +242,7 @@ a#post_title:hover {
 /* END END END ------ wripl mobile specific styles ---------------------- MOBILE SPECIFIC---- END END END*/
 
 /* This rule is explicitly for removing the .nailthumb-container rule of float right  */
-div#wripl-widget-ajax-container .nailthumb-container {
+div#wripl-widget-container .nailthumb-container {
     float: none;
     margin-top: 4px;
 }
@@ -261,7 +261,7 @@ a#post_title:hover {
     text-decoration: underline;
 }
 
-#wripl-slider .heading-sml {
+#wripl-slider-container .heading-sml {
     float: left;
     color: #e77b12;
     font-weight: 600;
@@ -332,9 +332,9 @@ a.fill-div-link {
     color: white;
 }
 
-/* -----------------NEW NEW NEW---------------- */
+/* --------- END OF CONTENT --------- */
 
-#wripl-end-of-content{
+#wripl-end-of-content-container{
     border: 0;
     margin: 0 0 10px;
     padding: 0;
@@ -358,11 +358,11 @@ a.fill-div-link {
 }
 
 
-#wripl-end-of-content img {
+#wripl-end-of-content-container img {
     max-width: none !important;
-    padding: 0;
-    margin: 0;
-    border: 0;
+    padding: 0 !important;
+    margin: 0 !important;
+    border: 0 !important;
 }
 
 .wripl-eoc-img{
@@ -398,4 +398,16 @@ a.fill-div-link {
     padding: 4px;
     margin-top: 126px;
     outline: 0px;
+}
+
+/* --------- QR DIALOG --------- */
+
+#wripl-qr-dialog {
+    padding: 0px;
+
+}
+#wripl-qr-dialog p {
+    /*padding: 4px;*/
+    text-align: center;
+    font-size: 10pt;
 }

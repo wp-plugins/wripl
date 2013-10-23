@@ -20,11 +20,11 @@ console.log('widget.js');
                     wriplAjaxProperties: WriplAjaxProperties
                 });
 
-                $('#wripl-widget-ajax-container').html(compiledHtml);
+                $('#wripl-widget-container').html(compiledHtml);
 
                 // Adds the 'spinning logo' upon clicking the connect button
 
-                $('div#wripl-widget-ajax-container img.wripl-oauth-connect').click(function () {
+                $('div#wripl-widget-container img.wripl-oauth-connect').click(function () {
                     $("body").trigger('wripl-connect-button-clicked');
                 });
             });
@@ -81,11 +81,12 @@ console.log('widget.js');
                     recommendations: sortedRecommendations
                 });
 
-                $('#wripl-widget-ajax-container').html(compiledHtml);
+                $('#wripl-widget-container').html(compiledHtml);
 
-                $('#wripl-widget-ajax-container .nailthumb-container').nailthumb();
+                $('#wripl-widget-container .nailthumb-container').nailthumb();
                 console.log("Widget: .nailthumb() called");
 
+                $("body").trigger(WriplEvents.TEMPLATE_FETCHED);
             });
         });
 
@@ -96,7 +97,7 @@ console.log('widget.js');
                 template = Handlebars.compile(data);
                 compiledHtml = template();
 
-                $('#wripl-widget-ajax-container').html(compiledHtml);
+                $('#wripl-widget-container').html(compiledHtml);
             });
         });
 
@@ -104,9 +105,8 @@ console.log('widget.js');
             console.log("Widget: wripl-connect-button-clicked heard");
 
             var htmlOfSpinningLogo = "<img class='wripl-rotate' src='" + WriplAjaxProperties.pluginPath + "images/wripl-logo-rotate-orng-sml.png' >";
-            $('#wripl-widget-ajax-container').html(htmlOfSpinningLogo);
+            $('#wripl-widget-container').html(htmlOfSpinningLogo);
         });
-
 
     });
 

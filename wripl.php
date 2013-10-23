@@ -113,7 +113,6 @@ class WriplWP
         );
 
         wp_enqueue_script('jquery-nail-thumb', plugin_dir_url(__FILE__) . 'js/dependencies/jquery.nailthumb.1.1.js', array('jquery'));
-
         wp_enqueue_script('handlebars.js');
 
         wp_enqueue_style('wripl-style', plugins_url('style.css', __FILE__), array(), self::VERSION);
@@ -122,6 +121,14 @@ class WriplWP
         wp_enqueue_script('wripl-piwik-tracking-code', "http://wripl.com/metrics/$consumerKey.js", array('wripl-piwik-script'));
 
         wp_enqueue_script('wripl-interest-monitor', plugin_dir_url(__FILE__) . 'js/dependencies/wripl-compiled.js');
+
+        /*
+         * Enqueue scripts and styles for the QR code dialog.
+         */
+        wp_enqueue_script('jquery-ui-dialog');
+        wp_enqueue_script('jquery-effects-fade');
+        wp_enqueue_style('jquery-style', 'http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.2/themes/smoothness/jquery-ui.css');
+
 
         /**
          * Old user init
@@ -147,7 +154,7 @@ class WriplWP
 
             wp_enqueue_script('jquery-effects-slide');
 
-            wp_enqueue_script('wripl-slider', plugin_dir_url(__FILE__) . 'js/slider-anon.js',
+            wp_enqueue_script('wripl-slider-container', plugin_dir_url(__FILE__) . 'js/slider-anon.js',
                 array(
                     'jquery',
                     'jquery-effects-slide',
@@ -159,7 +166,7 @@ class WriplWP
         }
 
         if (isset($featureSettings['endOfContentEnabled'])) {
-            wp_enqueue_script('wripl-end-of-content', plugin_dir_url(__FILE__) . 'js/endOfContent-anon.js',
+            wp_enqueue_script('wripl-end-of-content-container', plugin_dir_url(__FILE__) . 'js/endOfContent-anon.js',
                 array(
                     'jquery',
                     'handlebars.js',
@@ -267,7 +274,7 @@ class WriplWP
         $featureSettings = get_option('wripl_feature_settings');
 
         if (isset($featureSettings['endOfContentEnabled']) && (is_single() || is_page())) {
-            return $content . '<div id="wripl-end-of-content"></div>';
+            return $content . '<div id="wripl-end-of-content-container" class="wripl-ajax-container"></div>';
         }
 
         return $content;
