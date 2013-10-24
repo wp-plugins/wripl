@@ -11,6 +11,7 @@ console.log('wripl-anon-init.js');
 
     $(document).ready(function () {
         console.log('calling wripl anon init');
+        setupQrDialog();
         init();
     });
 
@@ -53,69 +54,55 @@ console.log('wripl-anon-init.js');
                 console.log("Aw snap! Something went wrong: " + thrownError);
                 $("body").trigger(WriplEvents.INIT_ERROR, xhr);
             });
+    };
+
+    var setupQrDialog = function () {
+
+        var qrDialog = $('<div id="wripl-qr-dialog"/>')
+            .appendTo('body')
+            .append("<p>Scan to continue on another device...</p>")
+            .prepend($('<img>', {
+                src: WriplProperties.pluginPath + 'images/go-mobile.png'
+            }))
+            .prepend($('<img>', {
+                src: WriplProperties.apiBase + '/anonymous/sync/qr.png?redirect=' + window.location
+            }));
+
+        qrDialog.dialog({
+            autoOpen: false,
+            modal: true,
+            resizable: false,
+            draggable: false,
+            show: {
+                effect: "fade",
+                duration: 150
+            },
+            hide: {
+                effect: "fade",
+                duration: 150
+            },
+            buttons: {
+                "Done": function () {
+                    $(this).dialog("close");
+                }
+            },
+            open: function () {
+                $("button").blur();            // remove the default autofocus
+            }
+        });
+
+        console.log(".dialog() called");
+
+        $(".ui-dialog-titlebar").hide();
 
         /*
-            The following listens to see if any wripl template is fetched (and used) via  event "WriplEvents.TEMPLATE_FETCHED"
-            the widget,
-            the slider,
-            or the end of content.
-
-            If so it creates the qrDialog html and appends it to the body.
-
-            subsequently a click event listener is added to each button with a class of ".go-cross-device-button"
+         a click event listener is added to each button with a class of ".go-cross-device-button"
          */
-        $("body").bind(WriplEvents.TEMPLATE_FETCHED, function (e, response) {
-
-            if (document.getElementById("wripl-qr-dialog")) {
-                // do nothing as "wripl-qr-dialog" already exists
-            } else {
-                var qrDialog = $('<div id="wripl-qr-dialog"/>')
-                    .appendTo('body')
-                    .append("<p>Scan to continue on another device...</p>")
-                    .prepend($('<img>', {
-                        src: WriplProperties.pluginPath + 'images/go-mobile.png'
-                    }))
-                    .prepend($('<img>', {
-                        src: WriplProperties.apiBase + '/anonymous/sync/qr.png?redirect=' + window.location
-                    }));
-
-                qrDialog.dialog({
-                    autoOpen: false,
-                    modal: true,
-                    resizable: false,
-                    closeText: "done",
-                    draggable: false,
-                    show: {
-                        effect: "fade",
-                        duration: 150
-                    },
-                    hide: {
-                        effect: "fade",
-                        duration: 150
-                    },
-                    buttons: {
-                        "Done": function () {
-                            $(this).dialog("close");
-                        }
-                    },
-                    open: function () {
-                        $("button").blur();            // remove the default autofocus
-                    }
-                });
-
-                console.log(".dialog() called");
-
-                $(".ui-dialog-titlebar").hide();
-
-                // add the listener
-                $('.wripl-ajax-container').on('click', '.go-cross-device-button', function () {
-                    qrDialog
-                        .data('link', WriplProperties.apiBase + '/anonymous/sync/qr.png?redirect=' + window.location)
-                        .dialog('open');
-                    return false;
-                });
-            }
-
+        $("body").bind(WriplEvents.TEMPLATE_FETCHED, function () {
+            $('.wripl-ajax-container').on('click', '.go-cross-device-button', function () {
+                qrDialog.dialog('open');
+                return false;
+            });
         });
     };
 
@@ -134,8 +121,8 @@ console.log('wripl-anon-init.js');
         })
             .done(function (response) {
 
-                // Only trigger an INIT_COMPLETE if there are recommendations.
-                if (response.length > 0) {
+                // Only trigger an INIT_COMPLETE if there are recommendations (array & greater that 0).
+                if (Object.prototype.toString.call(response) === '[object Array]' && response.length > 0) {
                     console.dir(response);
                     console.log(response.length + " recommendations.");
                     $("body").trigger(WriplEvents.INIT_COMPLETE, { 'recommendations': response });
