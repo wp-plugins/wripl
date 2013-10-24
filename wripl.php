@@ -141,7 +141,14 @@ class WriplWP
         ));
          **/
 
-        wp_enqueue_script('wripl-properties', plugin_dir_url(__FILE__) . 'js/wripl-anon-init.js', array('jquery', 'wripl-interest-monitor'), self::VERSION);
+        wp_enqueue_script(
+            'wripl-properties', plugin_dir_url(__FILE__) . 'js/wripl-anon-init.js',
+            array(
+                'jquery', 'wripl-interest-monitor'
+            ),
+            self::VERSION
+        );
+
         wp_localize_script('wripl-properties', 'WriplProperties', array(
             'apiBase' => $this->wriplPluginHelper->getApiUrl(),
             'path' => $this->wriplPluginHelper->getPathUri(),
