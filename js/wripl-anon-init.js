@@ -67,7 +67,7 @@ console.log('wripl-anon-init.js');
         $("body").bind(WriplEvents.TEMPLATE_FETCHED, function (e, response) {
 
             if (document.getElementById("wripl-qr-dialog")) {
-                // do nothing
+                // do nothing as "wripl-qr-dialog" already exists
             } else {
                 var qrDialog = $('<div id="wripl-qr-dialog"/>')
                     .appendTo('body')
@@ -99,22 +99,22 @@ console.log('wripl-anon-init.js');
                         }
                     },
                     open: function () {
-                        $("button").blur();                 // remove the default autofocus
+                        $("button").blur();            // remove the default autofocus
                     }
                 });
+
                 console.log(".dialog() called");
 
-                $(".ui-dialog-titlebar").hide();                                                        // remove the whole titlebar
-//                qrDialog.dialog().siblings('.ui-dialog-titlebar').removeClass('ui-widget-header');      // remove the titlebar but not the close button
+                $(".ui-dialog-titlebar").hide();
 
-                $('.wripl-ajax-container').on('click', '.go-cross-device-button', function (){
+                // add the listener
+                $('.wripl-ajax-container').on('click', '.go-cross-device-button', function () {
                     qrDialog
                         .data('link', WriplProperties.apiBase + '/anonymous/sync/qr.png?redirect=' + window.location)
                         .dialog('open');
                     return false;
                 });
             }
-
 
         });
     };
@@ -125,8 +125,6 @@ console.log('wripl-anon-init.js');
             key: WriplProperties.key
         };
 
-        console.log(parameters);
-
         $.ajax({
             type: 'GET',
             url: recommendationsEndpoint,
@@ -136,14 +134,14 @@ console.log('wripl-anon-init.js');
         })
             .done(function (response) {
 
-                console.dir(response);
-
-                if (response) {
-                    console.log("response with recommendations:");
-                    console.log(response);
+                // Only trigger an INIT_COMPLETE if there are recommendations.
+                if (response.length > 0) {
+                    console.dir(response);
+                    console.log(response.length + " recommendations.");
+                    $("body").trigger(WriplEvents.INIT_COMPLETE, { 'recommendations': response });
+                } else {
+                    $("body").trigger(WriplEvents.INIT_ERROR);
                 }
-
-                $("body").trigger(WriplEvents.INIT_COMPLETE, { 'recommendations': response });
             })
 
             .fail(function (xhr, ajaxOptions, thrownError) {
