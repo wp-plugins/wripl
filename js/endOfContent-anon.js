@@ -14,7 +14,6 @@ console.log('endOfContent-anon.js');
             console.log("Anonymous end-of-content: " + e.type + " heard");
 
             var recommendations = response.recommendations;
-
             templateName = "recommendations";
 
             for (var i = 0; i < recommendations.length; i++) {
@@ -34,7 +33,7 @@ console.log('endOfContent-anon.js');
             }
 
             if(!templateName){
-                console.log("Wripl Anonymous end-of-content: initialisation error! There is no templateName set. Please contact your local wripl administrator.");
+                console.log("Wripl Anonymous end-of-content: initialisation error! There is no 'templateName' set.");
                 $("body").trigger(WriplEvents.INIT_ERROR);
                 return;
             }
