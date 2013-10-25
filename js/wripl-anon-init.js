@@ -65,7 +65,7 @@ console.log('wripl-anon-init.js');
                 src: WriplProperties.pluginPath + 'images/go-mobile.png'
             }))
             .prepend($('<img>', {
-                src: WriplProperties.apiBase + '/anonymous/sync/qr.png?redirect=' + window.location
+                src: WriplProperties.apiBase + '/anonymous/sync/qr.png?' + $.param({redirect : window.location.href})
             }));
 
         qrDialog.dialog({

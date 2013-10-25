@@ -130,5 +130,4 @@ class WriplRecommendationWidget extends WP_Widget
 
         echo $out;
     }
-
 }
