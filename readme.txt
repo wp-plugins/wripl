@@ -4,15 +4,15 @@ Donate link:
 Tags: recommendations, personalisation, personalization, related posts, recommended articles, semantic analysis, correlation, related, blog, growth, engagement, sidebar, widget, slider
 Requires at least: 3.0.1
 Tested up to: 3.5
-Stable tag: 1.4.2
+Stable tag: 1.5.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-A sidebar widget and pop-out slider for suggesting personalised recommendations of 'what to read next' for your readers.
+A sidebar widget, pop-out slider and 'end of content' list, for suggesting personalised recommendations of 'what to read next' for your readers.
 
 == Description ==
 
-Wripl is a service which provides personalised, user controlled recommendations across the web. (Pronounced rip·ple)
+Wripl is a service which provides personalised, anonymous recommendations across the web. (Pronounced rip·ple)
 
 `[youtube http://www.youtube.com/watch?v=tYQP4v-ZKyc]`
 
@@ -28,7 +28,7 @@ There are currently 3 ways to deliver recommendations to your readers.
 
 See wripl in action on these sites: http://wripl.com/sites
 
-Wripl is also a hub for a user's interests, where they can manage and control their interests. Websites can then tap into wripl to provide the user with recommendations to interesting content .
+Wripl is also a hub for a user's interests, where they can manage and control their interests. Websites can then tap into wripl to provide the user with recommendations to interesting content.
 
 == Installation ==
 
@@ -38,19 +38,14 @@ Wripl is also a hub for a user's interests, where they can manage and control th
 
 == Frequently Asked Questions ==
 
-= Why should I install something on my blog which requires my readers to 'connect' or 'sign up'? =
-
-We believe it's better for your users to get recommendations which are based on their own personal interests and behaviour, in a way they can control. To achieve this we use similar technology to google/twitter/facebook (OAuth) - We really didn't want to use tracking cookies!
-
-This allows wripl to recommend posts for each user which are specifically tailored to them and they can also use their interests across all wripl sites.
-
-We know our plugin is not going to be for everyone, but we feel that the difference it will make to your most loyal and regular readers will be dramatic, especially in comparison with other more traditional "what to read next" plugins.
-
-For more info on how wripl works differently to other plugins... check out http://wripl.com/learn-more
-
 = Will wripl recommend content from other sites to my users? =
 
 *No.* The wripl plugin is currently designed to promote your posts - the idea is help wripl users find the most relevant content for them. Your users will receive no advertisements or links which will take them away from your blog.
+
+= Does wripl use cookies? =
+
+*Yes.* In order for wripl to work instantaneously, we assign each user and anonymous ID which must be stored in a cookie.
+
 
 == Screenshots ==
 
@@ -64,6 +59,9 @@ For more info on how wripl works differently to other plugins... check out http:
 8. Plugin configuration.
 
 == Changelog ==
+
+= 1.5.0 =
+* Added a new cross device feature. You can click on 'go mobile' which will generate a QR code. Once scanned, this will 'sync' your experience across devices, bringing you to the same location with the same recommendations and context as before.
 
 = 1.4.3 =
 * Added 'go mobile' feature which allows you to link wripl sessions across devices using a qr code.
