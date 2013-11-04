@@ -16,6 +16,7 @@ if (isset($_POST['debug'])) {
     $wriplDebugData['wriplSetup'] = (bool) $wriplWP->isSetup();
     $wriplDebugData['wordpressVersion'] = $wp_version;
     $wriplDebugData['curlVersion'] = function_exists('curl_version') ? curl_version() : false;
+    $wriplDebugData['curl_exec'] = function_exists('curl_exec');
     $wriplDebugData['phpVersion'] = phpversion();
     $wriplDebugData['server'] = $_SERVER['SERVER_SOFTWARE'];
 }

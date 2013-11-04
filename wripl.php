@@ -61,6 +61,8 @@ class WriplWP
         add_action('wp_ajax_nopriv_wripl-ajax-init', array($this, 'ajaxInit'));
         add_action('wp_ajax_wripl-ajax-init', array($this, 'ajaxInit'));
 
+        add_action( 'admin_notices', array($this, 'curlNotInstalledNotice'));
+
         add_filter('plugin_action_links_' . plugin_basename(__FILE__), array($this, 'pluginActionLinks'));
         add_filter('the_content', array($this, 'addRecommendationsToEndOfContent'));
 
@@ -520,6 +522,12 @@ class WriplWP
 
         echo '<h4>done! <a href="' . get_bloginfo('wpurl') . '/wp-admin/options-general.php?page=wripl-settings">back to wripl settings</a></h4>';
         flush();
+    }
+
+    function curlNotInstalledNotice() {
+        if(!function_exists('curl_exec')) {
+            echo '<div class="error"><p>Warning, wripl requires curl, specifically <em>curl_exec</em>, please enable or contact your server admin.</p></div>';
+        }
     }
 
     public function isSetup()
