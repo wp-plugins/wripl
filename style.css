@@ -405,6 +405,7 @@ a.fill-div-link {
 
 #wripl-qr-dialog {
     padding: 0px;
+    z-index: 2147483649;
 
 }
 #wripl-qr-dialog p {
