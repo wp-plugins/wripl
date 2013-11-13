@@ -4,7 +4,7 @@ Donate link:
 Tags: recommendations, personalisation, personalization, related posts, recommended articles, semantic analysis, correlation, related, blog, growth, engagement, sidebar, widget, slider
 Requires at least: 3.0.1
 Tested up to: 3.5
-Stable tag: 1.5.1
+Stable tag: 1.5.2
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -59,6 +59,9 @@ Wripl is also a hub for a user's interests, where they can manage and control th
 8. Plugin configuration.
 
 == Changelog ==
+
+= 1.5.2 =
+* Some behind-the-scenes optimisation, database indexing etc. Also some performance enhancements to the mobile slider.
 
 = 1.5.0 =
 * Added a new cross device feature. You can click on 'go mobile' which will generate a QR code. Once scanned, this will 'sync' your experience across devices, bringing you to the same location with the same recommendations and context as before.

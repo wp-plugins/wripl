@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Plugin to bring wripl's easy recommendations to Wordpress.
-  Version: 1.5.1
+  Version: 1.5.2
   Author: Wripl
   Author URI: http://wripl.com
  */
@@ -11,7 +11,6 @@ set_include_path(dirname(__FILE__) . '/libs' . PATH_SEPARATOR . get_include_path
 require_once dirname(__FILE__) . '/WriplRecommendationWidget.php';
 require_once dirname(__FILE__) . '/WriplPluginHelper.php';
 require_once dirname(__FILE__) . '/WriplTokenStore.php';
-
 
 //Conditional includes to avoid conflicts with other plugins.
 if (!class_exists('OAuthSimple')) {
@@ -26,7 +25,7 @@ class WriplWP
     const ITEM_NEEDS_INDEXING = -1;
     const ITEM_QUEUED = 0;
     const ITEM_INDEXED = 1;
-    const VERSION = '1.5.1';
+    const VERSION = '1.5.2';
 
     public $wriplPluginHelper;
 
