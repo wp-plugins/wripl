@@ -120,7 +120,9 @@ class WriplWP
         wp_enqueue_style('wripl-style', plugins_url('style.css', __FILE__), array(), self::VERSION);
 
         wp_enqueue_script('wripl-piwik-script', plugin_dir_url(__FILE__) . 'js/dependencies/piwik.js');
-        wp_enqueue_script('wripl-piwik-tracking-code', "http://wripl.com/metrics/$consumerKey.js", array('wripl-piwik-script'));
+        //wp_enqueue_script('wripl-piwik-tracking-code', "http://wripl.com/metrics/$consumerKey.js", array('wripl-piwik-script'));
+
+        wp_enqueue_script('wripl-async-script-loader', plugin_dir_url(__FILE__) . 'js/wripl-async-script-loader.js', array('wripl-piwik-script'));
 
         wp_enqueue_script('wripl-interest-monitor', plugin_dir_url(__FILE__) . 'js/dependencies/wripl-compiled.js');
 
@@ -156,7 +158,10 @@ class WriplWP
             'path' => $this->wriplPluginHelper->getPathUri(),
             'pluginPath' => plugin_dir_url(__FILE__),
             'pluginVersion' => self::VERSION,
-            'key' => $consumerKey
+            'key' => $consumerKey,
+            'asyncScripts' => array(
+                'piwikScript' => "http://wripl.com/metrics/$consumerKey.js",
+            ),
         ));
 
         if (isset($featureSettings['sliderEnabled'])) {
