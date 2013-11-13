@@ -150,6 +150,10 @@ img.wripl-rotate {
 
 /* START ------- wripl mobile specific styles ---------------------- MOBILE SPECIFIC -------- START*/
 
+.wripl-mobile-slider-active{
+    bottom: 0px !important;
+}
+
 #wripl-slider-container.wripl-mobile {
     width: 100%;
     height: 78px;
@@ -160,8 +164,13 @@ img.wripl-rotate {
     box-shadow: 0 -2px 6px #c8c8c8;
 
     /* mobile slider will be flush to the edges of the screen */
-    bottom: 0;
+    bottom: -80px;
     left: 0;
+
+    -webkit-transition: all 0.2s ease-out;
+    -moz-transition: all 0.2s ease-out;
+    -o-transition: all 0.2s ease-out;
+    transition: all 0.2s ease-out;
 }
 
 /* Tricky positioning of the 'get recommendations' button within this element */

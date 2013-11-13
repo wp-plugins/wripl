@@ -30,11 +30,7 @@ console.log('slider-anon.js');
         slider.show = function (isMobile) {
             if (isMobile) {
                 if (!this.displayed) {
-                    this.animate(
-                        {
-                            bottom: activePosition
-                        }
-                    );
+                    this.addClass("wripl-mobile-slider-active");
                     this.displayed = true;
                     this.removeClass('show-left-pointer');
                 }
@@ -54,7 +50,7 @@ console.log('slider-anon.js');
         slider.hide = function (isMobile) {
             if (isMobile) {
                 if (this.displayed) {
-                    this.animate({bottom: defaultPosition});
+                    this.removeClass("wripl-mobile-slider-active");
                 }
 
             } else {
@@ -238,7 +234,6 @@ console.log('slider-anon.js');
         $('#wripl-slider-container').on('click', 'a.dismiss', function (event) {
 
             event.stopPropagation();
-            console.log(slider.displayed);
             slider.hide(isMobile);
             slider.forcedDisplayed = true;
 
