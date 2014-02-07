@@ -4,7 +4,7 @@ Donate link:
 Tags: recommendations, personalisation, personalization, related posts, recommended articles, semantic analysis, correlation, related, blog, growth, engagement, sidebar, widget, slider
 Requires at least: 3.0.1
 Tested up to: 3.5
-Stable tag: 1.5.2
+Stable tag: 1.5.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -24,7 +24,7 @@ There are currently 3 ways to deliver recommendations to your readers.
 
 **The slider** - a responsive, mobile friendly slider which is designed to give timely and prominent recommendations to your readers.
 
-**The 'end of content' suggestions ** - a list of recommendations at the bottom of your posts. Currently requires featured images.
+**End of content ** - a list of recommendations at the bottom of your posts. Currently requires featured images.
 
 See wripl in action on these sites: http://wripl.com/sites
 
@@ -32,9 +32,11 @@ Wripl is also a hub for a user's interests, where they can manage and control th
 
 == Installation ==
 
-1. Upload `wripl-wordpress-plugin` to the `/wp-content/plugins/` directory
-1. Activate the plugin through the 'Plugins' menu in WordPress, and follow appropriate instructions.
-1. Contact wripl directly for api tokens, and fill them out under the wripl settings.
+1. Go to http://wripl.com/register and register your app.
+1. Upload `wripl` to the `/wp-content/plugins/` directory
+1. Activate the plugin through the 'Plugins' menu in WordPress
+1. In wripl wordpress settings fill in your 'Consumer Key' & 'Consumer Secret' from http://wripl.com/my-sites
+1. Lastly Queue Published Content.
 
 == Frequently Asked Questions ==
 
