@@ -24,7 +24,7 @@ There are currently 3 ways to deliver recommendations to your readers.
 
 **The slider** - a responsive, mobile friendly slider which is designed to give timely and prominent recommendations to your readers.
 
-**End of content ** - a list of recommendations at the bottom of your posts. Currently requires featured images.
+**End of content** - a list of recommendations at the bottom of your posts. Currently requires featured images.
 
 See wripl in action on these sites: http://wripl.com/sites
 
