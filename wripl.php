@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Plugin to bring wripl's easy recommendations to Wordpress.
-  Version: 1.5.2
+  Version: 1.5.3
   Author: Wripl
   Author URI: http://wripl.com
  */
@@ -25,7 +25,7 @@ class WriplWP
     const ITEM_NEEDS_INDEXING = -1;
     const ITEM_QUEUED = 0;
     const ITEM_INDEXED = 1;
-    const VERSION = '1.5.2';
+    const VERSION = '1.5.3';
 
     public $wriplPluginHelper;
 
@@ -375,9 +375,7 @@ class WriplWP
 
             <p>Here you can set your wripl tokens for secure communication with the wripl servers.</p>
 
-            <p>If you don't haven credentials, contact me at <a href="mailto:brian@wripl.com">brian@wripl.com</a> and
-                we'll
-                get you set up.</p>
+            <p>To get your wripl keys go to <a href="http://wripl.com/register" target="_blank">http://wripl.com/register</a> and register your site.</p>
             <!-- Beginning of the Plugin Options Form -->
             <form method="post" action="options.php">
                 <?php settings_fields('wripl_plugin_settings'); ?>
