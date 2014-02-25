@@ -2,7 +2,6 @@
 
 class WriplPluginHelper
 {
-
     protected $apiUrl;
 
     /**

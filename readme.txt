@@ -4,7 +4,7 @@ Donate link:
 Tags: recommendations, personalisation, personalization, related posts, recommended articles, semantic analysis, correlation, related, blog, growth, engagement, sidebar, widget, slider
 Requires at least: 3.0.1
 Tested up to: 3.5
-Stable tag: 1.5.3
+Stable tag: 1.5.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -20,11 +20,11 @@ The wripl recommendations plugin allows you to provide a way for your blog reade
 
 There are currently 3 ways to deliver recommendations to your readers.
 
-**The widget** - a simple list of text recommendations for use in sidebars.
+**The Widget** - a simple list of text recommendations for use in sidebars.
 
-**The slider** - a responsive, mobile friendly slider which is designed to give timely and prominent recommendations to your readers.
+**The Slider** - a responsive, mobile friendly slider which is designed to give timely and prominent recommendations to your readers.
 
-**End of content** - a list of recommendations at the bottom of your posts. Currently requires featured images.
+**End of Content** - a list of recommendations at the bottom of your posts. Currently requires featured images.
 
 See wripl in action on these sites: http://wripl.com/sites
 
