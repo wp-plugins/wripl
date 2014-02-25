@@ -11,7 +11,7 @@ console.log('wripl-anon-init.js');
 
     $(document).ready(function () {
         console.log('calling wripl anon init');
-        setupQrDialog();
+        //setupQrDialog();
         init();
     });
 
