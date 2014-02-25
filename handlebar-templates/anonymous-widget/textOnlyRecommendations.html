@@ -1,16 +1,13 @@
 <ul>
-
     {{#recommendations}}
-
     <li class="text-recommendation"><a href="{{linkUrl}}&region=wordpress_anonymous_widget_textonly" title="{{{title}}}">{{{title}}}</a></li>
-
     {{/recommendations}}
 </ul>
 
-<div id="wripl-oauth-disconnect-button">
-    <a href="http://wripl.com/features"
-       target="_blank">How does wripl work?</a>
-    -
-    <a class="go-cross-device-button" href="http://wripl.com/features"
-       target="_blank">Go mobile</a>
+{{#if wriplProperties.hideWriplBranding}}
+<!--Powered by wripl.com-->
+{{else}}
+<div class="wripl-powered">
+    <a href="http://wripl.com/features" target="_blank">Powered by wripl.com</a>
 </div>
+{{/if}}
