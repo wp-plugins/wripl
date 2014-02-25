@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Plugin to bring wripl's easy recommendations to Wordpress.
-  Version: 1.5.3
+  Version: 1.5.4
   Author: Wripl
   Author URI: http://wripl.com
  */
@@ -21,11 +21,10 @@ $wriplWP = new WriplWP();
 
 class WriplWP
 {
-
     const ITEM_NEEDS_INDEXING = -1;
     const ITEM_QUEUED = 0;
     const ITEM_INDEXED = 1;
-    const VERSION = '1.5.3';
+    const VERSION = '1.5.4';
 
     public $wriplPluginHelper;
 
@@ -37,7 +36,6 @@ class WriplWP
 
     public function __construct()
     {
-
         $this->wriplPluginHelper = new WriplPluginHelper($this->apiUrl);
 
         global $wpdb;
@@ -56,9 +54,6 @@ class WriplWP
         add_action('wp_trash_page', array($this, 'onPageTrash'));
 
         add_action('wp_enqueue_scripts', array($this, 'enqueueScripts'));
-
-        add_action('wp_ajax_nopriv_wripl-ajax-init', array($this, 'ajaxInit'));
-        add_action('wp_ajax_wripl-ajax-init', array($this, 'ajaxInit'));
 
         add_action( 'admin_notices', array($this, 'curlNotInstalledNotice'));
 
@@ -118,10 +113,7 @@ class WriplWP
 
         wp_enqueue_style('wripl-style', plugins_url('style.css', __FILE__), array(), self::VERSION);
 
-        wp_enqueue_script('wripl-piwik-script', plugin_dir_url(__FILE__) . 'js/dependencies/piwik.js');
-        //wp_enqueue_script('wripl-piwik-tracking-code', "http://wripl.com/metrics/$consumerKey.js", array('wripl-piwik-script'));
-
-        wp_enqueue_script('wripl-async-script-loader', plugin_dir_url(__FILE__) . 'js/wripl-async-script-loader.js', array('wripl-piwik-script'));
+        wp_enqueue_script('wripl-async-script-loader', plugin_dir_url(__FILE__) . 'js/wripl-async-script-loader.js');
 
         wp_enqueue_script('wripl-interest-monitor', plugin_dir_url(__FILE__) . 'js/dependencies/wripl-compiled.js');
 
@@ -152,16 +144,21 @@ class WriplWP
             self::VERSION
         );
 
-        wp_localize_script('wripl-properties', 'WriplProperties', array(
+        $wriplProperties = array(
             'apiBase' => $this->wriplPluginHelper->getApiUrl(),
             'path' => $this->wriplPluginHelper->getPathUri(),
             'pluginPath' => plugin_dir_url(__FILE__),
             'pluginVersion' => self::VERSION,
             'key' => $consumerKey,
             'asyncScripts' => array(
-                'piwikScript' => "http://wripl.com/metrics/$consumerKey.js",
             ),
-        ));
+        );
+
+        if (isset($featureSettings['hideWriplBranding'])) {
+            $wriplProperties['hideWriplBranding'] = 'true';
+        }
+
+        wp_localize_script('wripl-properties', 'WriplProperties', $wriplProperties);
 
         if (isset($featureSettings['sliderEnabled'])) {
 
@@ -187,99 +184,6 @@ class WriplWP
                 self::VERSION
             );
         }
-    }
-
-    public function ajaxInit()
-    {
-        $response = array();
-        $path = isset($_POST['path']) && !empty($_POST['path']) && $_POST['path'] !== 'null' ? $_POST['path'] : null;
-
-        $accessToken = WriplTokenStore::retrieveAccessToken();
-
-        if (is_null($accessToken)) {
-
-            $response['piwikScript'] = $this->metricCollection(false, true);
-
-            header($_SERVER['SERVER_PROTOCOL'] . ' 403 Forbidden', true, 403);
-
-        } else {
-
-            $response['piwikScript'] = $this->metricCollection(true, true);
-
-            // 1.) If a proper post, fetch activity code
-            if (!is_null($path)) {
-
-                try {
-                    $client = $this->getWriplClient();
-                    $result = $client->sendActivity($path, $accessToken->getToken(), $accessToken->gettokenSecret());
-
-                    $resultDecoded = json_decode($result);
-
-                    if (!$resultDecoded) {
-                        throw new Exception();
-                    }
-
-                    $wriplApiBase = $this->wriplPluginHelper->getApiUrl();
-                    $endpoint = $wriplApiBase . '/activity-update';
-
-                    $response['activityHashId'] = $resultDecoded->activity_hash_id;
-                    $response['endpoint'] = $endpoint;
-
-
-                } catch (Exception $e) {
-                    //Probably shouldn't crash out here...
-                    //header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
-                    //echo $e->getMessage();
-                    //exit;
-                    $response['errors']['retrievingActivityCode'] = $e->getMessage();
-                }
-            }
-
-            //2.) Get recommendations
-            try {
-
-                $recommendations = $this->requestRecommendations();
-
-                $indexedItems = $this->wriplPluginHelper->sortRecommendations($recommendations);
-
-                $response['recommendations'] = $indexedItems;
-
-            } catch (Exception $e) {
-                $response['errors']['retrievingRecommendations'] = $e->getMessage();
-                $response['recommendations'] = array();
-            }
-        }
-
-        header("Content-Type: application/json");
-        echo json_encode($response);
-        exit;
-    }
-
-    /**
-     * NOTE!
-     *
-     * Tracking scripts for trial sites only.
-     * Will be removed in future.
-     *
-     * @deprecated
-     * @param bool $wriplEnabled
-     */
-    public function metricCollection($wriplEnabled = false, $return = false)
-    {
-        $wriplSettings = get_option('wripl_settings');
-
-        $piwikWriplScript = "http://wripl.com/" . "metrics/{$wriplSettings['consumerKey']}.js";
-
-        if ($wriplEnabled) {
-            $piwikWriplScript .= '?wripl=on';
-        }
-
-        if ($return) {
-            return $piwikWriplScript;
-        }
-
-        wp_enqueue_script('wripl-piwik-script', 'http://piwik.wripl.com/piwik.js');
-        wp_enqueue_script('wripl-piwik-tracking-code', "$piwikWriplScript");
     }
 
     public function addRecommendationsToEndOfContent($content)
@@ -346,7 +250,6 @@ class WriplWP
 
     public function settingsPage()
     {
-
         global $wpdb;
 
         $settings = get_option('wripl_settings');
@@ -457,7 +360,17 @@ class WriplWP
                             <label for="endOfContent">
                                 <input id="endOfContent" type="checkbox" name="wripl_feature_settings[endOfContentEnabled]"
                                        value="1"<?php checked(isset($featureSettings['endOfContentEnabled'])); ?> />
-                                Show the wripl recommendations at the end of your posts. <em>(Only works with posts containing a featured image)</em>
+                                Show the wripl recommendations at the end of your posts. <em>(Only works with posts containing a featured image).</em>
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row">Hide wripl branding?</th>
+                        <td>
+                            <label for="hideWriplBranding">
+                                <input id="hideWriplBranding" type="checkbox" name="wripl_feature_settings[hideWriplBranding]"
+                                       value="1"<?php checked(isset($featureSettings['hideWriplBranding'])); ?> />
+                                Hide the 'powered by wripl' at the bottom of the recommendations.
                             </label>
                         </td>
                     </tr>

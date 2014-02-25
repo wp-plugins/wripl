@@ -422,3 +422,7 @@ a.fill-div-link {
     text-align: center;
     font-size: 10pt;
 }
+
+div.wripl-powered {
+    text-align: right;
+}
