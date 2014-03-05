@@ -1,8 +1,7 @@
 <?php
 
-class WriplTokenStore
+class WriplWordpress_Oauth_TokenStore
 {
-
     const WRIPL_OAUTH_REQUEST_TOKEN_COOKIE_KEY = 'wripl-ort';
     const WRIPL_OAUTH_ACCESS_TOKEN_COOKIE_KEY = 'wripl-oat';
 
@@ -66,5 +65,4 @@ class WriplTokenStore
     {
         setcookie(self::WRIPL_OAUTH_ACCESS_TOKEN_COOKIE_KEY, 'FALSE', strtotime('-1 year'), COOKIEPATH, COOKIE_DOMAIN, false);
     }
-
 }

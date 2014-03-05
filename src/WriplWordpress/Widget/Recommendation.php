@@ -1,13 +1,7 @@
 <?php
 
-/**
- * Description of WriplRecommendationWidget
- *
- * @author brian
- */
-class WriplRecommendationWidget extends WP_Widget
+class WriplWordpress_Widget_Recommendation extends WP_Widget
 {
-
     protected $defaults = array(
         'maxRecommendations' => 5,
         'widgetFormat' => 'text',
@@ -15,9 +9,19 @@ class WriplRecommendationWidget extends WP_Widget
         'handleRecommendationsWithoutImages' => 'append'
     );
 
-    public function WriplRecommendationWidget()
+    public static function registerHooks()
     {
-        $widget_ops = array('classname' => 'wripl-widget-recommendation', 'description' => __('Displays wripl recommendations'));
+        add_action('widgets_init', create_function('', 'return register_widget("' . __CLASS__ . '");'));
+    }
+
+    public function WriplWordpress_Widget_Recommendation()
+    {
+        $this->plugin = WriplWordpress_Plugin::$instance;
+
+        $widget_ops = array(
+            'classname' => 'wripl-widget-recommendation',
+            'description' => __('Displays wripl recommendations')
+        );
 
         $this->WP_Widget('wripl-recommentadion-widget-ajax', __('Wripl Recommendations'), $widget_ops);
     }
@@ -34,7 +38,7 @@ class WriplRecommendationWidget extends WP_Widget
 
         ?>
 
-    <p xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
+        <p xmlns="http://www.w3.org/1999/html" xmlns="http://www.w3.org/1999/html">
         <label for="<?php echo $this->get_field_id('maxRecommendations'); ?>">
             <?php echo __('Max recommendations to display'); ?>:
         </label>
@@ -74,12 +78,13 @@ class WriplRecommendationWidget extends WP_Widget
                    id="<?php echo $this->get_field_id('imageHeight'); ?>"
                    name="<?php echo $this->get_field_name('imageHeight'); ?>"
                    value="<?php echo $imageHeight; ?>"
-                    >
+                >
             <p>
                 and
                 <select id="<?php echo $this->get_field_id('handleRecommendationsWithoutImages'); ?>"
                         name="<?php echo $this->get_field_name('handleRecommendationsWithoutImages') ?>">
-                    <option value="append" <?php selected($handleRecommendationsWithoutImages, 'append'); ?>>append</option>
+                    <option value="append" <?php selected($handleRecommendationsWithoutImages, 'append'); ?>>append
+                    </option>
                     <option value="hide" <?php selected($handleRecommendationsWithoutImages, 'hide'); ?>>hide</option>
                 </select>
 
@@ -87,7 +92,7 @@ class WriplRecommendationWidget extends WP_Widget
             </p>
 
         <?php endif ?>
-    </p>
+        </p>
 
     <?php
     }
@@ -104,30 +109,40 @@ class WriplRecommendationWidget extends WP_Widget
         /**
          * If the new values are absent or invalid, then save the old ones.
          */
-        $instance['imageHeight'] =  ((int) strip_tags($newInstance['imageHeight']) ? (int) strip_tags($newInstance['imageHeight']) : $oldInstance['imageHeight']);
-        $instance['handleRecommendationsWithoutImages'] = strip_tags($newInstance['handleRecommendationsWithoutImages']) ? strip_tags($newInstance['handleRecommendationsWithoutImages']) : $oldInstance['handleRecommendationsWithoutImages'];
+        $instance['imageHeight'] = ((int)strip_tags($newInstance['imageHeight']) ? (int)strip_tags(
+            $newInstance['imageHeight']
+        ) : $oldInstance['imageHeight']);
+        $instance['handleRecommendationsWithoutImages'] = strip_tags(
+            $newInstance['handleRecommendationsWithoutImages']
+        ) ? strip_tags(
+            $newInstance['handleRecommendationsWithoutImages']
+        ) : $oldInstance['handleRecommendationsWithoutImages'];
 
         return $instance;
     }
 
     public function widget($args, $instance)
     {
+        $plugin = WriplWordpress_Plugin::$instance;
+
+        if(!$plugin->isSetup())
+        {
+            return;
+        }
+
         $instance = wp_parse_args((array)$instance, $this->defaults);
 
-        $imageFolderUrl = plugins_url('images', __FILE__);
+        wp_enqueue_script(
+            'wripl-ajax-widget',
+            plugin_dir_url($this->plugin->getPathToPluginFile()) . 'js/widget-anon.js',
+            array('jquery', 'handlebars.js'),
+            WriplWordpress_Plugin::VERSION
+        );
 
-        wp_enqueue_script('wripl-ajax-widget', plugin_dir_url(__FILE__) . 'js/widget-anon.js', array('jquery', 'handlebars.js'), WriplWP::VERSION);
         wp_localize_script('wripl-ajax-widget', 'WriplWidgetProperties', $instance);
 
-        $title = 'Suggestions For You:';
+        $imageFolderUrl = plugins_url('images', $this->plugin->getPathToPluginFile());
 
-        $out = $args['before_widget'];
-        $out .= $args['before_title'] . $title . $args['after_title'];
-
-        $out .= "<div id='wripl-widget-container' class='wripl-ajax-container'><img class='wripl-rotate' src='$imageFolderUrl/wripl-logo-rotate-orng-sml.png'></div>";
-
-        $out .= $args['after_widget'];
-
-        echo $out;
+        include $this->plugin->getTemplatePath() . DIRECTORY_SEPARATOR . 'widget' . DIRECTORY_SEPARATOR . 'recommendation.php';
     }
 }

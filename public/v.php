@@ -1,19 +1,18 @@
 <?php
 
-require_once(dirname(dirname(dirname(dirname(__FILE__)))) . '/wp-load.php');
+$parse_uri = explode( 'wp-content', $_SERVER['SCRIPT_FILENAME'] );
+require_once( $parse_uri[0] . 'wp-load.php' );
 
-$wriplWP = WriplWP::$instance;
-
-if (!$wriplWP->isSetup()) {
+if (!WriplWordpress_Plugin::isSetup()) {
     header($_SERVER['SERVER_PROTOCOL'] . ' 500 Internal Server Error', true, 500);
     exit('wripl doesn\'t seem to be set up yet');
 }
 
-$wriplDebugData['wriplWpVersion'] = WriplWP::VERSION;
+$wriplDebugData['wriplWpVersion'] = WriplWordpress_Plugin::VERSION;
 
 
 if (isset($_POST['debug'])) {
-    $wriplDebugData['wriplSetup'] = (bool) $wriplWP->isSetup();
+    $wriplDebugData['wriplSetup'] = (bool) WriplWordpress_Plugin::isSetup();
     $wriplDebugData['wordpressVersion'] = $wp_version;
     $wriplDebugData['curlVersion'] = function_exists('curl_version') ? curl_version() : false;
     $wriplDebugData['curl_exec'] = function_exists('curl_exec');
