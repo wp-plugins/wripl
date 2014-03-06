@@ -13,7 +13,7 @@ class WriplWordpress_EndOfContent_MostEngaging
         $featureSettings = get_option('wripl_feature_settings');
 
         if (isset($featureSettings['endOfContentMostEngagingEnabled']) && (is_single() || is_page())) {
-            return $content . '<div id="wripl-end-of-content-container-most_engaging" class="wripl-ajax-container"></div>';
+            return $content . '<div id="wripl-end-of-content-most_engaging-container" class="wripl-ajax-container wripl-end-of-content-container"></div>';
         }
 
         return $content;

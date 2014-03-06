@@ -13,7 +13,7 @@ class WriplWordpress_EndOfContent_Recommendations {
         $featureSettings = get_option('wripl_feature_settings');
 
         if (isset($featureSettings['endOfContentEnabled']) && (is_single() || is_page())) {
-            return $content . '<div id="wripl-end-of-content-container" class="wripl-ajax-container"></div>';
+            return $content . '<div id="wripl-end-of-content-recommendations-container" class="wripl-ajax-container wripl-end-of-content-container"></div>';
         }
 
         return $content;
