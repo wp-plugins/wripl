@@ -10,7 +10,6 @@ var WriplEvents = {
     $(document).ready(function () {
 
         var getRecommendations = function () {
-            console.log('HERE');
             var recommendationsEndpoint = WriplProperties.apiBase + "/anonymous/recommendations";
             var parameters = {
                 key: WriplProperties.key

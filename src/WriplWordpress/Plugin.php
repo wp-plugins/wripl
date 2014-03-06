@@ -99,7 +99,7 @@ class WriplWordpress_Plugin
 
         wp_register_script(
             'wripl-anon-init-mostEngaging',
-            plugin_dir_url($this->getPathToPluginFile()) . 'js/wripl-anon-init-mostEngaging.js',
+            plugin_dir_url($this->getPathToPluginFile()) . 'js/anon-most-engaging/init.js',
             array(
                 'jquery',
                 'wripl-anon-activity'

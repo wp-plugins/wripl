@@ -27,7 +27,7 @@ class WriplWordpress_EndOfContent_Recommendations {
         if (isset($featureSettings['endOfContentEnabled'])) {
             wp_enqueue_script(
                 'wripl-end-of-content-recommendations',
-                plugin_dir_url($plugin->getPathToPluginFile()) . 'js/endOfContent-anon.js',
+                plugin_dir_url($plugin->getPathToPluginFile()) . 'js/anon-recommendations/endOfContent.js',
                 array(
                     'jquery',
                     'handlebars.js',

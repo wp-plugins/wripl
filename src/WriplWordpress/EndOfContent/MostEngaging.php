@@ -27,7 +27,7 @@ class WriplWordpress_EndOfContent_MostEngaging
         if (isset($featureSettings['endOfContentMostEngagingEnabled'])) {
             wp_enqueue_script(
                 'wripl-end-of-content-mostEngaging',
-                plugin_dir_url($plugin->getPathToPluginFile()) . 'js/endOfContent-anon-mostEngaging.js',
+                plugin_dir_url($plugin->getPathToPluginFile()) . 'js/anon-most-engaging/endOfContent.js',
                 array(
                     'jquery',
                     'handlebars.js',
