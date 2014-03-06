@@ -1,4 +1,4 @@
-var WriplEvents = {
+var WriplRecommendationEvents = {
     'INIT_START': 'wripl-anonymous-initialisation-start',
     'INIT_COMPLETE': 'wripl-anonymous-initialisation-complete',
     'INIT_ERROR': 'wripl-anonymous-initialisation-error',
@@ -28,15 +28,15 @@ var WriplEvents = {
                     if (Object.prototype.toString.call(response) === '[object Array]' && response.length > 0) {
                         console.dir(response);
                         console.log(response.length + " recommendations.");
-                        $("body").trigger(WriplEvents.INIT_COMPLETE, { 'recommendations': response });
+                        $("body").trigger(WriplRecommendationsEvents.INIT_COMPLETE, { 'recommendations': response });
                     } else {
-                        $("body").trigger(WriplEvents.INIT_ERROR);
+                        $("body").trigger(WriplRecommendationsEvents.INIT_ERROR);
                     }
                 })
 
                 .fail(function (xhr, ajaxOptions, thrownError) {
                     console.log("Aw snap! Something went wrong: " + thrownError);
-                    $("body").trigger(WriplEvents.INIT_ERROR, xhr);
+                    $("body").trigger(WriplRecommendationsEvents.INIT_ERROR, xhr);
                 });
         };
 
