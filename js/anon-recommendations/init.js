@@ -1,8 +1,8 @@
 var WriplRecommendationEvents = {
-    'INIT_START': 'wripl-anonymous-initialisation-start',
-    'INIT_COMPLETE': 'wripl-anonymous-initialisation-complete',
-    'INIT_ERROR': 'wripl-anonymous-initialisation-error',
-    'TEMPLATE_FETCHED': 'wripl-template-fetched'
+    'INIT_START': 'wripl-anonymous-recommendation-initialisation-start',
+    'INIT_COMPLETE': 'wripl-anonymous-recommendation-initialisation-complete',
+    'INIT_ERROR': 'wripl-anonymous-recommendation-initialisation-error',
+    'TEMPLATE_FETCHED': 'wripl-recommendation-template-fetched'
 };
 
 (function ($) {
