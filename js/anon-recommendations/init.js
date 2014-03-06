@@ -28,15 +28,15 @@ var WriplRecommendationEvents = {
                     if (Object.prototype.toString.call(response) === '[object Array]' && response.length > 0) {
                         console.dir(response);
                         console.log(response.length + " recommendations.");
-                        $("body").trigger(WriplRecommendationsEvents.INIT_COMPLETE, { 'recommendations': response });
+                        $("body").trigger(WriplRecommendationEvents.INIT_COMPLETE, { 'recommendations': response });
                     } else {
-                        $("body").trigger(WriplRecommendationsEvents.INIT_ERROR);
+                        $("body").trigger(WriplRecommendationEvents.INIT_ERROR);
                     }
                 })
 
                 .fail(function (xhr, ajaxOptions, thrownError) {
                     console.log("Aw snap! Something went wrong: " + thrownError);
-                    $("body").trigger(WriplRecommendationsEvents.INIT_ERROR, xhr);
+                    $("body").trigger(WriplRecommendationEvents.INIT_ERROR, xhr);
                 });
         };
 

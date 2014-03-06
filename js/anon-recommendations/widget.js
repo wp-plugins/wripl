@@ -9,7 +9,7 @@
 
 
         // Add  the listeners
-        $("body").bind(WriplRecommendationsEvents.INIT_COMPLETE, function (e, response) {
+        $("body").bind(WriplRecommendationEvents.INIT_COMPLETE, function (e, response) {
             console.log("Anonymous Widget: " + e.type + " heard");
 
             recommendations = response.recommendations;
@@ -52,7 +52,7 @@
 
             if(!templateName){
                 console.log("Wripl anonymous initialisation error! There is no templateName set. Please contact your local wripl administrator.");
-                $("body").trigger(WriplRecommendationsEvents.INIT_ERROR);
+                $("body").trigger(WriplRecommendationEvents.INIT_ERROR);
                 return;
             }
 
@@ -71,11 +71,11 @@
                 $('#wripl-widget-container .nailthumb-container').nailthumb();
                 console.log("Anonymous Widget: .nailthumb() called");
 
-                $("body").trigger(WriplRecommendationsEvents.TEMPLATE_FETCHED);
+                $("body").trigger(WriplRecommendationEvents.TEMPLATE_FETCHED);
             });
         });
 
-        $("body").bind(WriplRecommendationsEvents.INIT_ERROR, function (e) {
+        $("body").bind(WriplRecommendationEvents.INIT_ERROR, function (e) {
             console.log("Anonymous Widget: " + e.type + " heard");
 
             $.get(WriplProperties.pluginPath + 'handlebar-templates/widget/recommendations-error.html?ver=' + WriplProperties.pluginVersion, function (data) {
@@ -85,7 +85,7 @@
             });
         });
 
-        $("body").bind(WriplRecommendationsEvents.INIT_START, function (e) {
+        $("body").bind(WriplRecommendationEvents.INIT_START, function (e) {
             console.log("Anonymous Widget: " + e.type + " heard");
 
             // Spin the logo

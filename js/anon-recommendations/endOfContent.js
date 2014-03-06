@@ -10,7 +10,7 @@ console.log('endOfContent-anon.js');
             thumbNailSize = 120;
 
         // Add  the listeners
-        $("body").bind(WriplRecommendationsEvents.INIT_COMPLETE, function (e, response) {
+        $("body").bind(WriplRecommendationEvents.INIT_COMPLETE, function (e, response) {
             console.log("Anonymous end-of-content: " + e.type + " heard");
 
             var recommendations = response.recommendations;
@@ -24,7 +24,7 @@ console.log('endOfContent-anon.js');
                         recommendationsWithNoImage.unshift(i);                                  // remembering the index of each rec WITHOUT an image
                     }
                 } else {
-                    $("body").trigger(WriplRecommendationsEvents.INIT_ERROR);
+                    $("body").trigger(WriplRecommendationEvents.INIT_ERROR);
                 }
             }
 
@@ -34,7 +34,7 @@ console.log('endOfContent-anon.js');
 
             if(!templateName){
                 console.log("Wripl Anonymous end-of-content: initialisation error! There is no 'templateName' set.");
-                $("body").trigger(WriplRecommendationsEvents.INIT_ERROR);
+                $("body").trigger(WriplRecommendationEvents.INIT_ERROR);
                 return;
             }
 
@@ -64,17 +64,17 @@ console.log('endOfContent-anon.js');
                 );
                 console.log("Anonymous end-of-content: .nailthumb() called");
 
-                $("body").trigger(WriplRecommendationsEvents.TEMPLATE_FETCHED);
+                $("body").trigger(WriplRecommendationEvents.TEMPLATE_FETCHED);
             });
         });
 
-        $("body").bind(WriplRecommendationsEvents.INIT_ERROR, function (e) {
+        $("body").bind(WriplRecommendationEvents.INIT_ERROR, function (e) {
             console.log("Anonymous end-of-content: " + e.type + " heard");
             $('#wripl-end-of-content-container').remove();
 
         });
 
-        $("body").bind(WriplRecommendationsEvents.INIT_START, function (e) {
+        $("body").bind(WriplRecommendationEvents.INIT_START, function (e) {
             console.log("Anonymous end-of-content: " + e.type + " heard");
 
             // Spin the logo

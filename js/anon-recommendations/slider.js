@@ -112,7 +112,7 @@ console.log('slider-anon.js');
          * Event Listeners below.
          */
 
-        $("body").bind(WriplRecommendationsEvents.INIT_COMPLETE, function (e, response) {
+        $("body").bind(WriplRecommendationEvents.INIT_COMPLETE, function (e, response) {
 
             console.log("Anonymous Widget: " + sliderMode + ": " + e.type + " heard");
 
@@ -164,7 +164,7 @@ console.log('slider-anon.js');
         });
 
         // If there is an error with wripl.. remove the slider
-        $("body").bind(WriplRecommendationsEvents.INIT_ERROR, function (e, params) {
+        $("body").bind(WriplRecommendationEvents.INIT_ERROR, function (e, params) {
             console.log(sliderMode + " " + e.type + " : heard");
             $('#wripl-slider-container').remove();
         });
