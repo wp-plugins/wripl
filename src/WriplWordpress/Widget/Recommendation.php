@@ -125,24 +125,28 @@ class WriplWordpress_Widget_Recommendation extends WP_Widget
     {
         $plugin = WriplWordpress_Plugin::$instance;
 
-        if(!$plugin->isSetup())
-        {
+        if (!$plugin->isSetup()) {
             return;
         }
 
         $instance = wp_parse_args((array)$instance, $this->defaults);
 
         wp_enqueue_script(
-            'wripl-ajax-widget',
-            plugin_dir_url($this->plugin->getPathToPluginFile()) . 'js/widget-anon.js',
-            array('jquery', 'handlebars.js'),
+            'wripl-anon-widget-recommendations',
+            plugin_dir_url($this->plugin->getPathToPluginFile()) . 'js/anon-recommendations/widget.js',
+            array(
+                'jquery',
+                'handlebars.js',
+                'wripl-anon-init-recommendations',
+            ),
             WriplWordpress_Plugin::VERSION
         );
 
-        wp_localize_script('wripl-ajax-widget', 'WriplWidgetProperties', $instance);
+        wp_localize_script('wripl-anon-widget-recommendations', 'WriplWidgetProperties', $instance);
 
         $imageFolderUrl = plugins_url('images', $this->plugin->getPathToPluginFile());
 
-        include $this->plugin->getTemplatePath() . DIRECTORY_SEPARATOR . 'widget' . DIRECTORY_SEPARATOR . 'recommendation.php';
+        include $this->plugin->getTemplatePath()
+            . DIRECTORY_SEPARATOR . 'widget' . DIRECTORY_SEPARATOR . 'recommendation.php';
     }
 }

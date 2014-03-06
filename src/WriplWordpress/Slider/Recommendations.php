@@ -16,12 +16,13 @@ class WriplWordpress_Slider_Recommendations
             wp_enqueue_script('jquery-effects-slide');
 
             wp_enqueue_script(
-                'wripl-slider-container',
-                plugin_dir_url($plugin->getPathToPluginFile()) . 'js/slider-anon.js',
+                'wripl-anon-slider-recommendations',
+                plugin_dir_url($plugin->getPathToPluginFile()) . 'js/anon-recommendations/slider.js',
                 array(
                     'jquery',
                     'jquery-effects-slide',
                     'jquery-nail-thumb',
+                    'wripl-anon-init-recommendations',
                     'handlebars.js',
                 ),
                 WriplWordpress_Plugin::VERSION

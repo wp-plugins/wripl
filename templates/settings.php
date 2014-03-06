@@ -98,6 +98,18 @@
                 </td>
             </tr>
             <tr>
+                <th scope="row">Enable Most Engaging at end of posts</th>
+                <td>
+                    <label for="endOfContentMostEngaging">
+                        <input id="endOfContentMostEngaging" type="checkbox"
+                               name="wripl_feature_settings[endOfContentMostEngagingEnabled]"
+                               value="1"<?php checked(isset($featureSettings['endOfContentMostEngagingEnabled'])); ?> />
+                        Show the most engaging posts at the end of your posts. <em>(Only works with posts
+                            containing a featured image).</em>
+                    </label>
+                </td>
+            </tr>
+            <tr>
                 <th scope="row">Hide wripl branding?</th>
                 <td>
                     <label for="hideWriplBranding">

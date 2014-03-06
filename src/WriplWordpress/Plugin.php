@@ -27,6 +27,7 @@ class WriplWordpress_Plugin
         WriplWordpress_Widget_Recommendation::registerHooks();
         WriplWordpress_Slider_Recommendations::registerHooks();
         WriplWordpress_EndOfContent_Recommendations::registerHooks();
+        WriplWordpress_EndOfContent_MostEngaging::registerHooks();
         WriplWordpress_Installer::registerHooks();
         WriplWordpress_SettingsPage::registerHooks();
     }
@@ -74,14 +75,34 @@ class WriplWordpress_Plugin
 
         wp_enqueue_script('wripl-async-script-loader', plugin_dir_url($this->getPathToPluginFile()) . 'js/wripl-async-script-loader.js');
 
-        wp_enqueue_script('wripl-interest-monitor', plugin_dir_url($this->getPathToPluginFile()) . 'js/dependencies/wripl-compiled.js');
+        wp_register_script('wripl-interest-monitor', plugin_dir_url($this->getPathToPluginFile()) . 'js/dependencies/wripl-compiled.js');
 
-        wp_enqueue_script(
-            'wripl-anon-init',
-            plugin_dir_url($this->getPathToPluginFile()) . 'js/wripl-anon-init.js',
+        wp_register_script(
+            'wripl-anon-activity',
+            plugin_dir_url($this->getPathToPluginFile()) . 'js/wripl-anon-activity.js',
             array(
                 'jquery',
                 'wripl-interest-monitor'
+            ),
+            self::VERSION
+        );
+
+        wp_register_script(
+            'wripl-anon-init-recommendations',
+            plugin_dir_url($this->getPathToPluginFile()) . 'js/anon-recommendations/init.js',
+            array(
+                'jquery',
+                'wripl-anon-activity'
+            ),
+            self::VERSION
+        );
+
+        wp_register_script(
+            'wripl-anon-init-mostEngaging',
+            plugin_dir_url($this->getPathToPluginFile()) . 'js/wripl-anon-init-mostEngaging.js',
+            array(
+                'jquery',
+                'wripl-anon-activity'
             ),
             self::VERSION
         );
@@ -99,7 +120,7 @@ class WriplWordpress_Plugin
             $wriplProperties['hideWriplBranding'] = 'true';
         }
 
-        wp_localize_script('wripl-anon-init', 'WriplProperties', $wriplProperties);
+        wp_localize_script('wripl-anon-activity', 'WriplProperties', $wriplProperties);
     }
 
     function curlNotInstalledNotice()

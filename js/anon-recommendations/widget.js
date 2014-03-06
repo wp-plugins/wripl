@@ -1,4 +1,3 @@
-console.log('widget-anon.js');
 (function ($, Handlebars) {
 
     jQuery(document).ready(function () {
