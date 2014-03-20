@@ -10,7 +10,8 @@ var WriplMostEngagingEvents = {
     $(document).ready(function () {
 
         var getRecommendations = function () {
-            var recommendationsEndpoint = WriplProperties.apiBase + "/anonymous/recommendations";
+
+            var recommendationsEndpoint = WriplProperties.apiBase + "/anonymous/most-engaging";
             var parameters = {
                 key: WriplProperties.key
             };

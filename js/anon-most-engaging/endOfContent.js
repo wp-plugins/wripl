@@ -3,31 +3,30 @@
     jQuery(document).ready(function () {
 
         var template, templateName, compiledHtml,
-            recommendationsWithImage = [],
-            recommendationsWithNoImage = [],
-            sortedRecommendations = [],
+            mostEngagingWithImage = [],
+            mostEngagingWithNoImage = [],
+            sortedMostEngaging = [],
             thumbNailSize = 120;
 
-        // Add  the listeners
+        // Add the listeners
         $("body").bind(WriplMostEngagingEvents.INIT_COMPLETE, function (e, response) {
-
-            var recommendations = response.mostEngaging;
+            var mostEngaging = response.mostEngaging;
             templateName = "most-engaging";
 
-            for (var i = 0; i < recommendations.length; i++) {
-                if (recommendations[i].hasOwnProperty('imageUrl')) {                            // IF the recommendation has a property called 'imageURL'
-                    if (recommendations[i].imageUrl !== ""){                                    // AND IF the imageUrl is not empty
-                        recommendationsWithImage.unshift(i);
+            for (var i = 0; i < mostEngaging.length; i++) {
+                if (mostEngaging[i].hasOwnProperty('imageUrl')) {                            // IF the recommendation has a property called 'imageURL'
+                    if (mostEngaging[i].imageUrl !== ""){                                    // AND IF the imageUrl is not empty
+                        mostEngagingWithImage.unshift(i);
                     } else {
-                        recommendationsWithNoImage.unshift(i);                                  // remembering the index of each rec WITHOUT an image
+                        mostEngagingWithNoImage.unshift(i);                                  // remembering the index of each rec WITHOUT an image
                     }
                 } else {
                     $("body").trigger(WriplMostEngagingEvents.INIT_ERROR);
                 }
             }
 
-            for (var k = 0; k < recommendationsWithImage.length; k++) {
-                sortedRecommendations.unshift(recommendations[recommendationsWithImage[k]]);
+            for (var k = 0; k < mostEngagingWithImage.length; k++) {
+                sortedMostEngaging.unshift(mostEngaging[mostEngagingWithImage[k]]);
             }
 
             if(!templateName){
@@ -36,8 +35,8 @@
                 return;
             }
 
-            if (recommendationsWithImage.length < 1) {
-                console.log("Wripl Anonymous end-of-content: No feature images in any recommendations - removing the #wripl-end-of-content-container element");
+            if (mostEngagingWithImage.length < 1) {
+                console.log("Wripl Anonymous end-of-content: No feature images in any recommendations - removing the #wripl-end-of-content-most_engaging-container element");
                 $('#wripl-end-of-content-most_engaging-container').remove();
                 return;
             }
@@ -48,7 +47,7 @@
                 template = Handlebars.compile(data);
                 compiledHtml = template({
                     wriplProperties: WriplProperties,
-                    mostEngaging: sortedRecommendations
+                    mostEngaging: sortedMostEngaging
                 });
 
                 $('#wripl-end-of-content-most_engaging-container').html(compiledHtml);
