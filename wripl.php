@@ -2,7 +2,7 @@
 /*
   Plugin Name: Wripl
   Description: Plugin to bring wripl's easy recommendations to Wordpress.
-  Version: 1.6.1
+  Version: 1.6.2
   Author: Wripl
   Author URI: http://wripl.com
  */
