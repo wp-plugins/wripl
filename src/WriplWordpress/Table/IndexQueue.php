@@ -35,7 +35,7 @@ class WriplWordpress_Table_IndexQueue
     public static function getAllQueuedItems()
     {
         global $wpdb;
-        return $wpdb->get_results('SELECT * FROM ' . self::getTableName() . 'WHERE status = ' . self::ITEM_QUEUED);
+        return $wpdb->get_results('SELECT * FROM ' . self::getTableName() . ' WHERE status = ' . self::ITEM_QUEUED);
     }
 
 
