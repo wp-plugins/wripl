@@ -1,0 +1,51 @@
+{
+    "_readme": [
+        "This file locks the dependencies of your project to a known state",
+        "Read more about it at http://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file"
+    ],
+    "hash": "7774f83c9786bdf58181fcca787e388f",
+    "packages": [
+        {
+            "name": "bgallagher/wripl-php-library",
+            "version": "dev-master",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/bgallagher/wripl-php-library.git",
+                "reference": "1638320f53e547e3ad3c7c7a833898718538208a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/bgallagher/wripl-php-library/zipball/1638320f53e547e3ad3c7c7a833898718538208a",
+                "reference": "1638320f53e547e3ad3c7c7a833898718538208a",
+                "shasum": ""
+            },
+            "type": "library",
+            "autoload": {
+                "psr-0": {
+                    "Wripl": "lib/"
+                }
+            },
+            "support": {
+                "source": "https://github.com/bgallagher/wripl-php-library/tree/master",
+                "issues": "https://github.com/bgallagher/wripl-php-library/issues"
+            },
+            "time": "2013-09-09 09:38:29"
+        }
+    ],
+    "packages-dev": [
+
+    ],
+    "aliases": [
+
+    ],
+    "minimum-stability": "stable",
+    "stability-flags": {
+        "bgallagher/wripl-php-library": 20
+    },
+    "platform": [
+
+    ],
+    "platform-dev": [
+
+    ]
+}
