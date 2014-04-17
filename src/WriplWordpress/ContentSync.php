@@ -65,7 +65,6 @@ class WriplWordpress_ContentSync
      */
     public static function onPostTrash($pId)
     {
-        $plugin = WriplWordpress_Plugin::$instance;
         $postOrPage = get_post($pId);
 
         switch ($postOrPage->post_type) {
@@ -81,7 +80,7 @@ class WriplWordpress_ContentSync
         }
 
         try {
-            $client = $plugin->getWriplClient();
+            $client = self::getWriplClient();
             $client->deleteFromIndex($path);
         } catch (Exception $e) {
             //Fail silently
