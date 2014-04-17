@@ -1,0 +1,17 @@
+{
+    "repositories":[
+        {
+            "type":"vcs",
+            "url":"https://github.com/bgallagher/wripl-php-library"
+        }
+    ],
+    "require": {
+        "bgallagher/wripl-php-library":"dev-master"
+    },
+    "autoload": {
+        "classmap": ["libs/OAuthSimple"],
+        "psr-0": {
+            "WriplWordpress": "src/"
+        }
+    }
+}

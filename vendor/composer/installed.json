@@ -1,0 +1,30 @@
+[
+    {
+        "name": "bgallagher/wripl-php-library",
+        "version": "dev-master",
+        "version_normalized": "9999999-dev",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/bgallagher/wripl-php-library.git",
+            "reference": "1638320f53e547e3ad3c7c7a833898718538208a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/bgallagher/wripl-php-library/zipball/1638320f53e547e3ad3c7c7a833898718538208a",
+            "reference": "1638320f53e547e3ad3c7c7a833898718538208a",
+            "shasum": ""
+        },
+        "time": "2013-09-09 09:38:29",
+        "type": "library",
+        "installation-source": "source",
+        "autoload": {
+            "psr-0": {
+                "Wripl": "lib/"
+            }
+        },
+        "support": {
+            "source": "https://github.com/bgallagher/wripl-php-library/tree/master",
+            "issues": "https://github.com/bgallagher/wripl-php-library/issues"
+        }
+    }
+]
