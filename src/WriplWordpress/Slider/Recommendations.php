@@ -11,8 +11,25 @@ class WriplWordpress_Slider_Recommendations
     {
         $featureSettings = get_option('wripl_feature_settings');
         $plugin = WriplWordpress_Plugin::$instance;
-
-        if (isset($featureSettings['sliderEnabled'])) {
+		$post = get_post();
+		
+		$catID = get_the_category( $post->ID );
+		$selectCat = '';
+		$catSelectTrue = false;
+		
+		if(isset($featureSettings['hideCatSliderSelect'])){
+			$selectCat = $featureSettings['hideCatSliderSelect'];
+		}
+		
+		foreach(($catID) as $category) {
+			if($category->cat_ID == $selectCat && !(is_front_page())){
+				$catSelectTrue = true;
+			}
+		}
+		
+        if (isset($featureSettings['sliderEnabled'])
+		&&!(is_front_page() && isset($featureSettings['hideHomeSlider']) )
+		&&!(isset($featureSettings['hideCatSlider']) && $catSelectTrue)) {
             wp_enqueue_script('jquery-effects-slide');
 
             wp_enqueue_script(

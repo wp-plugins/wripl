@@ -129,7 +129,7 @@ console.log('slider-anon.js');
             }
 
             console.log(sliderMode + ": first recommendation set - fetching template 'recommendations.html'");
-
+			
             $.get(templatesPath + 'recommendations.html?ver=' + WriplProperties.pluginVersion, function (data) {
 
                 console.log(sliderMode + ": recommendations.html fetched");

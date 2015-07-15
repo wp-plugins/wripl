@@ -119,6 +119,11 @@ class WriplWordpress_Plugin
         if (isset($featureSettings['hideWriplBranding'])) {
             $wriplProperties['hideWriplBranding'] = 'true';
         }
+		if (isset($featureSettings['recTextBox'])) {
+            $wriplProperties['recTextBox'] = $featureSettings['recTextBox'];
+        }else{
+			$wriplProperties['recTextBox'] = 'You might also like...';
+		}
 
         wp_localize_script('wripl-anon-activity', 'WriplProperties', $wriplProperties);
     }

@@ -69,12 +69,19 @@
 
     <div class="icon32" id="icon-themes"><br></div>
     <h2>Wripl Features</h2>
-
+	
+	
+	
     <form method="post" action="options.php">
         <?php settings_fields('wripl_plugin_features'); ?>
-
+		<?php $selectCat = '';
+			if(isset($featureSettings['hideCatSliderSelect'])){
+				$selectCat = $featureSettings['hideCatSliderSelect'];
+			}
+		?>
         <table class="form-table">
             <tbody>
+			
             <tr>
                 <th scope="row">Enable Slider</th>
                 <td>
@@ -120,6 +127,40 @@
                     </label>
                 </td>
             </tr>
+			<tr>
+                <th scope="row">Hide wripl slider on home page?</th>
+                <td>
+                    <label for="hideHomeSlider">
+                        <input id="hideHomeSlider" type="checkbox" name="wripl_feature_settings[hideHomeSlider]"
+                               value="1"<?php checked(isset($featureSettings['hideHomeSlider'])); ?> />
+                        Hide the wripl recommendations in when user is on home page.
+                    </label>
+                </td>
+            </tr>
+			<tr>
+                <th scope="row">Hide wripl slider on specific category</th>
+                <td>
+                    <label for="hideCatSlider">
+                        <input id="hideCatSlider" onclick="showHideSelectText(event.srcElement.checked)" type="checkbox" name="wripl_feature_settings[hideCatSlider]"
+                               value="1"<?php checked(isset($featureSettings['hideCatSlider'])); ?> />
+							   <select id="hideOnCatSlideDisableSelect" id="hideCatSliderSelect" name="wripl_feature_settings[hideCatSliderSelect]">
+									
+									<?php foreach((get_categories()) as $category) { ?>
+										<option value="<?php echo $category->cat_ID; ?>" <?php if($selectCat==$category->cat_ID){echo 'selected="selected"';}?> ><?php echo $category->cat_name; ?></option>
+									<?php } ?>
+								</select>
+                         <span id="hideOnCatSlideDisable">Hide the wripl recommendations for selected category.</span>
+                    </label>
+                </td>
+            </tr>
+			<tr>
+                <th scope="row">Recommendation Text</th>
+                <td>
+                    <label for="recTextBox">
+                        <input id="recTextBox" value="<?php echo $featureSettings['recTextBox'] ?>" type="text" name="wripl_feature_settings[recTextBox]" />
+                    </label>
+                </td>
+            </tr>
             </tbody>
         </table>
 
@@ -128,4 +169,18 @@
         </p>
 
     </form>
+	
+	<script>
+		function showHideSelectText(e){
+			var hCS = document.getElementById('hideCatSlider');
+			if(e||hCS.checked){
+					document.getElementById('hideOnCatSlideDisableSelect').style.visibility = 'visible';
+					document.getElementById('hideOnCatSlideDisable').style.visibility = 'visible';
+				}else{
+					document.getElementById('hideOnCatSlideDisableSelect').style.visibility = 'hidden';
+					document.getElementById('hideOnCatSlideDisable').style.visibility = 'hidden';
+				}
+		}
+		showHideSelectText();
+	</script>
 </div>
